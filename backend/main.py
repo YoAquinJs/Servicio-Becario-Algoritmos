@@ -16,8 +16,18 @@ async def root():
     """Root de la api"""
     return {"response":"root"}
 
+@app.get("/config/{config_type}")
+async def get_config(config_type: str):
+    """Retorna la informacion actual del archivo de configuracion solicitado"""
+    config_file = ConfigFile.get_type(config_type)
+    if config_file is None:
+        error_msg = f"archivo de configuracion '{config_type} no encontrado"
+        raise HTTPException(status_code=404, detail=error_msg)
+
+    return config_file.load_file()
+
 @app.post("/config/{config_type}")
-async def config(config_type: str, config_data: dict):
+async def modify_config(config_type: str, config_data: dict):
     """Guarda la configuracion en su archivo correspondiente"""
     config_file = ConfigFile.get_type(config_type)
     if config_file is None:
@@ -27,7 +37,7 @@ async def config(config_type: str, config_data: dict):
     config_file.save_file(config_data)
     return {"response":"configuracion "}
 
-@app.get("/output/{matrix_index}")
+@app.get("/matrix/{matrix_index}")
 async def output(matrix_type: str):
     """Retorna la matriz de credibilidad del indice especificado"""
     credibility_matrix = None #TODO encontrar la matriz correspondiente

@@ -13,13 +13,14 @@ class ConfigFile(ABC):
     @classmethod
     @abstractmethod
     def save_file(cls, data: dict) -> None:
-        """Guard el archivo de configuracion con la informacion recibida
+        """Guarda el archivo de configuracion con la informacion recibida,
            Puede lanzar un HTTPException si hay algun fallo"""
 
     @classmethod
     @abstractmethod
     def load_file(cls) -> dict:
-        """TODO"""
+        """Retorna la informacion guardada del archivo de configuracion,
+           Puede lanzar un HTTPException si hay algun fallo"""
 
     @staticmethod
     def get_type(config_type: str) -> Optional[type[ConfigFile]]:
