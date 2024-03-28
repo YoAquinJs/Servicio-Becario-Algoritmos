@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Algoritmos Genéticos</title>
+        <!--CSS-->
         <style>
             *{
                 text-align: center;
@@ -21,6 +22,69 @@
         <h1>Algoritmos Genéticos</h1>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae sint vero dolorum, eligendi nobis error distinctio? 
             Maiores eaque nobis odit quibusdam dolorem iste earum voluptatibus temporibus nisi, itaque cum optio.</p>
-        <button>Cargar</button>
+        <br>
+        <!--Aquí se sube el archivo .txt si se tiene para modelar el form-->
+        <h2>Sube archivo ".txt", o inserte los valores manualmente.</h2>
+            <input type="file" id="txtInput"> 
+            <br><br>
+            <!--Este es el form en el que se insertarán los valores del .txt, o los que se insertarán los valores manualmente-->
+            <form id="finalForm">
+
+            </form>
+
+        <script>
+            // Handle file submission
+            document.getElementById('txtInput').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const contents = e.target.result;
+
+                    // Extract values from the file contents
+                    const matches = contents.match(/g={([^}]*)}/);
+                    if (matches && matches[1]) {
+                        const values = matches[1].split(',').map(value => value.trim());
+
+                        // Crea elementos de label e input
+                        values.forEach(value => {
+                            // Crea elemento de label
+                            const label = document.createElement("label");
+                            label.textContent = value;
+
+                            // Crea elemento de input
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            // input.value = value;
+                            input.name = value; // Le da el nombre a cada input el nombre del valor extraído
+                            // Mete el elemento al elemento 'finalForm'
+                            document.getElementById('finalForm').appendChild(label);
+                            document.getElementById('finalForm').appendChild(input);
+                            document.getElementById('finalForm').appendChild(document.createElement("br"));
+                        });
+                    } else {
+                        console.error('No matching pattern found in the file.');
+                    }
+                };
+                reader.readAsText(file);
+            });
+
+        // Handle form submission
+        document.getElementById('finalForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission behavior
+
+            // Serialize form data to JSON
+            const formData = new FormData(this);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            // Convert JSON data to string
+            const jsonString = JSON.stringify(jsonData);
+            console.log('Form data as JSON:', jsonString);
+        });
+        </script>
     </body>
 </html>
