@@ -16,6 +16,7 @@
                 background-color: white;
             }
         </style>
+        <script src="script.js"></script>
     </head>
 
     <body>
@@ -32,6 +33,16 @@
 
             </form>
 
+            <div id="inputContainer">
+                <button id="addInput">Agregar nuevo input</button>
+                <br>
+
+                <label>Parámetros adicionales</label>
+                <input><input><input>
+                <br>
+            </div>
+
+            <div id="sendContainer"><button id="send">Enviar</button></div>
         <script>
             // Handle file submission
             document.getElementById('txtInput').addEventListener('change', function(event) {
