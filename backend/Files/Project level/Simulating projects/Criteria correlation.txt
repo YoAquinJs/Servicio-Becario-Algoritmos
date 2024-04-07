@@ -1,0 +1,8 @@
+Leading_criterion	Correlated_criterion	Correlation_direction
+g217	g212	1
+g217	g213	1
+g217	g214	1
+g217	g215	1
+g211	g26	1
+g26	g3	1
+g26	g15	1

@@ -6,6 +6,7 @@ Comand de ejecucion:
 uvicorn main:app --reload
 """
 
+from subprocess import CalledProcessError, TimeoutExpired, run
 from fastapi import FastAPI, HTTPException
 from config_files import ConfigFile
 
@@ -48,13 +49,14 @@ async def output(matrix_type: str):
     return credibility_matrix
 
 @app.post("/execute")
-async def execute() -> dict[str, None]:
+async def execute() -> dict[str, str]:
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
-    #comando: java -jar executable.jar 4
-    #TODO ejecutar el .jar
-    succesfull = False
-    if not succesfull:
-        error_msg = "fallo en la ejecucion del algoritmo"
-        raise HTTPException(status_code=500, detail=error_msg)
-
-    return {"response":"algoritmo de credibilidad ejecutado"}
+    command = "java -jar executable.jar 4"
+    try:
+        result = run(command, shell=True, capture_output=True, text=True, check=True)
+        return {"response":result.stdout}
+    except CalledProcessError as err:
+        raise HTTPException(status_code=500, detail=err.output) from err
+    except TimeoutExpired as err:
+        error_msg = "timeout en la ejecucion del algoritmo"
+        raise HTTPException(status_code=500, detail=error_msg) from err

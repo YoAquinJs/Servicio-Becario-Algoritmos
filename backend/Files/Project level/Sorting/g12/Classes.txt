@@ -1,0 +1,3 @@
+Bad
+Acceptable
+Good

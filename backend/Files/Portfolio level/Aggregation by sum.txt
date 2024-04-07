@@ -1,0 +1,12 @@
+Portfolio level criterion	Project level criterion
+g111	g111
+g112	g112
+g113	g113
+g121	g121
+g122	g122
+g123	g123
+g131	g131
+g132	g132
+g133	g133
+g14	g15
+g22	g3

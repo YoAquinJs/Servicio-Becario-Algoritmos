@@ -1,0 +1,2 @@
+Name	Not lower than, Not greater than, Equal to	Quatity
+g22	Not greater than	35000000

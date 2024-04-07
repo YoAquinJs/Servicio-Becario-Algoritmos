@@ -1,0 +1,2 @@
+Portfolio level criterion	Project level criterion	Minimum required class
+g21	g12	2

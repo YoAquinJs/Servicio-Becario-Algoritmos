@@ -1,0 +1,3 @@
+g	Acceptable(1)
+g1	Acceptable(1)
+g2	Good(2)
