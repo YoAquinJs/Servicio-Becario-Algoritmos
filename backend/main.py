@@ -9,6 +9,7 @@ uvicorn main:app --reload
 from subprocess import CalledProcessError, TimeoutExpired, run
 from fastapi import FastAPI, HTTPException
 from config_files import ConfigFile
+from credibility_matrix import load_credibility_matrix
 
 app = FastAPI()
 
@@ -38,15 +39,10 @@ async def modify_config(config_type: str, config_data: dict):
     config_file.save_file(config_data)
     return {"response":"configuracion "}
 
-@app.get("/matrix/{matrix_index}")
+@app.get("/matrix/{matrix_type}")
 async def output(matrix_type: str):
     """Retorna la matriz de credibilidad del indice especificado"""
-    credibility_matrix = None #TODO encontrar la matriz correspondiente
-    if credibility_matrix is None:
-        error_msg = f"matriz de credibilidad '{matrix_type}' no encontrada"
-        raise HTTPException(status_code=404,detail=error_msg)
-
-    return credibility_matrix
+    return load_credibility_matrix(matrix_type)
 
 @app.post("/execute")
 async def execute() -> dict[str, str]:
@@ -55,8 +51,8 @@ async def execute() -> dict[str, str]:
     try:
         result = run(command, shell=True, capture_output=True, text=True, check=True)
         return {"response":result.stdout}
-    except CalledProcessError as err:
-        raise HTTPException(status_code=500, detail=err.output) from err
-    except TimeoutExpired as err:
+    except CalledProcessError as exc:
+        raise HTTPException(status_code=500, detail=exc.output) from exc
+    except TimeoutExpired as exc:
         error_msg = "timeout en la ejecucion del algoritmo"
-        raise HTTPException(status_code=500, detail=error_msg) from err
+        raise HTTPException(status_code=500, detail=error_msg) from exc
