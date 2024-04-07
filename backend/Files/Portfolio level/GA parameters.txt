@@ -1,5 +1,0 @@
-Population size	200
-Crossover probability	0.8
-Mutation probability	0.1
-No iterations	200
-No generational restarts	30
