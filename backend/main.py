@@ -8,8 +8,8 @@ uvicorn main:app --reload
 
 from subprocess import CalledProcessError, TimeoutExpired, run
 from fastapi import FastAPI, HTTPException
-from config_files import ConfigFile
-from credibility_matrix import load_credibility_matrix
+from modules.config_files import ConfigFile
+from modules.credibility_matrix import load_credibility_matrix
 
 app = FastAPI()
 
