@@ -6,7 +6,7 @@ Comand de ejecucion:
 uvicorn main:app --reload
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from modules.config_files import ConfigFile
 from modules.credibility_matrix import load_credibility_matrix
 from modules.execute import run_executable
@@ -21,26 +21,16 @@ async def root():
 @app.get("/config/{config_type}")
 async def get_config(config_type: str):
     """Retorna la informacion actual del archivo de configuracion solicitado"""
-    config_file = ConfigFile.get_type(config_type)
-    if config_file is None:
-        error_msg = f"archivo de configuracion '{config_type} no encontrado"
-        raise HTTPException(status_code=404, detail=error_msg)
-
-    return config_file.load_file()
+    return ConfigFile.get_type(config_type).load_file()
 
 @app.post("/config/{config_type}")
 async def modify_config(config_type: str, config_data: dict):
     """Guarda la configuracion en su archivo correspondiente"""
-    config_file = ConfigFile.get_type(config_type)
-    if config_file is None:
-        error_msg = f"archivo de configuracion '{config_type} no encontrado"
-        raise HTTPException(status_code=404, detail=error_msg)
-
-    config_file.save_file(config_data)
-    return {"response":"configuracion "}
+    ConfigFile.get_type(config_type).save_file(config_data)
+    return {"response":f"Configuracion ({config_type}) guardada"}
 
 @app.get("/matrix/{matrix_type}")
-async def output(matrix_type: str):
+async def output(matrix_type: str) -> list[list[float]]:
     """Retorna la matriz de credibilidad del indice especificado"""
     return load_credibility_matrix(matrix_type)
 

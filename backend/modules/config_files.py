@@ -1,7 +1,6 @@
 """Modulo de las clases que especifican el formato de los archivos de configuracion"""
 
 from __future__ import annotations
-from typing import Optional
 
 from abc import ABC, abstractmethod
 from fastapi import HTTPException
@@ -23,13 +22,14 @@ class ConfigFile(ABC):
            Puede lanzar un HTTPException si hay algun fallo"""
 
     @staticmethod
-    def get_type(config_type: str) -> Optional[type[ConfigFile]]:
+    def get_type(config_type: str) -> type[ConfigFile]:
         """Obtiene el tipo correspondiente """
         match config_type:#TODO poner los tipos de archivos de configuracion
             case "":
                 return ConfigFile
             case _:
-                return None
+                error_msg = f"archivo de configuracion '{config_type} no encontrado"
+                raise HTTPException(status_code=404, detail=error_msg)
 
 #TODO crear todos los tipos de archivos de configuracion en su clase correspondiente
 
