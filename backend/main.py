@@ -24,7 +24,7 @@ async def get_config(config_type: str):
     return ConfigFile.get_type(config_type).load_file()
 
 @app.post("/config/{config_type}")
-async def modify_config(config_type: str, config_data: dict):
+async def modify_config(config_type: str, config_data: str):
     """Guarda la configuracion en su archivo correspondiente"""
     ConfigFile.get_type(config_type).save_file(config_data)
     return {"response":f"Configuracion ({config_type}) guardada"}
