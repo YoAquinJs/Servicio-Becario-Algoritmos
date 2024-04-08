@@ -3,11 +3,22 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from os import path
 from fastapi import HTTPException
+
+CONFIG_DIRECTORY = path.join("Files", "Calculate credibility matrix")
+ENCODING = "utf-8"
+
+def _read_config_file(config_type: str) -> str:
+    with open(path.join(CONFIG_DIRECTORY, config_type), "r", encoding=ENCODING) as file:
+        return file.read()
+
+def _write_config_file(config_type: str, data: str) -> None:
+    with open(path.join(CONFIG_DIRECTORY, config_type), "w", encoding=ENCODING) as file:
+        file.write(data)
 
 class ConfigFile(ABC):
     """Clase base para los archivos de configuracion"""
-    FILE_EXTENSION = '.txt'
 
     @classmethod
     @abstractmethod
@@ -53,110 +64,120 @@ class ConfigFile(ABC):
 
 class AdditionalCriteriaParametersConfig(ConfigFile):
     """Clase para configuracion de Additional criteria parameters"""
+    config_type = "Additional criteria parameters.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class CredibilityCriteriaConfig(ConfigFile):
     """Clase para configuracion de Credibility criteria"""
+    config_type = "Credibility criteria.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class CriteriaDirectionsConfig(ConfigFile):
     """Clase para configuracion de Criteria directions"""
+    config_type = "Criteria directions.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class CriteriaHierarchyConfig(ConfigFile):
     """Clase para configuracion de Criteria hierarchy"""
+    config_type = "Criteria hierarchy.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class CriteriaInteractionsConfig(ConfigFile):
     """Clase para configuracion de Criteria interactions"""
+    config_type = "Criteria interactions.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class CriteriaParametersConfig(ConfigFile):
     """Clase para configuracion de Criteria parameters"""
+    config_type = "Criteria parameters.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class PerformanceMatrixConfig(ConfigFile):
     """Clase para configuracion de Performance matrix"""
+    config_type = "Performance matrix.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class UseValueFunctionConfig(ConfigFile):
     """Clase para configuracion de Use value function"""
+    config_type = "Use value function.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class VetoThresholdsForSupercriteriaConfig(ConfigFile):
     """Clase para configuracion de Veto thresholds for supercriteria"""
+    config_type = "Veto thresholds for supercriteria.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
 
 class WeightsConfig(ConfigFile):
     """Clase para configuracion de Weights"""
+    config_type = "Weights.txt"
 
     @classmethod
     def save_file(cls, data: str) -> None:
-        pass
+        _write_config_file(cls.config_type, data)
 
     @classmethod
     def load_file(cls) -> str:
-        pass
+        return _read_config_file(cls.config_type)
