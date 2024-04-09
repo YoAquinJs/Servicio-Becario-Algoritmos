@@ -7,7 +7,9 @@ uvicorn main:app --reload
 """
 
 from fastapi import FastAPI, HTTPException
-from config_files import ConfigFile
+from modules.config_files import ConfigFile
+from modules.credibility_matrix import load_credibility_matrix
+from modules.execute import run_executable
 
 app = FastAPI()
 
@@ -37,24 +39,12 @@ async def modify_config(config_type: str, config_data: dict):
     config_file.save_file(config_data)
     return {"response":"configuracion "}
 
-@app.get("/matrix/{matrix_index}")
+@app.get("/matrix/{matrix_type}")
 async def output(matrix_type: str):
     """Retorna la matriz de credibilidad del indice especificado"""
-    credibility_matrix = None #TODO encontrar la matriz correspondiente
-    if credibility_matrix is None:
-        error_msg = f"matriz de credibilidad '{matrix_type}' no encontrada"
-        raise HTTPException(status_code=404,detail=error_msg)
-
-    return credibility_matrix
+    return load_credibility_matrix(matrix_type)
 
 @app.post("/execute")
-async def execute() -> dict[str, None]:
+async def execute() -> dict[str, str]:
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
-    #comando: java -jar executable.jar 4
-    #TODO ejecutar el .jar
-    succesfull = False
-    if not succesfull:
-        error_msg = "fallo en la ejecucion del algoritmo"
-        raise HTTPException(status_code=500, detail=error_msg)
-
-    return {"response":"algoritmo de credibilidad ejecutado"}
+    return run_executable()
