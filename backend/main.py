@@ -19,9 +19,9 @@ async def root():
     return {"response":"root"}
 
 @app.get("/config/{config_type}")
-async def get_config(config_type: str):
+async def get_config(config_type: str) -> dict[str, str]:
     """Retorna la informacion actual del archivo de configuracion solicitado"""
-    return ConfigFile.get_type(config_type).load_file()
+    return {"config": ConfigFile.get_type(config_type).load_file()}
 
 @app.post("/config/{config_type}")
 async def modify_config(config_type: str, config_data: str):
@@ -30,11 +30,11 @@ async def modify_config(config_type: str, config_data: str):
     return {"response":f"Configuracion ({config_type}) guardada"}
 
 @app.get("/matrix/{matrix_type}")
-async def output(matrix_type: str) -> list[list[float]]:
+async def output(matrix_type: str) -> dict[str, list[list[float]]]:
     """Retorna la matriz de credibilidad del indice especificado"""
-    return load_credibility_matrix(matrix_type)
+    return {"matrix": load_credibility_matrix(matrix_type)}
 
 @app.post("/execute")
 async def execute() -> dict[str, str]:
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
-    return run_executable()
+    return {"response":run_executable()}

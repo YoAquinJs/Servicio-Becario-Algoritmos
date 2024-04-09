@@ -5,11 +5,11 @@ from fastapi import HTTPException
 
 COMMAND = "java -jar executable.jar 4"
 
-def run_executable() -> dict[str, str]:
+def run_executable() -> str:
     """Ejecuta el ejecutable"""
     try:
         result = run(COMMAND, shell=True, capture_output=True, text=True, check=True)
-        return {"response":result.stdout}
+        return result.stdout
     except CalledProcessError as exc:
         raise HTTPException(status_code=500, detail=exc.output) from exc
     except TimeoutExpired as exc:
