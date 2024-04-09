@@ -26,26 +26,44 @@
         <br>
         <!--Aquí se sube el archivo .txt si se tiene para modelar el form-->
         <h2>Sube archivo ".txt", o inserte los valores manualmente.</h2>
-            <input type="file" id="txtInput"> 
+            <input type="file" id="txt-input"> 
             <br><br>
             <!--Este es el form en el que se insertarán los valores del .txt, o los que se insertarán los valores manualmente-->
-            <form id="finalForm">
+            <div class="dropdown">
+
+                <select name="menu-file" id="files">
+                    <option value="criteria-hierarchy">Jerarquía de criterio</option>
+                    <option value="weights">Pesos</option>
+                    <option value="criteria-parameters">Parametros de criterios</option>
+                    <option value="performance-matrix">Matriz de rendimiento</option>
+                  </select>
+
+            </div>
+            
+            <form id="final-form">
 
             </form>
 
-            <div id="inputContainer">
-                <input id="labelSet"><button id="addInput">Agregar nuevo input</button>
-                <br>
-
+            <!--This div contains the data to send as additional parameters-->
+            <div class="additional-parameters">
                 <label>Parámetros adicionales</label>
-                <input><input><input>
+                <!--The button logs what's being written onto the input fields to then be sent to the backend-->
+                <input id="parameter-1"><input id="parameter-2"><input id="parameter-3"> <button id="send-add-parameters">Enviar parámetros adicionales</button>
                 <br>
             </div>
 
-            <div id="sendContainer"><button id="send">Enviar</button></div>
+            <div id="input-container">
+                <input id="label-set"><button id="add-input">Agregar nuevo input</button>
+                <br>
+            </div>
+
+            <div id="send-container"><button id="send">Enviar</button></div>
+
+            <div class="backend-text"></div>
+
         <script>
             // Handle file submission
-            document.getElementById('txtInput').addEventListener('change', function(event) {
+            document.getElementById('txt-input').addEventListener('change', function(event) {
                 const file = event.target.files[0];
                 if (!file) return;
 
@@ -70,9 +88,9 @@
                             // input.value = value;
                             input.name = value; // Le da el nombre a cada input el nombre del valor extraído
                             // Mete el elemento al elemento 'finalForm'
-                            document.getElementById('finalForm').appendChild(label);
-                            document.getElementById('finalForm').appendChild(input);
-                            document.getElementById('finalForm').appendChild(document.createElement("br"));
+                            document.getElementById('final-form').appendChild(label);
+                            document.getElementById('final-form').appendChild(input);
+                            document.getElementById('final-form').appendChild(document.createElement("br"));
                         });
                     } else {
                         console.error('No matching pattern found in the file.');
@@ -82,7 +100,7 @@
             });
 
         // Handle form submission
-        document.getElementById('finalForm').addEventListener('submit', function(event) {
+        document.getElementById('final-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission behavior
 
             // Serialize form data to JSON
