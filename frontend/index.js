@@ -1,9 +1,19 @@
 import * as backend from "./backend_connection.js"
 import { onLoadFile } from "./file_uploader.js"
 
+const configTypeDropdownId = "config-type";
+const configTypeDropdown = document.getElementById(configTypeDropdownId);
+let uploadedFileContent;
+
 onLoadFile.addEventListener("onLoadFile", event => {
-    backend.sendConfigFile("TYPE", event.detail.fileContent);
-})
+    uploadedFileContent = event.detail.fileContent;
+});
+
+const sendFileButtonId = "send-file-button";
+const sendFileButton = document.getElementById(sendFileButtonId);
+sendFileButton.addEventListener("click", function(event) {
+    backend.sendConfigFile(configTypeDropdown.value, event.detail.fileContent);
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     // Counter to keep track of the number of inputs created
