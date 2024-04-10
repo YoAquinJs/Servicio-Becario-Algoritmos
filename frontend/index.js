@@ -1,24 +1,33 @@
 import * as backend from "./backend_connection.js"
 import { uploadedFileContent, handleFileSelect } from "./file_uploader.js"
-import { getParsedMatrix, downloadMatrix } from "./matrix_fetch.js";
+import { getParsedMatrix, downloadMatrix } from "./matrix_fetch.js"
+import { downloadConfig } from "./config_downloader.js"
 
-const fileUploadId = "file-upload"
+const fileUploadId = "file-upload";
 const configTypeDropdownId = "config-type";
 const sendFileButtonId = "send-file-button";
+const getConfigButtonId = "get-config-button";
 const executeButtonId = "execute-button";
 const matrixTypeId = "matrix-type";
 const getMatrixButtonId = "matrix-button";
-const matrixDisplayId = "matrix-display"
+const matrixDisplayId = "matrix-display";
 
-document.addEventListener('DOMContentLoaded', _ => {
+document.addEventListener("DOMContentLoaded", _ => {
+    const configTypeDropdown = document.getElementById(configTypeDropdownId);
+
     const fileInput = document.getElementById(fileUploadId);
     fileInput.addEventListener("change", handleFileSelect);
 
-    const configTypeDropdown = document.getElementById(configTypeDropdownId);
     const sendFileButton = document.getElementById(sendFileButtonId);
-
     sendFileButton.addEventListener("click", _ => {
         backend.sendConfigFile(configTypeDropdown.value, uploadedFileContent);
+    });
+
+    const getConfigButton = document.getElementById(getConfigButtonId);
+    getConfigButton.addEventListener("click", _ => {
+        backend.getConfigFile(configTypeDropdown.value).then(config => {
+            downloadConfig(config, configTypeDropdown.value);
+        });
     });
 
     const executeButton = document.getElementById(executeButtonId);
@@ -31,7 +40,6 @@ document.addEventListener('DOMContentLoaded', _ => {
     const matrixTypeInput = document.getElementById(matrixTypeId);
     const getMatrixButton = document.getElementById(getMatrixButtonId);
     const matrixDisplay = document.getElementById(matrixDisplayId);
-
     getMatrixButton.addEventListener("click", _ => {
         backend.getMatrix(matrixTypeInput.value).then(matrix => {
             const parsedMatrix = getParsedMatrix(matrix);

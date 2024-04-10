@@ -27,6 +27,8 @@
     </p>
     <p>Sube un archivo ".txt", o inserte los valores manualmente.</p>
 
+    <button id="execute-button">Ejecutar Algoritmo</button>
+    <br>
     <h3>Tipo de Configuracion</h3>
     <div class="dropdown">
         <select name="menu-file" id="config-type">
@@ -53,10 +55,9 @@
         </select>
     </div>
     <br>
-
+<!--
     <div class="additional-parameters">
         <label>Parámetros adicionales</label>
-        <!--The button logs what's being written onto the input fields to then be sent to the backend-->
         <input id="parameter-1"><input id="parameter-2"><input id="parameter-3">
         <button id="send-add-parameters">Enviar parámetros</button>
         <br>
@@ -65,12 +66,13 @@
         <input id="label-set"><button id="add-input">Agregar nuevo input</button>
         <br>
     </div>
-
+-->
     <br>
     <input type="file" id="file-upload">
-    <button id="send-file-button">Enviar Archivo</button>
+    <button id="send-file-button">Enviar Config</button>
     <br>
-    <button id="execute-button">Ejecutar Algoritmo</button>
+    <br>
+    <button id="get-config-button">Descargar Config</button>
     <br>
     <h3>Obtener Matriz de Configuracion</h3>
     <input type="text" id="matrix-type", placeholder="Matriz...">
