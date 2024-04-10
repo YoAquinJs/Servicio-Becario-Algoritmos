@@ -1,19 +1,27 @@
 import * as backend from "./backend_connection.js"
 import { uploadedFileContent, handleFileSelect } from "./file_uploader.js"
 
+const fileUploadId = "file-upload"
+const configTypeDropdownId = "config-type";
+const sendFileButtonId = "send-file-button";
+const executeButtonId = "execute-button";
 
 document.addEventListener('DOMContentLoaded', _ => {
-    const fileUploadId = "file-upload"
     const fileInput = document.getElementById(fileUploadId);
     fileInput.addEventListener("change", handleFileSelect);
 
-    const configTypeDropdownId = "config-type";
     const configTypeDropdown = document.getElementById(configTypeDropdownId);
 
-    const sendFileButtonId = "send-file-button";
     const sendFileButton = document.getElementById(sendFileButtonId);
     sendFileButton.addEventListener("click", _ => {
         backend.sendConfigFile(configTypeDropdown.value, uploadedFileContent);
+    });
+
+    const executeButton = document.getElementById(executeButtonId);
+    executeButton.addEventListener("click", _ => {
+        backend.execute().then(response => {
+            console.log(response);
+        });
     });
 });
 
