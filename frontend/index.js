@@ -1,7 +1,7 @@
-import * as backend from "./backend_connection.js"
-import { uploadedFileContent, handleFileSelect } from "./file_uploader.js"
-import { getParsedMatrix, downloadMatrix } from "./matrix_fetch.js"
-import { downloadConfig } from "./config_downloader.js"
+import * as backend from "./modules/backend_connection.js"
+import { uploadedFileContent, handleFileSelect } from "./modules/file_uploader.js"
+import { getParsedMatrix, downloadMatrix } from "./modules/matrix_fetch.js"
+import { downloadConfig } from "./modules/config_downloader.js"
 
 const fileUploadId = "file-upload";
 const configTypeDropdownId = "config-type";
