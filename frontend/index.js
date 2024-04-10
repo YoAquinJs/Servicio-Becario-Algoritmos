@@ -1,7 +1,7 @@
 import * as backend from "./modules/backend_connection.js"
 import { uploadedFileContent, handleFileSelect } from "./modules/file_uploader.js"
-import { getParsedMatrix, downloadMatrix } from "./modules/matrix_fetch.js"
-import { downloadConfig } from "./modules/config_downloader.js"
+import { getParsedMatrix } from "./modules/matrix_parser.js"
+import { downloadDataAsFile } from "./modules/downloader.js"
 
 const fileUploadId = "file-upload";
 const configTypeDropdownId = "config-type";
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", _ => {
     const getConfigButton = document.getElementById(getConfigButtonId);
     getConfigButton.addEventListener("click", _ => {
         backend.getConfigFile(configTypeDropdown.value).then(config => {
-            downloadConfig(config, configTypeDropdown.value);
+            downloadDataAsFile(config, configTypeDropdown.value);
         });
     });
 
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", _ => {
             const parsedMatrix = getParsedMatrix(matrix);
 
             matrixDisplay.innerText = parsedMatrix;
-            downloadMatrix(parsedMatrix, matrixTypeInput.value);
+            downloadDataAsFile(parsedMatrix, matrixTypeInput.value + "-matrix");
         });
     });
 });
