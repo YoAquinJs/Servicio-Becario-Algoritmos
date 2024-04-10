@@ -1,92 +1,6 @@
-const API_URI = 'http://127.0.0.1:8000'
+import * as backend from "./backend_connection.js"
 
-fetch(`${API_URI}/`, {
-    method : "GET"
-}).then(response => {
-    if (!response.ok){
-        console.error('conexion con backend fallida');
-        console.error({'error code':response.status});
-    }
-    return response.json();
-})
-.then(_ => {})
-.catch(error => {
-    console.error(error);
-});
 
-function sendConfigFile(config_type, data){
-    const param = new URLSearchParams({"config_data":data}).toString();
-    return fetch(`${API_URI}/config/${config_type}?${param}`, {
-        method : "POST",
-    }).then(response => {
-        if (!response.ok)
-            throw new Error("No se pudo guardar la configuracion correctamente\n"+response.statusText);
-        return response.json();
-    })
-    .then(data => {
-        if (!data || !data.response)
-            throw new Error("La respuesta no contiene la estructura esperada");
-        return data.response;
-    })
-    .catch(error => {
-        console.error(error);
-    });
-}
-
-function getConfigFile(config_type){
-    return fetch(`${API_URI}/config/${config_type}`, {
-        method : "GET",
-    }).then(response => {
-        if (!response.ok)
-            return new Error("No se pudo acceder a la configuracion correctamente\n"+response.statusText);
-        return response.json();
-    })
-    .then(data => {
-        if (!data || !data.config)
-            throw new Error("La respuesta no contiene la estructura esperada");
-        return data.config;
-    })
-    .catch(error => {
-        console.error(error);
-    });
-}
-
-function getMatrix(matrix_type){
-    return fetch(`${API_URI}/matrix/${matrix_type}`, {
-        method : "GET",
-    }).then(response => {
-        if (!response.ok)
-            return new Error("No se pudo acceder a la matriz correctamente\n"+response.statusText);
-        return response.json();
-    })
-    .then(data => {
-        if (!data || !data.matrix)
-            throw new Error("La respuesta no contiene la estructura esperada");
-        return data;
-    })
-    .catch(error => {
-        console.error(error);
-    });
-}
-
-function execute(){
-    return fetch(`${API_URI}/execute`, {
-        method : "POST",
-    }).then(response => {
-        if (!response.ok)
-            return new Error("No se pudo ejecutar");
-        return response.json();
-    })
-    .then(data => {
-        if (!data || !data.response)
-            throw new Error("La respuesta no contiene la estructura esperada\n"+response.statusText);
-        return data.response;
-    })
-    .catch(error => {
-        console.error(error);
-    });
-}
-/*
 document.addEventListener('DOMContentLoaded', function() {
     // Counter to keep track of the number of inputs created
     let inputCount = 0;
@@ -270,4 +184,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Call the function to load and display the text file from the backend
     displayTextFile('criteria-parameters.txt');
 });
-*/
