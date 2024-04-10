@@ -15,8 +15,11 @@ def load_credibility_matrix(matrix_type: str) -> list[list[float]]:
         with open(matrix_path, "r", encoding=ENCODING) as file:
             matrix = []
             reader = csv.reader(file, delimiter='\t')
+            next(reader)
             for row in reader:
-                matrix.append(row)
+                parsed_row = [float(val) for i, val in enumerate(row)]
+                parsed_row.pop(0)
+                matrix.append(parsed_row)
             return matrix
     except FileNotFoundError as exc:
         error_msg = f"matriz de credibilidad '{matrix_type}' no encontrada"
