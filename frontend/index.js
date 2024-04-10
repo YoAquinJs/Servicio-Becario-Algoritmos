@@ -5,14 +5,17 @@ const fileUploadId = "file-upload"
 const configTypeDropdownId = "config-type";
 const sendFileButtonId = "send-file-button";
 const executeButtonId = "execute-button";
+const matrixTypeId = "matrix-type";
+const getMatrixButtonId = "matrix-button";
+const matrixDisplayId = "matrix-display"
 
 document.addEventListener('DOMContentLoaded', _ => {
     const fileInput = document.getElementById(fileUploadId);
     fileInput.addEventListener("change", handleFileSelect);
 
     const configTypeDropdown = document.getElementById(configTypeDropdownId);
-
     const sendFileButton = document.getElementById(sendFileButtonId);
+
     sendFileButton.addEventListener("click", _ => {
         backend.sendConfigFile(configTypeDropdown.value, uploadedFileContent);
     });
@@ -21,6 +24,33 @@ document.addEventListener('DOMContentLoaded', _ => {
     executeButton.addEventListener("click", _ => {
         backend.execute().then(response => {
             console.log(response);
+        });
+    });
+
+    const matrixTypeInput = document.getElementById(matrixTypeId);
+    const getMatrixButton = document.getElementById(getMatrixButtonId);
+    const matrixDisplay = document.getElementById(matrixDisplayId);
+
+    getMatrixButton.addEventListener("click", _ => {
+        backend.getMatrix(matrixTypeInput.value).then(matrix => {
+            const labeledMatrix = [Array.from({ length: matrix[0].length+1 }, (_, i) => i)];
+            matrix.forEach((row, rowIdx) => {
+                labeledMatrix.push([rowIdx+1, ...row]);
+            });
+            const parsedMatrix = labeledMatrix.
+                map(row => row.join('\t')).join('\n').replace("0", "");
+            matrixDisplay.innerText = parsedMatrix;
+
+            const blob = new Blob([parsedMatrix], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = `${matrixTypeInput.value}-matrix.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         });
     });
 });

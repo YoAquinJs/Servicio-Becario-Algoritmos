@@ -64,7 +64,7 @@ export function getMatrix(matrix_type){
     .then(data => {
         if (!data || !data.matrix)
             throw new Error("La respuesta no contiene la estructura esperada");
-        return data;
+        return data.matrix;
     })
     .catch(error => {
         console.error(error);
