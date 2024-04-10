@@ -1,6 +1,6 @@
-export const onLoadFile = new EventTarget();
+export let uploadedFileContent;
 
-function handleFileSelect(event) {
+export function handleFileSelect(event) {
     const file = event.target.files[0];
 
     if (!file)
@@ -8,16 +8,7 @@ function handleFileSelect(event) {
 
     const reader = new FileReader();
     reader.onload = function(event) {
-        const fileContent = event.target.result;
-        onLoadFile.dispatchEvent(new CustomEvent('onLoadFile', {
-            detail: {
-                fileContent: fileContent
-            }
-        }));
+        uploadedFileContent = event.target.result;
     };
     reader.readAsText(file);
 }
-
-const fileUploadId = "file-upload"
-const fileInput = document.getElementById(fileUploadId);
-fileInput.addEventListener('change', handleFileSelect);

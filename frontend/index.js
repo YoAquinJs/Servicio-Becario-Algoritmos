@@ -1,20 +1,24 @@
 import * as backend from "./backend_connection.js"
-import { onLoadFile } from "./file_uploader.js"
+import { uploadedFileContent, handleFileSelect } from "./file_uploader.js"
 
-const configTypeDropdownId = "config-type";
-const configTypeDropdown = document.getElementById(configTypeDropdownId);
-let uploadedFileContent;
 
-onLoadFile.addEventListener("onLoadFile", event => {
-    uploadedFileContent = event.detail.fileContent;
+document.addEventListener('DOMContentLoaded', _ => {
+    const fileUploadId = "file-upload"
+    const fileInput = document.getElementById(fileUploadId);
+    fileInput.addEventListener("change", handleFileSelect);
+
+    const configTypeDropdownId = "config-type";
+    const configTypeDropdown = document.getElementById(configTypeDropdownId);
+
+    const sendFileButtonId = "send-file-button";
+    const sendFileButton = document.getElementById(sendFileButtonId);
+    sendFileButton.addEventListener("click", _ => {
+        backend.sendConfigFile(configTypeDropdown.value, uploadedFileContent);
+    });
 });
 
-const sendFileButtonId = "send-file-button";
-const sendFileButton = document.getElementById(sendFileButtonId);
-sendFileButton.addEventListener("click", function(event) {
-    backend.sendConfigFile(configTypeDropdown.value, event.detail.fileContent);
-});
 
+/*
 document.addEventListener('DOMContentLoaded', function() {
     // Counter to keep track of the number of inputs created
     let inputCount = 0;
@@ -62,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('input-container').appendChild(container);
     });
 
-// Add event listener to the send button
+    // Add event listener to the send button
     document.getElementById('send').addEventListener('click', function() {
         // Construct JSON object with the data to send
         const formData = [];
@@ -95,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => {
     console.error('Error:', error);
     }); 
-});
+    });
 
     document.getElementById('send').addEventListener('click', function() {
         // Construct JSON object with the data to send
@@ -176,25 +180,5 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         }); 
     });
-
-
-    // Function that gets the .txt file from the server to load it to display it to the frontend
-    function displayTextFile(filename) {
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    document.getElementsByClassName('backend-text').textContent = xhr.responseText;
-                } else {
-                    console.error('Failed to load the file:', xhr.status);
-                }
-            }
-        };
-        // Update the URL to point to the backend endpoint
-        xhr.open('GET', 'http://your-backend-url/' + filename, true);
-        xhr.send();
-    }
-    
-    // Call the function to load and display the text file from the backend
-    displayTextFile('criteria-parameters.txt');
 });
+*/
