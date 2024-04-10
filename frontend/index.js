@@ -1,5 +1,9 @@
 import * as backend from "./backend_connection.js"
+import { onLoadFile } from "./file_uploader.js"
 
+onLoadFile.addEventListener("onLoadFile", event => {
+    backend.sendConfigFile("TYPE", event.detail.fileContent);
+})
 
 document.addEventListener('DOMContentLoaded', function() {
     // Counter to keep track of the number of inputs created
