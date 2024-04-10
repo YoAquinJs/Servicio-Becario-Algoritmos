@@ -1,5 +1,6 @@
 import * as backend from "./backend_connection.js"
 import { uploadedFileContent, handleFileSelect } from "./file_uploader.js"
+import { getParsedMatrix, downloadMatrix } from "./matrix_fetch.js";
 
 const fileUploadId = "file-upload"
 const configTypeDropdownId = "config-type";
@@ -33,24 +34,10 @@ document.addEventListener('DOMContentLoaded', _ => {
 
     getMatrixButton.addEventListener("click", _ => {
         backend.getMatrix(matrixTypeInput.value).then(matrix => {
-            const labeledMatrix = [Array.from({ length: matrix[0].length+1 }, (_, i) => i)];
-            matrix.forEach((row, rowIdx) => {
-                labeledMatrix.push([rowIdx+1, ...row]);
-            });
-            const parsedMatrix = labeledMatrix.
-                map(row => row.join('\t')).join('\n').replace("0", "");
+            const parsedMatrix = getParsedMatrix(matrix);
+
             matrixDisplay.innerText = parsedMatrix;
-
-            const blob = new Blob([parsedMatrix], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-
-            link.href = url;
-            link.download = `${matrixTypeInput.value}-matrix.txt`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            downloadMatrix(parsedMatrix, matrixTypeInput.value);
         });
     });
 });
