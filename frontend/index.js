@@ -3,21 +3,27 @@ import { uploadedFileContent, handleFileSelect } from "./modules/file_uploader.j
 import { getParsedMatrix } from "./modules/matrix_parser.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
 
-const fileUploadId = "file-upload";
 const configTypeDropdownId = "config-type";
+const textUplaodId = "text-upload";
+const fileUploadId = "file-upload";
+const sendTextButtonId = "send-text-button";
 const sendFileButtonId = "send-file-button";
 const getConfigButtonId = "get-config-button";
 const executeButtonId = "execute-button";
 const matrixTypeId = "matrix-type";
 const getMatrixButtonId = "matrix-button";
 const matrixDisplayId = "matrix-display";
-
 document.addEventListener("DOMContentLoaded", _ => {
     const configTypeDropdown = document.getElementById(configTypeDropdownId);
 
-    const fileInput = document.getElementById(fileUploadId);
-    fileInput.addEventListener("change", handleFileSelect);
+    const textConfigInput = document.getElementById(textUplaodId);
+    const fileConfigInput = document.getElementById(fileUploadId);
+    fileConfigInput.addEventListener("change", handleFileSelect);
 
+    const sendTextButton = document.getElementById(sendTextButtonId);
+    sendTextButton.addEventListener("click", _ => {
+        backend.sendConfigFile(configTypeDropdown.value, textConfigInput.value);
+    });
     const sendFileButton = document.getElementById(sendFileButtonId);
     sendFileButton.addEventListener("click", _ => {
         backend.sendConfigFile(configTypeDropdown.value, uploadedFileContent);
