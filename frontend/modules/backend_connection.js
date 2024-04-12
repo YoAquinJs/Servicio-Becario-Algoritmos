@@ -16,75 +16,51 @@ fetch(`${API_URI}/`, {
 });
 
 //Api Calls
-export function sendConfigFile(config_type, data){
+export async function sendConfigFile(config_type, data){
     const param = new URLSearchParams({"config_data":data}).toString();
-    return fetch(`${API_URI}/config/${config_type}?${param}`, {
-        method : "POST",
-    }).then(response => {
-        if (!response.ok)
-            throw new Error("No se pudo guardar la configuracion correctamente\n"+response.statusText);
-        return response.json();
-    })
-    .then(data => {
-        if (!data || !data.response)
-            throw new Error("La respuesta no contiene la estructura esperada");
-        return data.response;
-    })
-    .catch(error => {
-        console.error(error);
-    });
+    const response = await fetch(`${API_URI}/config/${config_type}?${param}`, {method : "POST",});
+    if (!response.ok)
+        throw new Error("No se pudo guardar la configuracion correctamente\n"+response.statusText);
+
+    const parsedResponsed = await response.json(); 
+    if (!parsedResponsed || !parsedResponsed.response)
+        throw new Error("La respuesta no contiene la estructura esperada");
+
+    return parsedResponsed.response;
 }
 
-export function getConfigFile(config_type){
-    return fetch(`${API_URI}/config/${config_type}`, {
-        method : "GET",
-    }).then(response => {
-        if (!response.ok)
-            return new Error("No se pudo acceder a la configuracion correctamente\n"+response.statusText);
-        return response.json();
-    })
-    .then(data => {
-        if (!data || !data.config)
-            throw new Error("La respuesta no contiene la estructura esperada");
-        return data.config;
-    })
-    .catch(error => {
-        console.error(error);
-    });
+export async function getConfigFile(config_type){
+    const response = await fetch(`${API_URI}/config/${config_type}`, {method : "GET",});
+    if (!response.ok)
+        throw new Error("No se pudo acceder a la configuracion correctamente\n"+response.statusText);
+
+    const parsedResponsed = await response.json(); 
+    if (!parsedResponsed || !parsedResponsed.config)
+        throw new Error("La respuesta no contiene la estructura esperada");
+
+    return parsedResponsed.config;
 }
 
-export function getMatrix(matrix_type){
-    return fetch(`${API_URI}/matrix/${matrix_type}`, {
-        method : "GET",
-    }).then(response => {
-        if (!response.ok)
-            return new Error("No se pudo acceder a la matriz correctamente\n"+response.statusText);
-        return response.json();
-    })
-    .then(data => {
-        if (!data || !data.matrix)
-            throw new Error("La respuesta no contiene la estructura esperada");
-        return data.matrix;
-    })
-    .catch(error => {
-        console.error(error);
-    });
+export async function getMatrix(matrix_type){
+    const response = await fetch(`${API_URI}/matrix/${matrix_type}`, {method : "GET",});
+    if (!response.ok)
+        throw new Error("No se pudo acceder a la matriz correctamente\n"+response.statusText);
+
+    const parsedResponsed = await response.json(); 
+    if (!parsedResponsed || !parsedResponsed.matrix)
+        throw new Error("La respuesta no contiene la estructura esperada");
+
+    return parsedResponsed.matrix;
 }
 
-export function execute(){
-    return fetch(`${API_URI}/execute`, {
-        method : "POST",
-    }).then(response => {
-        if (!response.ok)
-            return new Error("No se pudo ejecutar");
-        return response.json();
-    })
-    .then(data => {
-        if (!data || !data.response)
-            throw new Error("La respuesta no contiene la estructura esperada\n"+response.statusText);
-        return data.response;
-    })
-    .catch(error => {
-        console.error(error);
-    });
+export async function execute(){
+    const response = await fetch(`${API_URI}/execute`, {method : "POST",});
+    if (!response.ok)
+        throw new Error("No se pudo ejecutar correctamente\n"+response.statusText);
+
+    const parsedResponsed = await response.json(); 
+    if (!parsedResponsed || !parsedResponsed.response)
+        throw new Error("La respuesta no contiene la estructura esperada");
+
+    return parsedResponsed.response;
 }
