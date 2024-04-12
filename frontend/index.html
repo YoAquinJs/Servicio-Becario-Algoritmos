@@ -5,18 +5,7 @@
     <title>Algoritmos Genéticos</title>
 
     <script type="module" src="index.js"></script>
-    <style>
-        *{
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: rgb(199, 199, 199);
-        }
-        button{
-            width: 100px;
-            height: 40px;
-            background-color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -25,7 +14,7 @@
         Prototipo de Interfaz para el calculo de matrices de credibilidad
         utilizando algortimos geneticos.
     </p>
-    <p>Sube un archivo ".txt", o inserte los valores manualmente.</p>
+    <p>Sube un archivo ".txt", o inserte los valores en el espacio de texto.</p>
 
     <button id="execute-button">Ejecutar Algoritmo</button>
     <br>
@@ -56,8 +45,12 @@
     </div>
     <br>
 
+    <textarea rows="6" id="text-upload"></textarea>
+    <br>
     <br>
     <input type="file" id="file-upload">
+    <br>
+    <br>
     <button id="send-file-button">Enviar Config</button>
     <br>
     <br>
