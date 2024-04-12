@@ -1,0 +1,15 @@
+*{
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(199, 199, 199);
+}
+button{
+    width: 100px;
+    height: 40px;
+    background-color: white;
+}
+#text-upload{
+    width: 200px;
+    text-align: left;
+    resize: vertical;
+}
