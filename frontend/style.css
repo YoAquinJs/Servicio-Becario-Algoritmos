@@ -1,0 +1,115 @@
+body {
+    background-color: rgb(199, 199, 199);
+    box-sizing: border-box;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button{
+    width: 100px;
+    height: 40px;
+    background-color: white;
+    border-radius: 25px;
+}
+
+.rounded{
+    border-radius: 25px;
+}
+
+#container {
+    background-color: #8495b9;
+    width: 1000px;
+    height: 80vh;
+    border: 5px solid #8495b9;
+    border-radius: 25px;
+    margin: 7vh auto;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#title {
+    margin: 0px auto;
+}
+
+#interface {
+    margin: 0 auto;
+}
+
+#instructions {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 0px auto;
+}
+
+#configs {
+    height: 350px;
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+#files {
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#get-matrix {
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#execute-button {
+    margin: 0 auto;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.dropdown-item {
+    padding: 4px 0;
+}
+
+.show {
+    display: block;
+}
+
+
+
+#matrix-type{
+    background-color: rgb(220, 220, 220);
+}
+
+.dropdown:hover #config-type, #execute-button:hover #execute-button {background-color: #6dbb6f;}
+.dropdown-item:hover {background-color: #6dbb6f;}
+button:hover {background-color: #6dbb6f;}
+
+

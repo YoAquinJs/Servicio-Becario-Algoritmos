@@ -5,70 +5,70 @@
     <title>Algoritmos Genéticos</title>
 
     <script type="module" src="index.js"></script>
-    <style>
-        *{
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: rgb(199, 199, 199);
-        }
-        button{
-            width: 100px;
-            height: 40px;
-            background-color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Algoritmos Genéticos</h1>
-    <p>
-        Prototipo de Interfaz para el calculo de matrices de credibilidad
-        utilizando algortimos geneticos.
-    </p>
-    <p>Sube un archivo ".txt", o inserte los valores manualmente.</p>
-
-    <button id="execute-button">Ejecutar Algoritmo</button>
-    <br>
-    <h3>Tipo de Configuracion</h3>
-    <div class="dropdown">
-        <select name="menu-file" id="config-type">
-            <option value="Additional criteria parameters">
-                Additional criteria parameters</option>
-            <option value="Credibility criteria">
-                Credibility criteria</option>
-            <option value="Criteria directions">
-                Criteria directions</option>
-            <option value="Criteria hierarchy">
-                Criteria hierarchy</option>
-            <option value="Criteria interactions">
-                Criteria interactions</option>
-            <option value="Criteria parameters">
-                Criteria parameters</option>
-            <option value="Performance matrix">
-                Performance matrix</option>
-            <option value="Use value function">
-                Use value function</option>
-            <option value="Veto thresholds for supercriteria">
-                Veto thresholds for supercriteria</option>
-            <option value="Weights">
-                Weights</option>
-        </select>
+<div id="container">
+    <div id="instructions">
+        <h1>Algoritmos Genéticos</h1>
+        <p>
+            Prototipo de Interfaz para el calculo de matrices de credibilidad
+            utilizando algortimos geneticos.
+        </p>
+        <p>Sube un archivo ".txt", o inserte los valores en el espacio de texto.</p>
+    
+        <button id="execute-button">Ejecutar Algoritmo</button>
     </div>
-    <br>
 
     <br>
-    <input type="file" id="file-upload">
-    <button id="send-file-button">Enviar Config</button>
-    <br>
-    <br>
-    <button id="get-config-button">Descargar Config</button>
-    <br>
-    <h3>Obtener Matriz de credibilidad</h3>
-    <input type="text" id="matrix-type", placeholder="Matriz...">
-    <button id="matrix-button">Obtener Matriz</button>
-    <div id="matrix-display"></div>
-    <br>
-
-    <div class="backend-text"></div>
+    <div id="interface">
+        <h3>Tipo de Configuracion</h3>
+        <div id="dropdown">
+            <select name="menu-file" id="config-type">
+                <option value="Additional criteria parameters">
+                    Additional criteria parameters</option>
+                <option value="Credibility criteria">
+                    Credibility criteria</option>
+                <option value="Criteria directions">
+                    Criteria directions</option>
+                <option value="Criteria hierarchy">
+                    Criteria hierarchy</option>
+                <option value="Criteria interactions">
+                    Criteria interactions</option>
+                <option value="Criteria parameters">
+                    Criteria parameters</option>
+                <option value="Performance matrix">
+                    Performance matrix</option>
+                <option value="Use value function">
+                    Use value function</option>
+                <option value="Veto thresholds for supercriteria">
+                    Veto thresholds for supercriteria</option>
+                <option value="Weights">
+                    Weights</option>
+            </select>
+        </div>
+        <br>
+        <div id="configs">
+            <div id="files">
+                <div id="txt-area">
+                    <textarea rows="6" id="text-upload"></textarea>
+                </div>
+                <div id="send-and-upload">
+                    <input type="file" id="file-upload">
+                    <button id="send-file-button">Enviar Config (archivo)</button>
+                    <button id="send-text-button">Enviar Config (Texto)</button>
+                    <button id="get-config-button">Descargar Config</button>
+                </div>
+            </div>
+            <div id="get-matrix">
+                <h3>Obtener Matriz de credibilidad</h3>
+                <input type="text" class="rounded" id="matrix-type", placeholder="Matriz...">
+                <button id="matrix-button">Obtener Matriz</button>
+                <div id="matrix-display"></div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
