@@ -1,14 +1,19 @@
-export let uploadedFileContent;
+let uploadedFile = null;
 
 export function handleFileSelect(event) {
-    const file = event.target.files[0];
+    uploadedFile = event.target.files.length > 0 ? event.target.files[0] : null;
+}
 
-    if (!file)
-        return;
+export function getFileContent(){
+    if (!uploadedFile)
+        return Promise.reject("Missing File");
 
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        uploadedFileContent = event.target.result;
-    };
-    reader.readAsText(file);
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject("Error occurred reading the file.");
+
+        reader.readAsText(uploadedFile);
+    });
 }

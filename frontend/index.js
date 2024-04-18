@@ -1,5 +1,5 @@
 import * as backend from "./modules/backend_connection.js"
-import { uploadedFileContent, handleFileSelect } from "./modules/file_uploader.js"
+import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
 import { getParsedMatrix } from "./modules/matrix_parser.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
 
@@ -11,7 +11,7 @@ function visualizeRequestOutput(request, htmlElem, onSuccesMsg, onErrorMsg){
         setTimeout(_ => {
             htmlElem.innerHTML = prevText;
         }, 800);
-    }).catch(err => {
+    }).catch(_ => {
         htmlElem.innerHTML = onErrorMsg;
         setTimeout(_ => {
             htmlElem.innerHTML = prevText;
@@ -44,16 +44,19 @@ document.addEventListener("DOMContentLoaded", _ => {
     });
     const sendFileButton = document.getElementById(sendFileButtonId);
     sendFileButton.addEventListener("click", _ => {
-        const request = backend.sendConfigFile(configTypeDropdown.value, uploadedFileContent);
-        visualizeRequestOutput(request, sendFileButton, "Enviado", "Fallido");
+        getFileContent().then(fileContent => {
+            const request = backend.sendConfigFile(configTypeDropdown.value, fileContent);
+            visualizeRequestOutput(request, sendFileButton, "Enviado", "Fallido");
+        }).catch(err => {
+            console.log(err)
+            visualizeRequestOutput(new Promise(resolve => resolve()), sendFileButton, "Archivo No Seleccionado", "");   
+        });
     });
 
     const getConfigButton = document.getElementById(getConfigButtonId);
     getConfigButton.addEventListener("click", _ => {
         const request = backend.getConfigFile(configTypeDropdown.value);
-        request.then(config => {
-            downloadDataAsFile(config, configTypeDropdown.value);
-        });
+        request.then(config => downloadDataAsFile(config, configTypeDropdown.value));
         visualizeRequestOutput(request, getConfigButton, "Obtenido", "Fallido");
     });
 
