@@ -3,6 +3,22 @@ import { uploadedFileContent, handleFileSelect } from "./modules/file_uploader.j
 import { getParsedMatrix } from "./modules/matrix_parser.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
 
+function visualizeRequestOutput(request, htmlElem, onSuccesMsg, onErrorMsg){
+    const prevText = htmlElem.innerHTML;
+    htmlElem.innerHTML = "...";
+    request.then(_ => {
+        htmlElem.innerHTML = onSuccesMsg;
+        setTimeout(_ => {
+            htmlElem.innerHTML = prevText;
+        }, 800);
+    }).catch(err => {
+        htmlElem.innerHTML = onErrorMsg;
+        setTimeout(_ => {
+            htmlElem.innerHTML = prevText;
+        }, 1500);
+    });
+}
+
 const configTypeDropdownId = "config-type";
 const textUplaodId = "text-upload";
 const fileUploadId = "file-upload";
@@ -13,6 +29,7 @@ const executeButtonId = "execute-button";
 const matrixTypeId = "matrix-type";
 const getMatrixButtonId = "matrix-button";
 const matrixDisplayId = "matrix-display";
+
 document.addEventListener("DOMContentLoaded", _ => {
     const configTypeDropdown = document.getElementById(configTypeDropdownId);
 
@@ -22,36 +39,44 @@ document.addEventListener("DOMContentLoaded", _ => {
 
     const sendTextButton = document.getElementById(sendTextButtonId);
     sendTextButton.addEventListener("click", _ => {
-        backend.sendConfigFile(configTypeDropdown.value, textConfigInput.value);
+        const request = backend.sendConfigFile(configTypeDropdown.value, textConfigInput.value);
+        visualizeRequestOutput(request, sendTextButton, "Enviado", "Fallido");
     });
     const sendFileButton = document.getElementById(sendFileButtonId);
     sendFileButton.addEventListener("click", _ => {
-        backend.sendConfigFile(configTypeDropdown.value, uploadedFileContent);
+        const request = backend.sendConfigFile(configTypeDropdown.value, uploadedFileContent);
+        visualizeRequestOutput(request, sendFileButton, "Enviado", "Fallido");
     });
 
     const getConfigButton = document.getElementById(getConfigButtonId);
     getConfigButton.addEventListener("click", _ => {
-        backend.getConfigFile(configTypeDropdown.value).then(config => {
+        const request = backend.getConfigFile(configTypeDropdown.value);
+        request.then(config => {
             downloadDataAsFile(config, configTypeDropdown.value);
         });
+        visualizeRequestOutput(request, getConfigButton, "Obtenido", "Fallido");
     });
 
     const executeButton = document.getElementById(executeButtonId);
     executeButton.addEventListener("click", _ => {
-        backend.execute().then(response => {
+        const request = backend.execute();
+        request.then(response => {
             console.log(response);
         });
+        visualizeRequestOutput(request, executeButton, "Ejecutado", "Fallido");
     });
 
     const matrixTypeInput = document.getElementById(matrixTypeId);
     const getMatrixButton = document.getElementById(getMatrixButtonId);
     const matrixDisplay = document.getElementById(matrixDisplayId);
     getMatrixButton.addEventListener("click", _ => {
-        backend.getMatrix(matrixTypeInput.value).then(matrix => {
+        const request = backend.getMatrix(matrixTypeInput.value);
+        request.then(matrix => {
             const parsedMatrix = getParsedMatrix(matrix);
 
             matrixDisplay.innerText = parsedMatrix;
             downloadDataAsFile(parsedMatrix, matrixTypeInput.value + "-matrix");
         });
+        visualizeRequestOutput(request, getMatrixButton, "Obtenido", "Fallido");
     });
 });
