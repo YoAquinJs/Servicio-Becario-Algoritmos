@@ -15,7 +15,7 @@ def _read_config_file(config_type: str) -> str:
 
 def _write_config_file(config_type: str, data: str) -> None:
     with open(path.join(CONFIG_DIRECTORY, config_type), "w", encoding=ENCODING) as file:
-        file.write(data)
+        file.write(data.replace('\r\n', '\n'))
 
 class ConfigFile(ABC):
     """Clase base para los archivos de configuracion"""
