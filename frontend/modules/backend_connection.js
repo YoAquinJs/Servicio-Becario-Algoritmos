@@ -15,6 +15,29 @@ fetch(`${API_URI}/`, {
     console.error(error);
 });
 
+function isValidResponse(response, expectedStruct) {
+    if (!response || !expectedStruct || typeof response !== typeof expectedStruct)
+        return false;
+
+    const expected = Object.keys(expectedStruct);
+    if (Object.keys(response).length !== expected.length)
+        return false;
+
+    for (let key of expected) {
+        if (!response.hasOwnProperty(key))
+            return false;
+
+        const responseVal = response[key];
+        const expectedVal = expectedStruct[key];
+        if (typeof responseVal !== typeof expectedVal)
+            return false;
+        if (typeof expectedVal === "object" && !isValidResponse(responseVal, expectedVal))
+            return false;
+    }
+
+    return true;
+}
+
 //Api Calls
 export async function sendConfigFile(config_type, data){
     const param = new URLSearchParams({"config_data":data}).toString();
@@ -22,11 +45,11 @@ export async function sendConfigFile(config_type, data){
     if (!response.ok)
         throw new Error("No se pudo guardar la configuracion correctamente\n"+response.statusText);
 
-    const parsedResponsed = await response.json(); 
-    if (!parsedResponsed || !parsedResponsed.response)
+    const parsedResponse = await response.json(); 
+    if (!isValidResponse(parsedResponse, {"response":""}))
         throw new Error("La respuesta no contiene la estructura esperada");
 
-    return parsedResponsed.response;
+    return parsedResponse.response;
 }
 
 export async function getConfigFile(config_type){
@@ -34,11 +57,11 @@ export async function getConfigFile(config_type){
     if (!response.ok)
         throw new Error("No se pudo acceder a la configuracion correctamente\n"+response.statusText);
 
-    const parsedResponsed = await response.json(); 
-    if (!parsedResponsed || !parsedResponsed.config)
+    const parsedResponse = await response.json();
+    if (!isValidResponse(parsedResponse, {"config":""}))
         throw new Error("La respuesta no contiene la estructura esperada");
 
-    return parsedResponsed.config;
+    return parsedResponse.config;
 }
 
 export async function getMatrix(matrix_type){
@@ -46,11 +69,11 @@ export async function getMatrix(matrix_type){
     if (!response.ok)
         throw new Error("No se pudo acceder a la matriz correctamente\n"+response.statusText);
 
-    const parsedResponsed = await response.json(); 
-    if (!parsedResponsed || !parsedResponsed.matrix)
+    const parsedResponse = await response.json(); 
+    if (!isValidResponse(parsedResponse, {"matrix":""}))
         throw new Error("La respuesta no contiene la estructura esperada");
 
-    return parsedResponsed.matrix;
+    return parsedResponse.matrix;
 }
 
 export async function execute(){
@@ -58,9 +81,9 @@ export async function execute(){
     if (!response.ok)
         throw new Error("No se pudo ejecutar correctamente\n"+response.statusText);
 
-    const parsedResponsed = await response.json(); 
-    if (!parsedResponsed || !parsedResponsed.response)
+    const parsedResponse = await response.json(); 
+    if (!isValidResponse(parsedResponse, {"response":""}))
         throw new Error("La respuesta no contiene la estructura esperada");
 
-    return parsedResponsed.response;
+    return parsedResponse.response;
 }
