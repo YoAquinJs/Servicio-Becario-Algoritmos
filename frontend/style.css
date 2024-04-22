@@ -19,13 +19,14 @@ button{
 #container {
     background-color: #8495b9;
     width: 1000px;
-    height: 80vh;
+    min-height: 80vh;
     border: 5px solid #8495b9;
     border-radius: 25px;
     margin: 7vh auto;
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
+    flex: 1 1 1;
 }
 
 #title {
@@ -45,7 +46,7 @@ button{
 }
 
 #configs {
-    height: 350px;
+    min-height: 350px;
     display: flex;
     gap: 10px;
     margin: 0 auto;
@@ -64,6 +65,7 @@ button{
 }
 
 #get-matrix {
+    min-height: 160px;
     gap: 10px;
     display: flex;
     flex-direction: column;
@@ -108,6 +110,5 @@ button{
     background-color: rgb(220, 220, 220);
 }
 
-.dropdown:hover #config-type, #execute-button:hover #execute-button {background-color: #6dbb6f;}
-.dropdown-item:hover {background-color: #6dbb6f;}
-button:hover {background-color: #6dbb6f;}
+.dropdown:hover #config-type, #execute-button:hover #execute-button {background-color: #77a2ff;}
+button:hover {background-color: #77a2ff;}
