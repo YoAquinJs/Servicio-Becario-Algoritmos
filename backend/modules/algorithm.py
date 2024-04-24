@@ -25,7 +25,7 @@ class ParseableEnum(EnumMeta):
         return cast(ParseableEnum, found)
 
 
-class ExecAlgorithm(ParseableEnum):
+class ExecAlgorithm(Enum, metaclass=ParseableEnum):
     """Enum de las diferentes carpetas para la ejecucion del algoritmo"""
 
     SORTING="Calculate sorting"
