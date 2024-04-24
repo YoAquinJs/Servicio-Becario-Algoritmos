@@ -3,18 +3,27 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from enum import Enum
 from os import path
 from fastapi import HTTPException
 
-CONFIG_DIRECTORY = path.join("Files", "Calculate credibility matrix")
+CONFIG_EXT = ".txt"
+CONFIG_DIRECTORY = "Files"
 ENCODING = "utf-8"
 
-def _read_config_file(config_type: str) -> str:
-    with open(path.join(CONFIG_DIRECTORY, config_type), "r", encoding=ENCODING) as file:
+class ConfigDirectory(Enum):
+    """Enum de las diferentes carpetas para la ejecucion del algoritmo"""
+    SORTING="Calculate sorting"
+    CREDIBILITY_MATRIX="Calculate credibility matrix"
+
+def _read_config_file(directory: ConfigDirectory, config_type: str) -> str:
+    file_path = path.join(CONFIG_DIRECTORY, directory.value, config_type)+CONFIG_EXT
+    with open(file_path, "r", encoding=ENCODING) as file:
         return file.read()
 
-def _write_config_file(config_type: str, data: str) -> None:
-    with open(path.join(CONFIG_DIRECTORY, config_type), "w", encoding=ENCODING) as file:
+def _write_config_file(directory: ConfigDirectory, config_type: str, data: str) -> None:
+    file_path = path.join(CONFIG_DIRECTORY, directory.value, config_type)+CONFIG_EXT
+    with open(file_path, "w", encoding=ENCODING) as file:
         file.write(data.replace('\r\n', '\n'))
 
 class ConfigFile(ABC):
@@ -22,13 +31,13 @@ class ConfigFile(ABC):
 
     @classmethod
     @abstractmethod
-    def save_file(cls, data: str) -> None:
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
         """Guarda el archivo de configuracion con la informacion recibida,
            Puede lanzar un HTTPException si hay algun fallo"""
 
     @classmethod
     @abstractmethod
-    def load_file(cls) -> str:
+    def load_file(cls, directory: ConfigDirectory) -> str:
         """Retorna la informacion guardada del archivo de configuracion,
            Puede lanzar un HTTPException si hay algun fallo"""
 
@@ -37,25 +46,25 @@ class ConfigFile(ABC):
         """Obtiene el tipo correspondiente """
         config: type[ConfigFile]
         match config_type:
-            case "Additional criteria parameters":
+            case AdditionalCriteriaParametersConfig.config_type:
                 config = AdditionalCriteriaParametersConfig
-            case "Credibility criteria":
+            case CredibilityCriteriaConfig.config_type:
                 config = CredibilityCriteriaConfig
-            case "Criteria directions":
+            case CriteriaDirectionsConfig.config_type:
                 config = CriteriaDirectionsConfig
-            case "Criteria hierarchy":
+            case CriteriaHierarchyConfig.config_type:
                 config = CriteriaHierarchyConfig
-            case "Criteria interactions":
+            case CriteriaInteractionsConfig.config_type:
                 config = CriteriaInteractionsConfig
-            case "Criteria parameters":
+            case CriteriaParametersConfig.config_type:
                 config = CriteriaParametersConfig
-            case "Performance matrix":
+            case PerformanceMatrixConfig.config_type:
                 config = PerformanceMatrixConfig
-            case "Use value function":
+            case UseValueFunctionConfig.config_type:
                 config = UseValueFunctionConfig
-            case "Veto thresholds for supercriteria":
+            case VetoThresholdsForSupercriteriaConfig.config_type:
                 config = VetoThresholdsForSupercriteriaConfig
-            case "Weights":
+            case WeightsConfig.config_type:
                 config = WeightsConfig
             case _:
                 error_msg = f"archivo de configuracion '{config_type} no encontrado"
@@ -64,120 +73,120 @@ class ConfigFile(ABC):
 
 class AdditionalCriteriaParametersConfig(ConfigFile):
     """Clase para configuracion de Additional criteria parameters"""
-    config_type = "Additional criteria parameters.txt"
+    config_type = "Additional criteria parameters"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class CredibilityCriteriaConfig(ConfigFile):
     """Clase para configuracion de Credibility criteria"""
-    config_type = "Credibility criteria.txt"
+    config_type = "Credibility criteria"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class CriteriaDirectionsConfig(ConfigFile):
     """Clase para configuracion de Criteria directions"""
-    config_type = "Criteria directions.txt"
+    config_type = "Criteria directions"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class CriteriaHierarchyConfig(ConfigFile):
     """Clase para configuracion de Criteria hierarchy"""
-    config_type = "Criteria hierarchy.txt"
+    config_type = "Criteria hierarchy"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class CriteriaInteractionsConfig(ConfigFile):
     """Clase para configuracion de Criteria interactions"""
-    config_type = "Criteria interactions.txt"
+    config_type = "Criteria interactions"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class CriteriaParametersConfig(ConfigFile):
     """Clase para configuracion de Criteria parameters"""
-    config_type = "Criteria parameters.txt"
+    config_type = "Criteria parameters"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class PerformanceMatrixConfig(ConfigFile):
     """Clase para configuracion de Performance matrix"""
-    config_type = "Performance matrix.txt"
+    config_type = "Performance matrix"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class UseValueFunctionConfig(ConfigFile):
     """Clase para configuracion de Use value function"""
-    config_type = "Use value function.txt"
+    config_type = "Use value function"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class VetoThresholdsForSupercriteriaConfig(ConfigFile):
     """Clase para configuracion de Veto thresholds for supercriteria"""
-    config_type = "Veto thresholds for supercriteria.txt"
+    config_type = "Veto thresholds for supercriteria"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
 
 class WeightsConfig(ConfigFile):
     """Clase para configuracion de Weights"""
-    config_type = "Weights.txt"
+    config_type = "Weights"
 
     @classmethod
-    def save_file(cls, data: str) -> None:
-        _write_config_file(cls.config_type, data)
+    def save_file(cls, directory: ConfigDirectory, data: str) -> None:
+        _write_config_file(directory, cls.config_type, data)
 
     @classmethod
-    def load_file(cls) -> str:
-        return _read_config_file(cls.config_type)
+    def load_file(cls, directory: ConfigDirectory) -> str:
+        return _read_config_file(directory, cls.config_type)
