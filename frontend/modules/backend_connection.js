@@ -26,10 +26,12 @@ function isValidResponse(response, expectedStruct) {
     for (let key of expected) {
         if (!response.hasOwnProperty(key))
             return false;
-
+        
         const responseVal = response[key];
         const expectedVal = expectedStruct[key];
-        if (typeof responseVal !== typeof expectedVal)
+        if (expectedVal === undefined)
+            continue;
+        if (typeof expectedVal !== typeof responseVal)
             return false;
         if (typeof expectedVal === "object" && !isValidResponse(responseVal, expectedVal))
             return false;
@@ -70,7 +72,7 @@ export async function getMatrix(matrix_type){
         throw new Error("No se pudo acceder a la matriz correctamente\n"+response.statusText);
 
     const parsedResponse = await response.json(); 
-    if (!isValidResponse(parsedResponse, {"matrix":""}))
+    if (!isValidResponse(parsedResponse, {"matrix":undefined}))
         throw new Error("La respuesta no contiene la estructura esperada");
 
     return parsedResponse.matrix;
