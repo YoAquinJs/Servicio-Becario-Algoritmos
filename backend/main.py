@@ -8,7 +8,7 @@ uvicorn main:app --reload
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from modules.config_files import ConfigFile, ConfigDirectory
+from modules.config_files import ConfigFile, ConfigAlgorithm
 from modules.credibility_matrix import load_credibility_matrix
 from modules.execute import run_executable
 
@@ -30,13 +30,13 @@ async def root():
 @app.get("/config/{config_type}")
 async def get_config(config_type: str) -> dict[str, str]:
     """Retorna la informacion actual del archivo de configuracion solicitado"""
-    config = ConfigFile.get_type(config_type).load_file(ConfigDirectory.CREDIBILITY_MATRIX)
+    config = ConfigFile.get_type(config_type).load_file(ConfigAlgorithm.CREDIBILITY_MATRIX)
     return {"config": config}
 
 @app.post("/config/{config_type}")
 async def modify_config(config_type: str, config_data: str):
     """Guarda la configuracion en su archivo correspondiente"""
-    ConfigFile.get_type(config_type).save_file(ConfigDirectory.CREDIBILITY_MATRIX, config_data)
+    ConfigFile.get_type(config_type).save_file(ConfigAlgorithm.CREDIBILITY_MATRIX, config_data)
     return {"response": f"Configuracion ({config_type}) guardada"}
 
 @app.get("/matrix/{matrix_type}")
