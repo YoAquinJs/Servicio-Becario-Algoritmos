@@ -104,7 +104,11 @@ button{
     display: block;
 }
 
-
+#text-upload{
+    resize: vertical;
+    min-height: 100px;
+    width: 350px;
+}
 
 #matrix-type{
     background-color: rgb(220, 220, 220);
