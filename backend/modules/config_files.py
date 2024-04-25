@@ -5,19 +5,19 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from os import path
 from fastapi import HTTPException
-from modules.algorithm import ExecAlgorithm
+from modules.algorithm import ExecAlgorithm, EXECUTABLE_CONFIG_DIR
 
 CONFIG_EXT = ".txt"
-CONFIG_DIRECTORY = "Files"
+EXEC_FILES_DIR = "Files"
 ENCODING = "utf-8"
 
 def _read_config_file(algorithm: ExecAlgorithm, config_type: str) -> str:
-    file_path = path.join(CONFIG_DIRECTORY, algorithm.value, config_type)+CONFIG_EXT
+    file_path = path.join(EXEC_FILES_DIR, EXECUTABLE_CONFIG_DIR[algorithm], config_type)+CONFIG_EXT
     with open(file_path, "r", encoding=ENCODING) as file:
         return file.read()
 
 def _write_config_file(algorithm: ExecAlgorithm, config_type: str, data: str) -> None:
-    file_path = path.join(CONFIG_DIRECTORY, algorithm.value, config_type)+CONFIG_EXT
+    file_path = path.join(EXEC_FILES_DIR, EXECUTABLE_CONFIG_DIR[algorithm], config_type)+CONFIG_EXT
     with open(file_path, "w", encoding=ENCODING) as file:
         file.write(data.replace('\r\n', '\n'))
 

@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from modules.algorithm import ExecAlgorithm
 from modules.config_files import ConfigFile
-from modules.credibility_matrix import load_credibility_matrix
+from modules.output import load_algorithm_output
 from modules.execute import run_executable
 
 app = FastAPI()
@@ -40,11 +40,11 @@ async def modify_config(algorithm: str, config_type: str, config_data: str):
     ConfigFile.get_type(config_type).save_file(ExecAlgorithm[algorithm], config_data)
     return {"response": f"Configuracion ({config_type}) guardada"}
 
-@app.get("/output/{algorithm}/{matrix_type}")
-async def output(algorithm: str, matrix_type: str) -> dict[str, list[list[float]]]:
+@app.get("/output/{algorithm}/{output_type}")
+async def get_output(algorithm: str, output_type: str) -> dict[str, str]:
     """Retorna la matriz de credibilidad del indice especificado"""
-    matrix = load_credibility_matrix(matrix_type)
-    return {"matrix": matrix}
+    output = load_algorithm_output(ExecAlgorithm[algorithm], output_type)
+    return {"output": output}
 
 @app.post("/execute/{algorithm}")
 async def execute(algorithm: str) -> dict[str, str]:
