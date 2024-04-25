@@ -1,15 +1,14 @@
 """Este modulo contiene el Enum de ExecAlgorithm y su funcionalidad para pasarlo a string"""
+# pylint:disable=undefined-variable
 
-from __future__ import annotations
-
-from enum import EnumMeta
+from enum import Enum, EnumMeta
 from typing import cast
 from fastapi import HTTPException
 
-class ParseableEnum(EnumMeta):
+class ParseableEnum[T](EnumMeta):
     """Makes a string parseable to the specified enum type
     """
-    def __getitem__(cls, item: str) -> ParseableEnum:
+    def __getitem__(cls, item: str) -> T:
         """This method parse from a string to the Enum object
 
         Args:
@@ -22,9 +21,10 @@ class ParseableEnum(EnumMeta):
             raise HTTPException(status_code=404, detail=f"Algoritmo {item} no encontrado")
 
         found = cls.__members__.get(item)
-        return cast(ParseableEnum, found)
+        return cast(T, found)
 
 
+# The value of each enum value has to be name of the directory of that algorithm
 class ExecAlgorithm(Enum, metaclass=ParseableEnum):
     """Enum de las diferentes carpetas para la ejecucion del algoritmo"""
 

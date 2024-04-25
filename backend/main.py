@@ -6,6 +6,7 @@ Comand de ejecucion:
 uvicorn main:app --reload
 """
 
+from typing import cast
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from modules.algorithm import ExecAlgorithm, get_executable_param
@@ -31,16 +32,16 @@ async def root():
 @app.get("/config/{algorithm}/{config_type}")
 async def get_config(algorithm: str, config_type: str) -> dict[str, str]:
     """Retorna la informacion actual del archivo de configuracion solicitado"""
-    config = ConfigFile.get_type(config_type).load_file(algorithm)
+    config = ConfigFile.get_type(config_type).load_file(ExecAlgorithm[algorithm])
     return {"config": config}
 
 @app.post("/config/{algorithm}/{config_type}")
 async def modify_config(algorithm: str, config_type: str, config_data: str):
     """Guarda la configuracion en su archivo correspondiente"""
-    ConfigFile.get_type(config_type).save_file(algorithm, config_data)
+    ConfigFile.get_type(config_type).save_file(ExecAlgorithm[algorithm], config_data)
     return {"response": f"Configuracion ({config_type}) guardada"}
 
-@app.get("/matrix/{algorithm}/{matrix_type}")
+@app.get("/output/{algorithm}/{matrix_type}")
 async def output(algorithm: str, matrix_type: str) -> dict[str, list[list[float]]]:
     """Retorna la matriz de credibilidad del indice especificado"""
     matrix = load_credibility_matrix(matrix_type)
