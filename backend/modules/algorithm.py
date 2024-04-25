@@ -17,11 +17,11 @@ class ParseableEnum[T](EnumMeta):
         Returns:
             ParseableEnum: This enum
         """
-        if item not in cls.__members__.keys():
+        option = [opt for opt in cls._member_map_.values() if opt.value == item]
+        if len(option) == 0:
             raise HTTPException(status_code=404, detail=f"Algoritmo {item} no encontrado")
 
-        found = cls.__members__.get(item)
-        return cast(T, found)
+        return cast(T, option[0])
 
 
 # The value of each enum value has to be name of the directory of that algorithm
