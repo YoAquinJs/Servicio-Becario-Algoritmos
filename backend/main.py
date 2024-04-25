@@ -6,10 +6,9 @@ Comand de ejecucion:
 py -m uvicorn main:app --reload
 """
 
-from typing import cast
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from modules.algorithm import ExecAlgorithm, get_executable_param
+from modules.algorithm import ExecAlgorithm
 from modules.config_files import ConfigFile
 from modules.credibility_matrix import load_credibility_matrix
 from modules.execute import run_executable
@@ -50,4 +49,5 @@ async def output(algorithm: str, matrix_type: str) -> dict[str, list[list[float]
 @app.post("/execute/{algorithm}")
 async def execute(algorithm: str) -> dict[str, str]:
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
-    return {"response": run_executable()}
+    result = run_executable(ExecAlgorithm[algorithm])
+    return {"response": result}
