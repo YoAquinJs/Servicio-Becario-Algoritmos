@@ -6,6 +6,11 @@ const algorithmColors = {
     'Portfolio Level': '#aa6fd1'
 };
 
+// .bg-credibility { background-color: #8495b9; }
+// .bg-sorting { background-color: #c9b14a; }
+// .bg-project { background-color: #66cc99; }
+// .bg-portfolio { background-color: #aa6fd1; }
+
 // Function to set the background color based on the selected value
 function setBackgroundColor(selectedValue) {
     // Get the container element
