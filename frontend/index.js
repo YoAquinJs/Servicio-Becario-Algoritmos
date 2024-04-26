@@ -1,6 +1,5 @@
 import * as backend from "./modules/backend_connection.js"
 import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
-import { getParsedMatrix } from "./modules/matrix_parser.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
 
 const ALGORITHMS = [
