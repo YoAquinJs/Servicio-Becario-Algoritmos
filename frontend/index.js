@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedConfig = elems[IDs.configSelector].value;
         const inputText = elems[IDs.configTextInput].value;
         const request = backend.modifyConfig(selectedAlgorithm, selectedConfig, inputText);
-        visualizeRequestOutput(request, sendTextButton, "Enviado", "Fallido");
+        visualizeRequestOutput(request, elems[IDs.sendTextButton], "Enviado", "Fallido");
     });
     elems[IDs.sendFileButton].addEventListener("click", _ => {
         getFileContent().then(fileContent => {
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedConfig = elems[IDs.configSelector].value;
         const request = backend.getConfigFile(selectedAlgorithm, selectedConfig);
-        request.then(config => downloadDataAsFile(config, configTypeDropdown.value));
+        request.then(config => downloadDataAsFile(config, selectedConfig));
         visualizeRequestOutput(request, elems[IDs.getConfigButton], "Obtenido", "Fallido");
     });
 
