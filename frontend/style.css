@@ -50,7 +50,6 @@ button{
 }
 
 #instructions {
-    height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -76,7 +75,7 @@ button{
     flex-direction: column;
 }
 
-#get-matrix {
+#get-result {
     min-height: 160px;
     gap: 10px;
     display: flex;
@@ -118,11 +117,11 @@ button{
 
 #text-upload{
     resize: vertical;
-    min-height: 100px;
+    min-height: 150px;
     width: 350px;
 }
 
-#matrix-type{
+#matrix-result{
     background-color: rgb(220, 220, 220);
 }
 

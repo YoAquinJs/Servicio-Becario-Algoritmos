@@ -12,22 +12,19 @@
 <body>
 <div id="container">
     <div id="instructions">
-        <h1>Algoritmos Genéticos</h1>
+        <h1>Algoritmos Genéticos de Optimizacion</h1>
         <p>
-            Prototipo de Interfaz para el calculo de matrices de credibilidad
-            utilizando algortimos geneticos.
+            Prototipo de Interfaz para el nucleo de software de
+            algortimos geneticos de optimizacion.<br>
+            Sube un archivo ".txt", o inserte los valores en el espacio de texto.
         </p>
-        <p>Sube un archivo ".txt", o inserte los valores en el espacio de texto.</p>
-    
-        <button class="hover-bg" id="execute-button">Ejecutar Algoritmo</button>
     </div>
 
-    <br>
     <div id="interface">
         <h2 id="algo-title">Calculate Credibility Matrix</h2>
         <h3>Selección de Algoritmo</h3>
-        <div id="algo-menu">
-            <select name="algorithm" id="algo-select">
+        <div>
+            <select id="algorithm-type">
                 <option value="Calculate Credibility Matrix">
                     Calculate Credibility Matrix</option>
                 <option value="Calculate Sorting">
@@ -38,6 +35,10 @@
                     Portfolio Level</option>
             </select>
         </div>
+        <br>
+        <button class="hover-bg" id="execute-button">Ejecutar Algoritmo</button>
+        <br><br>
+        
         <h3>Tipo de Configuracion</h3>
         <div id="dropdown">
             <select name="menu-file" id="config-type">
@@ -76,11 +77,11 @@
                     <button class="hover-bg" id="get-config-button">Descargar Config</button>
                 </div>
             </div>
-            <div id="get-matrix">
-                <h3>Obtener Matriz de credibilidad</h3>
-                <input type="text" class="rounded" id="matrix-type", placeholder="Matriz...">
-                <button class="hover-bg" id="matrix-button">Obtener Matriz</button>
-                <div id="matrix-display"></div>
+            <div id="get-result">
+                <h3>Obtener Resultados del Algoritmo</h3>
+                <input type="text" class="rounded" id="result-type", placeholder="nombre del archivo...">
+                <button class="hover-bg" id="get-result-button">Obtener Archivo</button>
+                <!-- <div id="matrix-display"></div> -->
             </div>
         </div>
     </div>

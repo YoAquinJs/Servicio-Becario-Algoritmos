@@ -30,11 +30,11 @@ function setBackgroundColor(selectedValue) {
 // Add event listener when the DOM content is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Call the function to set the background color when the page loads
-    var selectedValue = document.getElementById('algo-select').value;
+    var selectedValue = document.getElementById('algorithm-type').value;
     setBackgroundColor(selectedValue);
 
     // Add event listener to the select element
-    document.getElementById('algo-select').addEventListener('change', function() {
+    document.getElementById('algorithm-type').addEventListener('change', function() {
         // Get the selected value
         var selectedValue = this.value;
 
