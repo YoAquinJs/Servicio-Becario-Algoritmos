@@ -5,6 +5,7 @@
     <title>Algoritmos Genéticos</title>
 
     <script type="module" src="index.js"></script>
+    <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -18,11 +19,25 @@
         </p>
         <p>Sube un archivo ".txt", o inserte los valores en el espacio de texto.</p>
     
-        <button id="execute-button">Ejecutar Algoritmo</button>
+        <button class="hover-bg" id="execute-button">Ejecutar Algoritmo</button>
     </div>
 
     <br>
     <div id="interface">
+        <h2 id="algo-title">Calculate Credibility Matrix</h2>
+        <h3>Selección de Algoritmo</h3>
+        <div id="algo-menu">
+            <select name="algorithm" id="algo-select">
+                <option value="Calculate Credibility Matrix">
+                    Calculate Credibility Matrix</option>
+                <option value="Calculate Sorting">
+                    Calculate Sorting</option>
+                <option value="Project Level">
+                    Project Level</option>
+                <option value="Portfolio Level">
+                    Portfolio Level</option>
+            </select>
+        </div>
         <h3>Tipo de Configuracion</h3>
         <div id="dropdown">
             <select name="menu-file" id="config-type">
@@ -56,15 +71,15 @@
                 </div>
                 <div id="send-and-upload">
                     <input type="file" id="file-upload">
-                    <button id="send-file-button">Enviar Config (archivo)</button>
-                    <button id="send-text-button">Enviar Config (Texto)</button>
-                    <button id="get-config-button">Descargar Config</button>
+                    <button class="hover-bg" id="send-file-button">Enviar Config (archivo)</button>
+                    <button class="hover-bg" id="send-text-button">Enviar Config (Texto)</button>
+                    <button class="hover-bg" id="get-config-button">Descargar Config</button>
                 </div>
             </div>
             <div id="get-matrix">
                 <h3>Obtener Matriz de credibilidad</h3>
                 <input type="text" class="rounded" id="matrix-type", placeholder="Matriz...">
-                <button id="matrix-button">Obtener Matriz</button>
+                <button class="hover-bg" id="matrix-button">Obtener Matriz</button>
                 <div id="matrix-display"></div>
             </div>
         </div>

@@ -16,11 +16,10 @@ button{
     border-radius: 25px;
 }
 
+
 #container {
-    background-color: #8495b9;
     width: 1000px;
     min-height: 80vh;
-    border: 5px solid #8495b9;
     border-radius: 25px;
     margin: 7vh auto;
     padding: 20px;
@@ -29,12 +28,25 @@ button{
     flex: 1 1 1;
 }
 
+.bg-credibility { background-color: #8495b9; }
+.bg-sorting { background-color: #c9b14a; }
+.bg-project { background-color: #66cc99; }
+.bg-portfolio { background-color: #aa6fd1; }
+
 #title {
     margin: 0px auto;
 }
 
+#execute-button {
+    margin-bottom: 50px;
+}
+
 #interface {
-    margin: 0 auto;
+    margin: 25px auto;
+}
+
+#algo-title {
+    margin: 15px;
 }
 
 #instructions {
@@ -114,5 +126,6 @@ button{
     background-color: rgb(220, 220, 220);
 }
 
-.dropdown:hover #config-type, #execute-button:hover #execute-button {background-color: #77a2ff;}
-button:hover {background-color: #77a2ff;}
+.hover-bg:hover {
+    background-color: #8495b9;
+}
