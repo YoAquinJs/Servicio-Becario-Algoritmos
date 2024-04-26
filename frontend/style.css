@@ -75,7 +75,7 @@ button{
     flex-direction: column;
 }
 
-#get-result {
+#get-output {
     min-height: 160px;
     gap: 10px;
     display: flex;

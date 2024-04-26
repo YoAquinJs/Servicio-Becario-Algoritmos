@@ -3,6 +3,43 @@ import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
 import { getParsedMatrix } from "./modules/matrix_parser.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
 
+//api constants
+const ALGORITHMS = [
+    "Calculate Credibility Matrix",
+    "Calculate Sorting",
+    "Project Level",
+    "Portfolio Leve"
+];
+
+const CONFIGS = [
+    "Additional criteria parameters",
+    "Credibility criteria",
+    "Criteria directions",
+    "Criteria hierarchy",
+    "Criteria interactions",
+    "Criteria parameters",
+    "Performance matrix",
+    "Use value function",
+    "Veto thresholds for supercriteria",
+    "Weights"
+];
+
+//DOM Ids
+const IDs = {
+    algorithmSelectorId : "algorithm-selector",
+    executeButtonId : "execute-button",
+
+    configSelectorId : "config-selector",
+    configTextInputId : "config-text",
+    configFileInputId : "config-file",
+    sendTextButtonId : "send-text-button",
+    sendFileButtonId : "send-file-button",
+    getConfigButtonId : "get-config-button",
+
+    outputSelectorId : "output-selector",
+    getOutputButtonId : "get-output-button",
+};
+
 function visualizeRequestOutput(request, htmlElem, onSuccesMsg, onErrorMsg){
     const prevText = htmlElem.innerHTML;
     htmlElem.innerHTML = "...";
@@ -19,67 +56,62 @@ function visualizeRequestOutput(request, htmlElem, onSuccesMsg, onErrorMsg){
     });
 }
 
-const configTypeDropdownId = "config-type";
-const textUplaodId = "text-upload";
-const fileUploadId = "file-upload";
-const sendTextButtonId = "send-text-button";
-const sendFileButtonId = "send-file-button";
-const getConfigButtonId = "get-config-button";
-const executeButtonId = "execute-button";
-const matrixTypeId = "matrix-type";
-const getMatrixButtonId = "matrix-button";
-const matrixDisplayId = "matrix-display";
+function fillSelectorOptions(selectorElem, options){
+    for(const opt of options)
+        selectorElem.innerHTML += `<option value=${opt}>${opt}</option>\n`;
+}
 
 document.addEventListener("DOMContentLoaded", _ => {
-    const configTypeDropdown = document.getElementById(configTypeDropdownId);
+    const elems = Object.keys(IDs).reduce((output, id) => {
+        output[IDs[id]] = document.getElementById(IDs[id]);
+        return output;
+    }, {});
 
-    const textConfigInput = document.getElementById(textUplaodId);
-    const fileConfigInput = document.getElementById(fileUploadId);
-    fileConfigInput.addEventListener("change", handleFileSelect);
+    fillSelectorOptions(elems[IDs.algorithmSelectorId], ALGORITHMS);
+    fillSelectorOptions(elems[IDs.configSelectorId], CONFIGS);
 
-    const sendTextButton = document.getElementById(sendTextButtonId);
-    sendTextButton.addEventListener("click", _ => {
-        const request = backend.sendConfigFile(configTypeDropdown.value, textConfigInput.value);
+    elems[IDs.configFileInputId].addEventListener("change", handleFileSelect);
+
+    elems[IDs.sendTextButtonId].addEventListener("click", _ => {
+        const selectedConfig = elems[IDs.configSelectorId].value;
+        const inputText = elems[IDs.configTextInputId].value;
+        const request = backend.sendConfigFile(selectedConfig, inputText);
         visualizeRequestOutput(request, sendTextButton, "Enviado", "Fallido");
     });
-    const sendFileButton = document.getElementById(sendFileButtonId);
-    sendFileButton.addEventListener("click", _ => {
+    elems[IDs.sendFileButtonId].addEventListener("click", _ => {
         getFileContent().then(fileContent => {
-            const request = backend.sendConfigFile(configTypeDropdown.value, fileContent);
-            visualizeRequestOutput(request, sendFileButton, "Enviado", "Fallido");
+            const selectedConfig = elems[IDs.configSelectorId].value;
+            const request = backend.sendConfigFile(selectedConfig, fileContent);
+            visualizeRequestOutput(request, elems[IDs.sendFileButtonId], "Enviado", "Fallido");
         }).catch(err => {
             console.log(err)
-            visualizeRequestOutput(new Promise(resolve => resolve()), sendFileButton, "Archivo No Seleccionado", "");   
+            const noEvent = new Promise(resolve => resolve());
+            visualizeRequestOutput(noEvent,elems[IDs.sendFileButtonId], "Archivo No Seleccionado", "");   
         });
     });
 
-    const getConfigButton = document.getElementById(getConfigButtonId);
-    getConfigButton.addEventListener("click", _ => {
-        const request = backend.getConfigFile(configTypeDropdown.value);
+    elems[IDs.getConfigButtonId].addEventListener("click", _ => {
+        const selectedConfig = elems[IDs.configSelectorId].value;
+        const request = backend.getConfigFile(selectedConfig);
         request.then(config => downloadDataAsFile(config, configTypeDropdown.value));
-        visualizeRequestOutput(request, getConfigButton, "Obtenido", "Fallido");
+        visualizeRequestOutput(request, elems[IDs.getConfigButtonId], "Obtenido", "Fallido");
     });
 
-    const executeButton = document.getElementById(executeButtonId);
-    executeButton.addEventListener("click", _ => {
+    elems[IDs.executeButtonId].addEventListener("click", _ => {
         const request = backend.execute();
         request.then(response => {
             console.log(response);
         });
-        visualizeRequestOutput(request, executeButton, "Ejecutado", "Fallido");
+        visualizeRequestOutput(request, elems[IDs.executeButtonId], "Ejecutado", "Fallido");
     });
 
-    const matrixTypeInput = document.getElementById(matrixTypeId);
-    const getMatrixButton = document.getElementById(getMatrixButtonId);
-    const matrixDisplay = document.getElementById(matrixDisplayId);
-    getMatrixButton.addEventListener("click", _ => {
-        const request = backend.getMatrix(matrixTypeInput.value);
-        request.then(matrix => {
-            const parsedMatrix = getParsedMatrix(matrix);
-
-            matrixDisplay.innerText = parsedMatrix;
-            downloadDataAsFile(parsedMatrix, matrixTypeInput.value + "-matrix");
+    elems[IDs.getOutputButtonId].addEventListener("click", _ => {
+        const selectedAlgorithm = elems[IDs.algorithmSelectorId].value;
+        const selectedOutput = elems[IDs.outputSelectorId].value;
+        const request = backend.getMatrix(selectedOutput);
+        request.then(output => {
+            downloadDataAsFile(output, `${selectedOutput}-out-${selectedAlgorithm}`);
         });
-        visualizeRequestOutput(request, getMatrixButton, "Obtenido", "Fallido");
+        visualizeRequestOutput(request, elems[IDs.getOutputButtonId], "Obtenido", "Fallido");
     });
 });
