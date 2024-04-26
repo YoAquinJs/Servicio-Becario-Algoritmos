@@ -1,7 +1,7 @@
 """Este modulo contiene el Enum de ExecAlgorithm y su funcionalidad para pasarlo a string"""
 # pylint:disable=undefined-variable
 
-from enum import Enum, EnumMeta, auto
+from enum import Enum, EnumMeta
 from typing import cast
 from fastapi import HTTPException
 
@@ -24,14 +24,17 @@ class ParseableEnum[T](EnumMeta):
 
         return cast(T, option[0])
 
-
 class ExecAlgorithm(Enum, metaclass=ParseableEnum):
     """Enum de las diferentes carpetas para la ejecucion del algoritmo"""
 
-    SORTING=auto()
-    CREDIBILITY_MATRIX=auto()
+    PROJECT_LEVEL="Portfolio level"
+    PORTFOLIO_LEVEL="Project level"
+    SORTING="Calculate sorting"
+    CREDIBILITY_MATRIX="Calculate credibility matrix"
 
 EXECUTABLE_CONFIG_DIR: dict[ExecAlgorithm, str] = {
+    ExecAlgorithm.PROJECT_LEVEL: "Project level",
+    ExecAlgorithm.PORTFOLIO_LEVEL: "Portfolio level",
     ExecAlgorithm.SORTING: "Calculate sorting",
     ExecAlgorithm.CREDIBILITY_MATRIX: "Calculate credibility matrix",
 }
