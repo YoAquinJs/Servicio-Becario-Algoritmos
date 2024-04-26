@@ -114,7 +114,7 @@ button{
     margin: 0 auto;
 }
 
-#text-upload {
+#config-text {
     resize: vertical;
     min-height: 150px;
     width: 350px;

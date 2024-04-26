@@ -3,10 +3,10 @@ import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
 
 const ALGORITHMS = [
-    "Calculate Credibility Matrix",
-    "Calculate Sorting",
-    "Project Level",
-    "Portfolio Leve"
+    "Calculate credibility matrix",
+    "Calculate sorting",
+    "Project level",
+    "Portfolio level"
 ];
 
 const algorithmCols = ["#8495b9","#c9b14a","#66cc99","#aa6fd1"]
@@ -66,7 +66,7 @@ function fillSelectorOptions(selectorElem, options){
     for(const opt of options)
         selectorElem.innerHTML += `<option value="${opt}">${opt}</option>\n`;
     selectorElem.value = options[0];
-    selectorElem.dispatchEvent(new Event('change'));
+    selectorElem.dispatchEvent(new Event("change"));
 }
 
 document.addEventListener("DOMContentLoaded", _ => {
@@ -89,15 +89,17 @@ document.addEventListener("DOMContentLoaded", _ => {
     elems[IDs.configFileInput].addEventListener("change", handleFileSelect);
 
     elems[IDs.sendTextButton].addEventListener("click", _ => {
+        const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedConfig = elems[IDs.configSelector].value;
         const inputText = elems[IDs.configTextInput].value;
-        const request = backend.sendConfigFile(selectedConfig, inputText);
+        const request = backend.modifyConfig(selectedAlgorithm, selectedConfig, inputText);
         visualizeRequestOutput(request, sendTextButton, "Enviado", "Fallido");
     });
     elems[IDs.sendFileButton].addEventListener("click", _ => {
         getFileContent().then(fileContent => {
+            const selectedAlgorithm = elems[IDs.algorithmSelector].value;
             const selectedConfig = elems[IDs.configSelector].value;
-            const request = backend.sendConfigFile(selectedConfig, fileContent);
+            const request = backend.modifyConfig(selectedAlgorithm, selectedConfig, fileContent);
             visualizeRequestOutput(request, elems[IDs.sendFileButton], "Enviado", "Fallido");
         }).catch(err => {
             console.log(err)
@@ -107,14 +109,16 @@ document.addEventListener("DOMContentLoaded", _ => {
     });
 
     elems[IDs.getConfigButton].addEventListener("click", _ => {
+        const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedConfig = elems[IDs.configSelector].value;
-        const request = backend.getConfigFile(selectedConfig);
+        const request = backend.getConfigFile(selectedAlgorithm, selectedConfig);
         request.then(config => downloadDataAsFile(config, configTypeDropdown.value));
         visualizeRequestOutput(request, elems[IDs.getConfigButton], "Obtenido", "Fallido");
     });
 
     elems[IDs.executeButton].addEventListener("click", _ => {
-        const request = backend.execute();
+        const selectedAlgorithm = elems[IDs.algorithmSelector].value;
+        const request = backend.execute(selectedAlgorithm);
         request.then(response => {
             console.log(response);
         });
@@ -124,7 +128,7 @@ document.addEventListener("DOMContentLoaded", _ => {
     elems[IDs.getOutputButton].addEventListener("click", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedOutput = elems[IDs.outputSelector].value;
-        const request = backend.getMatrix(selectedOutput);
+        const request = backend.getOutput(selectedAlgorithm, selectedOutput);
         request.then(output => {
             downloadDataAsFile(output, `${selectedOutput}-out-${selectedAlgorithm}`);
         });
