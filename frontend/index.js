@@ -1,7 +1,7 @@
 import * as backend from "./modules/backend_connection.js"
 import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
-
+import { HttpError, ResponseFormatError } from "./modules/errors.js"
 const ALGORITHMS = [
     "Calculate credibility matrix",
     "Calculate sorting",
@@ -54,7 +54,10 @@ function visualizeRequestOutput(request, htmlElem, onSuccesMsg, onErrorMsg){
         setTimeout(_ => {
             htmlElem.innerHTML = prevText;
         }, 800);
-    }).catch(_ => {
+    }).catch(error => {
+        if (error instanceof HttpError)
+            alert(error.detail);
+
         htmlElem.innerHTML = onErrorMsg;
         setTimeout(_ => {
             htmlElem.innerHTML = prevText;
@@ -101,8 +104,7 @@ document.addEventListener("DOMContentLoaded", _ => {
             const selectedConfig = elems[IDs.configSelector].value;
             const request = backend.modifyConfig(selectedAlgorithm, selectedConfig, fileContent);
             visualizeRequestOutput(request, elems[IDs.sendFileButton], "Enviado", "Fallido");
-        }).catch(err => {
-            console.log(err)
+        }).catch(_ => {
             const noEvent = new Promise(resolve => resolve());
             visualizeRequestOutput(noEvent,elems[IDs.sendFileButton], "Archivo No Seleccionado", "");   
         });

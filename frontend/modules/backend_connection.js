@@ -45,12 +45,13 @@ function validateResponseFormat(response, expectedFormat) {
 //Api Calls
 export async function getConfigFile(algorithmType, configType){
     const fetchURI = `${API_URI}/config/${algorithmType}/${configType}`;
-    const response = await fetch(fetchURI, {method:"GET"});
-    
-    if (!response.ok)
-        throw new HttpError(response.statusText);
 
+    const response = await fetch(fetchURI, {method:"GET"});
     const parsedResponse = await response.json();
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse.detail);
+
     validateResponseFormat(parsedResponse, {"config":""})
 
     return parsedResponse.config;
@@ -59,12 +60,13 @@ export async function getConfigFile(algorithmType, configType){
 export async function modifyConfig(algorithmType, configType, data){
     const param = new URLSearchParams({"config_data":data}).toString();
     const fetchURI = `${API_URI}/config/${algorithmType}/${configType}?${param}`;
-    const response = await fetch(fetchURI, {method:"POST"});
-    
-    if (!response.ok)
-        throw new HttpError(response.statusText);
 
+    const response = await fetch(fetchURI, {method:"POST"});
     const parsedResponse = await response.json(); 
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse.detail);
+
     validateResponseFormat(parsedResponse, {"response":""})
 
     return parsedResponse.response;
@@ -72,12 +74,13 @@ export async function modifyConfig(algorithmType, configType, data){
 
 export async function getOutput(algorithmType, outputType){
     const fetchURI = `${API_URI}/output/${algorithmType}/${outputType}`;
-    const response = await fetch(fetchURI, {method:"GET"});
-    
-    if (!response.ok)
-        throw new HttpError(response.statusText);
 
+    const response = await fetch(fetchURI, {method:"GET"});
     const parsedResponse = await response.json(); 
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse.detail);
+
     validateResponseFormat(parsedResponse, {"matrix":undefined})
 
     return parsedResponse.matrix;
@@ -85,12 +88,13 @@ export async function getOutput(algorithmType, outputType){
 
 export async function execute(algorithmType){
     const fetchURI = `${API_URI}/execute/${algorithmType}`;
-    const response = await fetch(fetchURI, {method:"POST"});
-    
-    if (!response.ok)
-        throw new HttpError(response.statusText);
 
+    const response = await fetch(fetchURI, {method:"POST"});
     const parsedResponse = await response.json(); 
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse.detail);
+
     validateResponseFormat(parsedResponse, {"response":""})
 
     return parsedResponse.response;
