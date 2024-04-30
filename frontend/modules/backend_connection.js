@@ -1,3 +1,5 @@
+import { HttpError, ResponseFormatError } from "./errors.js"
+
 const API_URI = "http://127.0.0.1:8000"
 
 //Api on start validation
@@ -15,29 +17,29 @@ fetch(`${API_URI}/`, {
     console.error(error);
 });
 
-function isValidResponse(response, expectedStruct) {
-    if (!response || !expectedStruct || typeof response !== typeof expectedStruct)
-        return false;
+//Throws an expcetion if the format of the response does not match the expected one
+//Otherwiise does nothing and returns undefined
+function validateResponseFormat(response, expectedFormat) {
+    if (!response || !expectedFormat || typeof response !== typeof expectedFormat)
+        throw new ResponseFormatError("Null or undefined parameters");
 
-    const expected = Object.keys(expectedStruct);
+    const expected = Object.keys(expectedFormat);
     if (Object.keys(response).length !== expected.length)
-        return false;
+        throw new ResponseFormatError("Invalid response format structure");
 
     for (let key of expected) {
         if (!response.hasOwnProperty(key))
-            return false;
-        
+            throw new ResponseFormatError("Invalid response format structure");
+
         const responseVal = response[key];
-        const expectedVal = expectedStruct[key];
+        const expectedVal = expectedFormat[key];
         if (expectedVal === undefined)
             continue;
         if (typeof expectedVal !== typeof responseVal)
-            return false;
-        if (typeof expectedVal === "object" && !isValidResponse(responseVal, expectedVal))
-            return false;
+            throw new ResponseFormatError(`Invalid attribute '${key}' type`);
+        if (typeof expectedVal === "object")
+            validateResponseFormat(responseVal, expectedVal);
     }
-
-    return true;
 }
 
 //Api Calls
@@ -46,11 +48,10 @@ export async function getConfigFile(algorithmType, configType){
     const response = await fetch(fetchURI, {method:"GET"});
     
     if (!response.ok)
-        throw new Error("Failed request: \n"+response.statusText);
+        throw new HttpError(response.statusText);
 
     const parsedResponse = await response.json();
-    if (!isValidResponse(parsedResponse, {"config":""}))
-        throw new Error("Response does not contain expected structure");
+    validateResponseFormat(parsedResponse, {"config":""})
 
     return parsedResponse.config;
 }
@@ -61,11 +62,10 @@ export async function modifyConfig(algorithmType, configType, data){
     const response = await fetch(fetchURI, {method:"POST"});
     
     if (!response.ok)
-        throw new Error("Failed request: \n"+response.statusText);
+        throw new HttpError(response.statusText);
 
     const parsedResponse = await response.json(); 
-    if (!isValidResponse(parsedResponse, {"response":""}))
-        throw new Error("Response does not contain expected structure");
+    validateResponseFormat(parsedResponse, {"response":""})
 
     return parsedResponse.response;
 }
@@ -75,11 +75,10 @@ export async function getOutput(algorithmType, outputType){
     const response = await fetch(fetchURI, {method:"GET"});
     
     if (!response.ok)
-        throw new Error("Failed request: \n"+response.statusText);
+        throw new HttpError(response.statusText);
 
     const parsedResponse = await response.json(); 
-    if (!isValidResponse(parsedResponse, {"matrix":undefined}))
-        throw new Error("Response does not contain expected structure");
+    validateResponseFormat(parsedResponse, {"matrix":undefined})
 
     return parsedResponse.matrix;
 }
@@ -89,11 +88,10 @@ export async function execute(algorithmType){
     const response = await fetch(fetchURI, {method:"POST"});
     
     if (!response.ok)
-        throw new Error("Failed request: \n"+response.statusText);
+        throw new HttpError(response.statusText);
 
     const parsedResponse = await response.json(); 
-    if (!isValidResponse(parsedResponse, {"response":""}))
-        throw new Error("Response does not contain expected structure");
+    validateResponseFormat(parsedResponse, {"response":""})
 
     return parsedResponse.response;
 }
