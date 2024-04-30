@@ -30,7 +30,11 @@ class ConfigFile(ABC):
     def load_file(cls, algorithm: ExecAlgorithm) -> str:
         """Retorna la informacion guardada del archivo de configuracion,
            Puede lanzar un HTTPException si hay algun fallo"""
-        return _read_config_file(algorithm, cls.config_type)
+        try:
+            return _read_config_file(algorithm, cls.config_type)
+        except FileNotFoundError as exc:
+            error_msg = f"Algoritmo no posee el archivo de configuracion '{cls.config_type}'"
+            raise HTTPException(status_code=404, detail=error_msg) from exc
 
     @classmethod
     def save_file(cls, algorithm: ExecAlgorithm, data: str) -> None:
@@ -40,7 +44,12 @@ class ConfigFile(ABC):
         if not cls.is_valid_format(data):
             error_msg = f"Formato invalido para el archivo '{cls.config_type}'"
             raise HTTPException(status_code=500, detail=error_msg)
-        _write_config_file(algorithm, cls.config_type, data)
+
+        try:
+            _write_config_file(algorithm, cls.config_type, data)
+        except FileNotFoundError as exc:
+            error_msg = f"Algoritmo no posee el archivo de configuracion '{cls.config_type}'"
+            raise HTTPException(status_code=404, detail=error_msg) from exc
 
     @classmethod
     @abstractmethod
