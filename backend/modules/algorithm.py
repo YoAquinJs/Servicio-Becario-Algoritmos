@@ -44,7 +44,7 @@ EXECUTABLE_OUTPUT_DIR: dict[ExecAlgorithm, str] = {
     ExecAlgorithm.CREDIBILITY_MATRIX: "Credibility matrices",
 }
 
-EXECUTABLE_PARAMS: dict[ExecAlgorithm, int] = {
+EXECUTABLE_PARAM: dict[ExecAlgorithm, int] = {
     ExecAlgorithm.SORTING: 3,
     ExecAlgorithm.CREDIBILITY_MATRIX: 4,
 }
