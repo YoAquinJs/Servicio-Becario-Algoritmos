@@ -81,7 +81,7 @@ export async function getOutput(algorithmType, outputType){
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse.detail);
 
-    validateResponseFormat(parsedResponse, {"matrix":undefined})
+    validateResponseFormat(parsedResponse, {"output":undefined})
 
     return parsedResponse.matrix;
 }
