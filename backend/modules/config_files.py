@@ -34,7 +34,7 @@ class ConfigFile(ABC):
     @abstractmethod
     def load_file(cls, algorithm: ExecAlgorithm) -> str:
         """Retorna la informacion guardada del archivo de configuracion,
-           Puede lanzar un HTTPException si hay algun fallo"""
+           Puede lanzar un HTTPException (400) si hay algun fallo"""
 
     @staticmethod
     def get_type(config_type: str) -> type[ConfigFile]:

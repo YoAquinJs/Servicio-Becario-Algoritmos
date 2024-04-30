@@ -1,7 +1,8 @@
 import * as backend from "./modules/backend_connection.js"
 import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
-import { HttpError, ResponseFormatError } from "./modules/errors.js"
+import { visualizeRequestOutput } from "./modules/ui_output_visualizer.js"
+
 const ALGORITHMS = [
     "Calculate credibility matrix",
     "Calculate sorting",
@@ -45,29 +46,6 @@ const IDs = {
     outputSelector : "output-selector",
     getOutputButton : "get-output-button",
 };
-
-function visualizeRequestOutput(request, htmlElem, onSuccesMsg, onErrorMsg){
-    const prevText = htmlElem.innerHTML;
-    htmlElem.disabled = true;
-    htmlElem.innerHTML = "...";
-
-    request.then(_ => {
-        htmlElem.innerHTML = onSuccesMsg;
-        setTimeout(_ => {
-            htmlElem.innerHTML = prevText;
-            htmlElem.disabled = false;
-        }, 800);
-    }).catch(error => {
-        if (error instanceof HttpError)
-            alert(error.detail);
-
-        htmlElem.innerHTML = onErrorMsg;
-        setTimeout(_ => {
-            htmlElem.innerHTML = prevText;
-            htmlElem.disabled = false;
-        }, 1500);
-    });
-}
 
 function fillSelectorOptions(selectorElem, options){
     for(const opt of options)
