@@ -27,8 +27,10 @@ def get_config_type(config_type: str) -> type[ConfigFile]:
             config = VetoThresholdsForSupercriteriaConfig
         case WeightsConfig.config_type:
             config = WeightsConfig
+        case SortingCriteria.config_type:
+            config = SortingCriteria
         case _:
-            error_msg = f"archivo de configuracion '{config_type} no encontrado"
+            error_msg = f"archivo de configuracion '{config_type}' no encontrado"
             raise HTTPException(status_code=404, detail=error_msg)
     return config
 
@@ -109,6 +111,14 @@ class VetoThresholdsForSupercriteriaConfig(ConfigFile):
 class WeightsConfig(ConfigFile):
     """Clase para configuracion de Weights"""
     config_type = "Weights"
+
+    @classmethod
+    def is_valid_format(cls, data: str) -> bool:
+        return True
+
+class SortingCriteria(ConfigFile):
+    """Clase para configuracion de Sorting criteria"""
+    config_type = "Sorting criteria"
 
     @classmethod
     def is_valid_format(cls, data: str) -> bool:

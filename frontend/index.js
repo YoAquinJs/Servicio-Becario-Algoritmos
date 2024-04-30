@@ -27,7 +27,8 @@ const CONFIGS = [
     "Performance matrix",
     "Use value function",
     "Veto thresholds for supercriteria",
-    "Weights"
+    "Weights",
+    "Sorting criteria"
 ];
 
 //DOM Ids
