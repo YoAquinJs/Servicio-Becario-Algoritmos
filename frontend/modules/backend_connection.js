@@ -52,7 +52,7 @@ export async function getConfigFile(algorithmType, configType){
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse.detail);
 
-    validateResponseFormat(parsedResponse, {"config":""})
+    validateResponseFormat(parsedResponse, {"config":""});
 
     return parsedResponse.config;
 }
@@ -67,7 +67,7 @@ export async function modifyConfig(algorithmType, configType, data){
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse.detail);
 
-    validateResponseFormat(parsedResponse, {"response":""})
+    validateResponseFormat(parsedResponse, {"response":""});
 
     return parsedResponse.response;
 }
@@ -81,21 +81,21 @@ export async function getOutput(algorithmType, outputType){
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse.detail);
 
-    validateResponseFormat(parsedResponse, {"output":undefined})
+    validateResponseFormat(parsedResponse, {"output":undefined});
 
-    return parsedResponse.matrix;
+    return parsedResponse.output;
 }
 
 export async function execute(algorithmType){
     const fetchURI = `${API_URI}/execute/${algorithmType}`;
 
     const response = await fetch(fetchURI, {method:"POST"});
-    const parsedResponse = await response.json(); 
+    const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse.detail);
 
-    validateResponseFormat(parsedResponse, {"response":""})
+    validateResponseFormat(parsedResponse, {"response":""});
 
     return parsedResponse.response;
 }

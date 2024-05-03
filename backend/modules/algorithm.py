@@ -45,6 +45,6 @@ EXECUTABLE_OUTPUT_DIR: dict[ExecAlgorithm, str] = {
 }
 
 EXECUTABLE_PARAM: dict[ExecAlgorithm, int] = {
-    ExecAlgorithm.SORTING: 3,
+    ExecAlgorithm.SORTING: 5,
     ExecAlgorithm.CREDIBILITY_MATRIX: 4,
 }

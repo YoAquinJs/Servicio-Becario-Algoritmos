@@ -105,8 +105,8 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const request = backend.execute(selectedAlgorithm);
         request.then(response => {
-            console.log(response);
-        });
+            alert(response);
+        }); 
         visualizeRequestOutput(request, elems[IDs.executeButton], "Ejecutado", "Fallido");
     });
 
