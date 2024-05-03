@@ -2,7 +2,7 @@
 
 from subprocess import CalledProcessError, TimeoutExpired, run
 from fastapi import HTTPException
-from backend.modules.base_algorithm import ExecAlgorithm
+from modules.base_algorithm import ExecAlgorithm
 
 COMMAND = "java -jar executable.jar"
 

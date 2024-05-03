@@ -5,7 +5,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from os import path
 from fastapi import HTTPException
-from backend.modules.base_algorithm import ExecAlgorithm
+from modules.base_algorithm import ExecAlgorithm
 
 CONFIG_EXT = ".txt"
 EXEC_FILES_DIR = "Files"
