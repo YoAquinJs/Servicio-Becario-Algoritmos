@@ -8,9 +8,8 @@ py -m uvicorn main:app --reload
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from modules.algorithm import ExecAlgorithm
+from modules.algorithms import get_algorithm
 from modules.config_files import get_config_type
-from modules.output import load_algorithm_output
 from modules.execute import run_executable
 
 app = FastAPI()
@@ -31,23 +30,23 @@ async def root():
 @app.get("/config/{algorithm}/{config_type}")
 async def get_config(algorithm: str, config_type: str) -> dict[str, str]:
     """Retorna la informacion actual del archivo de configuracion solicitado"""
-    config = get_config_type(config_type).load_file(ExecAlgorithm[algorithm])
+    config = get_config_type(config_type).load_file(get_algorithm(algorithm))
     return {"config": config}
 
 @app.post("/config/{algorithm}/{config_type}")
 async def modify_config(algorithm: str, config_type: str, config_data: str):
     """Guarda la configuracion en su archivo correspondiente"""
-    get_config_type(config_type).save_file(ExecAlgorithm[algorithm], config_data)
+    get_config_type(config_type).save_file(get_algorithm(algorithm), config_data)
     return {"response": f"Configuracion ({config_type}) guardada"}
 
 @app.get("/output/{algorithm}/{output_type}")
 async def get_output(algorithm: str, output_type: str) -> dict[str, str]:
     """Retorna la matriz de credibilidad del indice especificado"""
-    output = load_algorithm_output(ExecAlgorithm[algorithm], output_type)
+    output = get_algorithm(algorithm).get_output(output_type)
     return {"output": output}
 
 @app.post("/execute/{algorithm}")
 async def execute(algorithm: str) -> dict[str, str]:
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
-    result = run_executable(ExecAlgorithm[algorithm])
+    result = run_executable(get_algorithm(algorithm))
     return {"response": result}

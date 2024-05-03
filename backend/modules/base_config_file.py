@@ -5,19 +5,19 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from os import path
 from fastapi import HTTPException
-from modules.algorithm import ExecAlgorithm, EXECUTABLE_CONFIG_DIR
+from backend.modules.base_algorithm import ExecAlgorithm
 
 CONFIG_EXT = ".txt"
 EXEC_FILES_DIR = "Files"
 ENCODING = "utf-8"
 
-def _read_config_file(algorithm: ExecAlgorithm, config_type: str) -> str:
-    file_path = path.join(EXEC_FILES_DIR, EXECUTABLE_CONFIG_DIR[algorithm], config_type)+CONFIG_EXT
+def _read_config_file(algorithm: type[ExecAlgorithm], config_type: str) -> str:
+    file_path = path.join(EXEC_FILES_DIR, algorithm.exec_config_dir, config_type)+CONFIG_EXT
     with open(file_path, "r", encoding=ENCODING) as file:
         return file.read()
 
-def _write_config_file(algorithm: ExecAlgorithm, config_type: str, data: str) -> None:
-    file_path = path.join(EXEC_FILES_DIR, EXECUTABLE_CONFIG_DIR[algorithm], config_type)+CONFIG_EXT
+def _write_config_file(algorithm: type[ExecAlgorithm], config_type: str, data: str) -> None:
+    file_path = path.join(EXEC_FILES_DIR, algorithm.exec_config_dir, config_type)+CONFIG_EXT
     with open(file_path, "w", encoding=ENCODING) as file:
         file.write(data.replace('\r\n', '\n'))
 
@@ -27,7 +27,7 @@ class ConfigFile(ABC):
     config_type: str
 
     @classmethod
-    def load_file(cls, algorithm: ExecAlgorithm) -> str:
+    def load_file(cls, algorithm: type[ExecAlgorithm]) -> str:
         """Retorna la informacion guardada del archivo de configuracion,
            Puede lanzar un HTTPException si hay algun fallo"""
         try:
@@ -37,7 +37,7 @@ class ConfigFile(ABC):
             raise HTTPException(status_code=404, detail=error_msg) from exc
 
     @classmethod
-    def save_file(cls, algorithm: ExecAlgorithm, data: str) -> None:
+    def save_file(cls, algorithm: type[ExecAlgorithm], data: str) -> None:
         """Guarda el archivo de configuracion con la informacion recibida,
            Puede lanzar un HTTPException si hay algun fallo, Http code 400
            si la informacion enviada no cumple con el formato requerido"""

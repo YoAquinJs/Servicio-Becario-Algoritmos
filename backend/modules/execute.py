@@ -2,14 +2,14 @@
 
 from subprocess import CalledProcessError, TimeoutExpired, run
 from fastapi import HTTPException
-from modules.algorithm import ExecAlgorithm, EXECUTABLE_PARAM
+from backend.modules.base_algorithm import ExecAlgorithm
 
 COMMAND = "java -jar executable.jar"
 
-def run_executable(algorithm: ExecAlgorithm) -> str:
+def run_executable(algorithm: type[ExecAlgorithm]) -> str:
     """Ejecuta el algoritmo"""
     try:
-        command = f"{COMMAND} {EXECUTABLE_PARAM[algorithm]}"
+        command = f"{COMMAND} {algorithm.exec_param}"
         print(command)
         result = run(command, shell=True, capture_output=True, text=True, check=True)
         return result.stdout
