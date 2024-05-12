@@ -1,7 +1,7 @@
 import * as backend from "./modules/backend_connection.js"
 import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
-import { visualizeRequestOutput } from "./modules/ui_output_visualizer.js"
+import { requestFeedback } from "./modules/ui_feedback.js"
 
 const ALGORITHMS = [
     "Calculate credibility matrix",
@@ -93,17 +93,17 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedConfig = elems[IDs.configSelector].value;
         const inputText = elems[IDs.configTextInput].value;
         const request = backend.modifyConfig(selectedAlgorithm, selectedConfig, inputText);
-        visualizeRequestOutput(request, elems[IDs.sendTextButton], "Enviado", "Fallido");
+        requestFeedback(request, elems[IDs.sendTextButton], "Enviado", "Fallido");
     });
     elems[IDs.sendFileButton].addEventListener("click", _ => {
         getFileContent().then(fileContent => {
             const selectedAlgorithm = elems[IDs.algorithmSelector].value;
             const selectedConfig = elems[IDs.configSelector].value;
             const request = backend.modifyConfig(selectedAlgorithm, selectedConfig, fileContent);
-            visualizeRequestOutput(request, elems[IDs.sendFileButton], "Enviado", "Fallido");
+            requestFeedback(request, elems[IDs.sendFileButton], "Enviado", "Fallido");
         }).catch(_ => {
             const noEvent = new Promise(resolve => resolve());
-            visualizeRequestOutput(noEvent,elems[IDs.sendFileButton], "Archivo No Seleccionado", "");   
+            requestFeedback(noEvent,elems[IDs.sendFileButton], "Archivo No Seleccionado", "");   
         });
     });
 
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedConfig = elems[IDs.configSelector].value;
         const request = backend.getConfigFile(selectedAlgorithm, selectedConfig);
         request.then(config => downloadDataAsFile(config, selectedConfig));
-        visualizeRequestOutput(request, elems[IDs.getConfigButton], "Obtenido", "Fallido");
+        requestFeedback(request, elems[IDs.getConfigButton], "Obtenido", "Fallido");
     });
 
     elems[IDs.executeButton].addEventListener("click", _ => {
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", _ => {
         request.then(response => {
             alert(response);
         }); 
-        visualizeRequestOutput(request, elems[IDs.executeButton], "Ejecutado", "Fallido");
+        requestFeedback(request, elems[IDs.executeButton], "Ejecutado", "Fallido");
     });
 
     elems[IDs.getOutputButton].addEventListener("click", _ => {
@@ -149,6 +149,6 @@ document.addEventListener("DOMContentLoaded", _ => {
             outputTableContainerElem.appendChild(table);
         });
 
-        visualizeRequestOutput(request, elems[IDs.getOutputButton], "Obtenido", "Fallido");
+        requestFeedback(request, elems[IDs.getOutputButton], "Obtenido", "Fallido");
     });
 });

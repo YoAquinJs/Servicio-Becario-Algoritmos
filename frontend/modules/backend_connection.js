@@ -36,7 +36,7 @@ function validateResponseFormat(response, expectedFormat) {
         if (expectedVal === undefined)
             continue;
         if (typeof expectedVal !== typeof responseVal)
-            throw new ResponseFormatError(`Invalid attribute '${key}' type`);
+            throw new ResponseFormatError(`Invalid attribute "${key}" type`);
         if (typeof expectedVal === "object")
             validateResponseFormat(responseVal, expectedVal);
     }
