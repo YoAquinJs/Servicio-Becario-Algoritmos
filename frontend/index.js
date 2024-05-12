@@ -113,10 +113,56 @@ document.addEventListener("DOMContentLoaded", _ => {
     elems[IDs.getOutputButton].addEventListener("click", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedOutput = elems[IDs.outputSelector].value;
+        
+        // Make a request to the backend to get the output
         const request = backend.getOutput(selectedAlgorithm, selectedOutput);
+        
+        // Process the response
         request.then(output => {
             downloadDataAsFile(output, `${selectedOutput}-out-${selectedAlgorithm}`);
+
+            // Parse the output and split it into rows
+            const rows = output.split('\n');
+            
+            // Create a table element
+            const table = document.createElement('table');
+            
+            // Loop through each row of the output
+            rows.forEach(row => {
+                // Split the row into project number and range
+                const [projectNumber, range1, range2] = row.split('\t');
+                
+                // Create a new row in the table
+                const tr = document.createElement('tr');
+                
+                // Create cells for project number and range
+                const tdProjectNumber = document.createElement('td');
+                const tdRange = document.createElement('td');
+                
+                // Set the text content of the cells
+                tdProjectNumber.textContent = projectNumber;
+                tdRange.textContent = `${range1} - ${range2}`;
+                
+                // Append cells to the row
+                tr.appendChild(tdProjectNumber);
+                tr.appendChild(tdRange);
+                
+                // Append row to the table
+                table.appendChild(tr);
+            });
+            console.log('Table content:', table);
+
+            // Get the table container
+            const tableContainer = document.getElementById('output-table');
+            
+            // Clear the contents of the table container
+            tableContainer.innerHTML = '';
+            
+            // Append the table to a container in the HTML document
+            document.getElementById('output-table').appendChild(table);
         });
+        
         visualizeRequestOutput(request, elems[IDs.getOutputButton], "Obtenido", "Fallido");
     });
+    
 });

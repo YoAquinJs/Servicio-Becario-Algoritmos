@@ -16,6 +16,10 @@ button{
     border-radius: 25px;
 }
 
+table, td, th{
+    border: 1px solid black;
+}
+
 .rounded{
     border-radius: 25px;
 }
@@ -118,4 +122,9 @@ button{
     resize: vertical;
     min-height: 150px;
     width: 350px;
+}
+
+#output-table {
+    display: flex;
+    margin: 0 auto;
 }

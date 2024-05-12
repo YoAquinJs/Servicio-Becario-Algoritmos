@@ -6,6 +6,7 @@
 
     <script type="module" src="index.js"></script>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
 </head>
 
 <body>
@@ -23,7 +24,9 @@
         <h2 id="algorithm-title"></h2>
         <h3>Selección de Algoritmo</h3>
         <div>
-            <select class="dropdown" id="algorithm-selector"></select>
+            <select class="dropdown" id="algorithm-selector">
+                <option></option>
+            </select>
         </div>
         <br>
         <button class="hover-bg" id="execute-button">Ejecutar Algoritmo</button>
@@ -58,6 +61,9 @@
                     placeholder="nombre del archivo...">
                 <button class="hover-bg" id="get-output-button">Obtener Archivo</button>
                 <!-- <div id="matrix-display"></div> -->
+            </div>
+            <div id="output-table">
+                
             </div>
         </div>
     </div>
