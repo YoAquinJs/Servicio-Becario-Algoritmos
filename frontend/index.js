@@ -2,6 +2,7 @@ import * as backend from "./modules/backend_connection.js"
 import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
 import { requestFeedback } from "./modules/ui_feedback.js"
+import { visualizeOutput } from "./modules/output_visualizer.js"
 
 const ALGORITHMS = [
     "Calculate credibility matrix",
@@ -58,18 +59,6 @@ function fillSelectorOptions(selectorElem, options){
     selectorElem.dispatchEvent(new Event("change"));
 }
 
-function addRowToTable(tableElem, ...cells){
-    const tr = document.createElement("tr");
-    
-    cells.forEach(cell => {
-        const td = document.createElement("td");
-        td.textContent = cell;
-        tr.appendChild(td);
-    })
-
-    tableElem.appendChild(tr);
-}
-
 document.addEventListener("DOMContentLoaded", _ => {
     const elems = Object.keys(IDs).reduce((output, id) => {
         output[IDs[id]] = document.getElementById(IDs[id]);
@@ -77,8 +66,11 @@ document.addEventListener("DOMContentLoaded", _ => {
     }, {});
 
     elems[IDs.algorithmSelector].addEventListener("change", _ => {
+        elems[IDs.outputTableContainer].innerHTML = "";
+
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         elems[IDs.algorithmTitle].textContent = selectedAlgorithm;
+
         const color = algorithmPageColors[selectedAlgorithm];
         document.documentElement.style.setProperty(ALGORITHM_COL_CSS_VAR, color);
     });
@@ -116,8 +108,11 @@ document.addEventListener("DOMContentLoaded", _ => {
     });
 
     elems[IDs.executeButton].addEventListener("click", _ => {
+        elems[IDs.outputTableContainer].innerHTML = "";
+
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const request = backend.execute(selectedAlgorithm);
+
         request.then(response => {
             alert(response);
         }); 
@@ -131,22 +126,7 @@ document.addEventListener("DOMContentLoaded", _ => {
         const request = backend.getOutput(selectedAlgorithm, selectedOutput);
         request.then(output => {
             downloadDataAsFile(output, `${selectedOutput}-out-${selectedAlgorithm}`);
-
-            const table = document.createElement("table");
-            addRowToTable(table, "Proyecto", "rango");
-
-            const rows = output.split("\n");
-            rows.forEach(row => {
-                if (row.length == 0)
-                    return;
-
-                const [project, ...cells] = row.split("\t");
-                const parsedCells = cells.map(c => c = c.match(/[a-zA-Z]+/)[0]).join(" - ");
-                addRowToTable(table, project, parsedCells);
-            });
-            const outputTableContainerElem = elems[IDs.outputTableContainer]
-            outputTableContainerElem.innerHTML = "";
-            outputTableContainerElem.appendChild(table);
+            visualizeOutput(output, elems[IDs.outputTableContainer]);
         });
 
         requestFeedback(request, elems[IDs.getOutputButton], "Obtenido", "Fallido");
