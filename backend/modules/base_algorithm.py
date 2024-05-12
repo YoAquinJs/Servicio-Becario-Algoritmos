@@ -32,5 +32,10 @@ class ExecAlgorithm(ABC):
 
     @classmethod
     @abstractmethod
+    def get_outputs(cls) -> list[str]:
+        """Obtiene los nombres de los tipos de resultados"""
+
+    @classmethod
+    @abstractmethod
     def _get_output_path(cls, output_type: str) -> str:
         """Obtiene la direccion del archivo de resultados"""

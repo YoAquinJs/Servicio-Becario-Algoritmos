@@ -39,11 +39,17 @@ async def modify_config(algorithm: str, config_type: str, config_data: str):
     get_config_type(config_type).save_file(get_algorithm(algorithm), config_data)
     return {"response": f"Configuracion ({config_type}) guardada"}
 
+@app.get("/outputs/{algorithm}")
+async def get_outputs(algorithm: str) -> dict[str, list[str]]:
+    """Obtiene los nombres de resultados de los algoritmos"""
+    outputs = get_algorithm(algorithm).get_outputs()
+    return {"response": outputs}
+
 @app.get("/output/{algorithm}/{output_type}")
 async def get_output(algorithm: str, output_type: str) -> dict[str, str]:
     """Retorna la matriz de credibilidad del indice especificado"""
     output = get_algorithm(algorithm).get_output(output_type)
-    return {"output": output}
+    return {"outputs": output}
 
 @app.post("/execute/{algorithm}")
 async def execute(algorithm: str) -> dict[str, str]:
