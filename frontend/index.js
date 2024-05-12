@@ -10,6 +10,7 @@ const ALGORITHMS = [
     "Portfolio level"
 ];
 
+const ALGORITHM_COL_CSS_VAR = "--algorithm-color";
 const algorithmCols = ["#8495b9","#c9b14a","#66cc99","#aa6fd1"]
 
 const algorithmPageColors = ALGORITHMS.reduce((acc, key, idx) => {
@@ -46,6 +47,8 @@ const IDs = {
 
     outputSelector : "output-selector",
     getOutputButton : "get-output-button",
+
+    outputTableContainer : "output-table",
 };
 
 function fillSelectorOptions(selectorElem, options){
@@ -53,6 +56,18 @@ function fillSelectorOptions(selectorElem, options){
         selectorElem.innerHTML += `<option value="${opt}">${opt}</option>\n`;
     selectorElem.value = options[0];
     selectorElem.dispatchEvent(new Event("change"));
+}
+
+function addRowToTable(tableElem, ...cells){
+    const tr = document.createElement("tr");
+    
+    cells.forEach(cell => {
+        const td = document.createElement("td");
+        td.textContent = cell;
+        tr.appendChild(td);
+    })
+
+    tableElem.appendChild(tr);
 }
 
 document.addEventListener("DOMContentLoaded", _ => {
@@ -65,8 +80,7 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         elems[IDs.algorithmTitle].textContent = selectedAlgorithm;
         const color = algorithmPageColors[selectedAlgorithm];
-        const cssAlgorithmColor = "--algorithm-color";
-        document.documentElement.style.setProperty(cssAlgorithmColor, color);
+        document.documentElement.style.setProperty(ALGORITHM_COL_CSS_VAR, color);
     });
 
     fillSelectorOptions(elems[IDs.algorithmSelector], ALGORITHMS);
@@ -114,55 +128,27 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedOutput = elems[IDs.outputSelector].value;
         
-        // Make a request to the backend to get the output
         const request = backend.getOutput(selectedAlgorithm, selectedOutput);
-        
-        // Process the response
         request.then(output => {
             downloadDataAsFile(output, `${selectedOutput}-out-${selectedAlgorithm}`);
 
-            // Parse the output and split it into rows
-            const rows = output.split('\n');
-            
-            // Create a table element
-            const table = document.createElement('table');
-            
-            // Loop through each row of the output
-            rows.forEach(row => {
-                // Split the row into project number and range
-                const [projectNumber, range1, range2] = row.split('\t');
-                
-                // Create a new row in the table
-                const tr = document.createElement('tr');
-                
-                // Create cells for project number and range
-                const tdProjectNumber = document.createElement('td');
-                const tdRange = document.createElement('td');
-                
-                // Set the text content of the cells
-                tdProjectNumber.textContent = projectNumber;
-                tdRange.textContent = `${range1} - ${range2}`;
-                
-                // Append cells to the row
-                tr.appendChild(tdProjectNumber);
-                tr.appendChild(tdRange);
-                
-                // Append row to the table
-                table.appendChild(tr);
-            });
-            console.log('Table content:', table);
+            const table = document.createElement("table");
+            addRowToTable(table, "Proyecto", "rango");
 
-            // Get the table container
-            const tableContainer = document.getElementById('output-table');
-            
-            // Clear the contents of the table container
-            tableContainer.innerHTML = '';
-            
-            // Append the table to a container in the HTML document
-            document.getElementById('output-table').appendChild(table);
+            const rows = output.split("\n");
+            rows.forEach(row => {
+                if (row.length == 0)
+                    return;
+
+                const [project, ...cells] = row.split("\t");
+                const parsedCells = cells.map(c => c = c.match(/[a-zA-Z]+/)[0]).join(" - ");
+                addRowToTable(table, project, parsedCells);
+            });
+            const outputTableContainerElem = elems[IDs.outputTableContainer]
+            outputTableContainerElem.innerHTML = "";
+            outputTableContainerElem.appendChild(table);
         });
-        
+
         visualizeRequestOutput(request, elems[IDs.getOutputButton], "Obtenido", "Fallido");
     });
-    
 });
