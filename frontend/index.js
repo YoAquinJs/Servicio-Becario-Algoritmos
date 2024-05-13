@@ -8,10 +8,9 @@ const ALGORITHMS = [
     "Calculate credibility matrix",
     "Calculate sorting",
     "Project level",
-    "Portfolio level"
+    "Portfolio level",
 ];
 
-const ALGORITHM_COL_CSS_VAR = "--algorithm-color";
 const algorithmCols = ["#8495b9","#c9b14a","#66cc99","#aa6fd1"]
 
 const algorithmPageColors = ALGORITHMS.reduce((acc, key, idx) => {
@@ -33,6 +32,10 @@ const CONFIGS = [
     "Sorting criteria"
 ];
 
+//CSS vars
+const ALGORITHM_COL_CSSVAR = "--algorithm-color";
+const DROPDOWN_DISPLAY_CSSVAR = "--dropdown-display";
+
 //DOM Ids
 const IDs = {
     algorithmTitle : "algorithm-title",
@@ -53,10 +56,19 @@ const IDs = {
 };
 
 function fillSelectorOptions(selectorElem, options){
-    for(const opt of options)
-        selectorElem.innerHTML += `<option value="${opt}">${opt}</option>\n`;
+    selectorElem.innerHTML = "";
+    options.forEach(opt => selectorElem.innerHTML += `<option value="${opt}">${opt}</option>\n`);
     selectorElem.value = options[0];
     selectorElem.dispatchEvent(new Event("change"));
+}
+
+function updateOutputSelector(outputSelectorElem, algorithmSelectorElem){
+    backend.getOutputs(algorithmSelectorElem.value).then(outputs => {
+        fillSelectorOptions(outputSelectorElem, outputs);
+        const cssvarDisplay = window.getComputedStyle(outputSelectorElem)
+                                    .getPropertyValue(DROPDOWN_DISPLAY_CSSVAR);
+        outputSelectorElem.style.display = outputs.length == 0 ? "none" : cssvarDisplay;
+    });
 }
 
 document.addEventListener("DOMContentLoaded", _ => {
@@ -67,12 +79,13 @@ document.addEventListener("DOMContentLoaded", _ => {
 
     elems[IDs.algorithmSelector].addEventListener("change", _ => {
         elems[IDs.outputTableContainer].innerHTML = "";
+        updateOutputSelector(elems[IDs.outputSelector], elems[IDs.algorithmSelector]);
 
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         elems[IDs.algorithmTitle].textContent = selectedAlgorithm;
 
         const color = algorithmPageColors[selectedAlgorithm];
-        document.documentElement.style.setProperty(ALGORITHM_COL_CSS_VAR, color);
+        document.documentElement.style.setProperty(ALGORITHM_COL_CSSVAR, color);
     });
 
     fillSelectorOptions(elems[IDs.algorithmSelector], ALGORITHMS);
@@ -109,6 +122,7 @@ document.addEventListener("DOMContentLoaded", _ => {
 
     elems[IDs.executeButton].addEventListener("click", _ => {
         elems[IDs.outputTableContainer].innerHTML = "";
+        updateOutputSelector(elems[IDs.outputSelector], elems[IDs.algorithmSelector]);
 
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const request = backend.execute(selectedAlgorithm);
@@ -122,10 +136,10 @@ document.addEventListener("DOMContentLoaded", _ => {
     elems[IDs.getOutputButton].addEventListener("click", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedOutput = elems[IDs.outputSelector].value;
-        
+        debugger;
         const request = backend.getOutput(selectedAlgorithm, selectedOutput);
         request.then(output => {
-            downloadDataAsFile(output, `${selectedOutput}-out-${selectedAlgorithm}`);
+            downloadDataAsFile(output, `${selectedOutput}-resultado-${selectedAlgorithm}`);
             visualizeOutput(output, elems[IDs.outputTableContainer]);
         });
 

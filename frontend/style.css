@@ -1,5 +1,6 @@
 :root {
     --algorithm-color: "";
+    --dropdown-display: inline-block;
 }
 
 body {
@@ -30,7 +31,7 @@ table, td, th{
 
 .dropdown {
     position: relative;
-    display: inline-block;
+    display: var(--dropdown-display);
 }
 
 .dropdown-toggle {

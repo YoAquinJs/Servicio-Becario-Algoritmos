@@ -37,7 +37,7 @@ function validateResponseFormat(response, expectedFormat) {
             continue;
         if (typeof expectedVal !== typeof responseVal)
             throw new ResponseFormatError(`Invalid attribute "${key}" type`);
-        if (typeof expectedVal === "object")
+        if (typeof expectedVal === "object" && !Array.isArray(expectedVal))
             validateResponseFormat(responseVal, expectedVal);
     }
 }
@@ -62,7 +62,7 @@ export async function modifyConfig(algorithmType, configType, data){
     const fetchURI = `${API_URI}/config/${algorithmType}/${configType}?${param}`;
 
     const response = await fetch(fetchURI, {method:"POST"});
-    const parsedResponse = await response.json(); 
+    const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse.detail);
@@ -72,16 +72,30 @@ export async function modifyConfig(algorithmType, configType, data){
     return parsedResponse.response;
 }
 
-export async function getOutput(algorithmType, outputType){
-    const fetchURI = `${API_URI}/output/${algorithmType}/${outputType}`;
-
+export async function getOutputs(algorithmType){
+    const fetchURI = `${API_URI}/outputs/${algorithmType}`;
     const response = await fetch(fetchURI, {method:"GET"});
-    const parsedResponse = await response.json(); 
+
+    const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse.detail);
 
-    validateResponseFormat(parsedResponse, {"output":undefined});
+    validateResponseFormat(parsedResponse, {"outputs":undefined});
+
+    return parsedResponse.outputs;
+}
+
+export async function getOutput(algorithmType, outputType){
+    const fetchURI = `${API_URI}/output/${algorithmType}/${outputType}`;
+
+    const response = await fetch(fetchURI, {method:"GET"});
+    const parsedResponse = await response.json();
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse.detail);
+
+    validateResponseFormat(parsedResponse, {"output":""});
 
     return parsedResponse.output;
 }

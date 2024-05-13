@@ -43,13 +43,13 @@ async def modify_config(algorithm: str, config_type: str, config_data: str):
 async def get_outputs(algorithm: str) -> dict[str, list[str]]:
     """Obtiene los nombres de resultados de los algoritmos"""
     outputs = get_algorithm(algorithm).get_outputs()
-    return {"response": outputs}
+    return {"outputs": outputs}
 
 @app.get("/output/{algorithm}/{output_type}")
 async def get_output(algorithm: str, output_type: str) -> dict[str, str]:
     """Retorna la matriz de credibilidad del indice especificado"""
     output = get_algorithm(algorithm).get_output(output_type)
-    return {"outputs": output}
+    return {"output": output}
 
 @app.post("/execute/{algorithm}")
 async def execute(algorithm: str) -> dict[str, str]:
