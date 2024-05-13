@@ -62,8 +62,8 @@ function fillSelectorOptions(selectorElem, options){
     selectorElem.dispatchEvent(new Event("change"));
 }
 
-function updateOutputSelector(outputSelectorElem, algorithmSelectorElem){
-    backend.getOutputs(algorithmSelectorElem.value).then(outputs => {
+function updateOutputSelector(outputSelectorElem, selectedAlgorithm){
+    backend.getOutputs(selectedAlgorithm).then(outputs => {
         fillSelectorOptions(outputSelectorElem, outputs);
         const cssvarDisplay = window.getComputedStyle(outputSelectorElem)
                                     .getPropertyValue(DROPDOWN_DISPLAY_CSSVAR);
@@ -78,14 +78,14 @@ document.addEventListener("DOMContentLoaded", _ => {
     }, {});
 
     elems[IDs.algorithmSelector].addEventListener("change", _ => {
-        elems[IDs.outputTableContainer].innerHTML = "";
-        updateOutputSelector(elems[IDs.outputSelector], elems[IDs.algorithmSelector]);
-
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         elems[IDs.algorithmTitle].textContent = selectedAlgorithm;
 
         const color = algorithmPageColors[selectedAlgorithm];
         document.documentElement.style.setProperty(ALGORITHM_COL_CSSVAR, color);
+
+        elems[IDs.outputTableContainer].innerHTML = "";
+        updateOutputSelector(elems[IDs.outputSelector], selectedAlgorithm);
     });
 
     fillSelectorOptions(elems[IDs.algorithmSelector], ALGORITHMS);
@@ -121,11 +121,11 @@ document.addEventListener("DOMContentLoaded", _ => {
     });
 
     elems[IDs.executeButton].addEventListener("click", _ => {
-        elems[IDs.outputTableContainer].innerHTML = "";
-        updateOutputSelector(elems[IDs.outputSelector], elems[IDs.algorithmSelector]);
-
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const request = backend.execute(selectedAlgorithm);
+
+        elems[IDs.outputTableContainer].innerHTML = "";
+        updateOutputSelector(elems[IDs.outputSelector], selectedAlgorithm);
 
         request.then(response => {
             alert(response);
@@ -136,11 +136,12 @@ document.addEventListener("DOMContentLoaded", _ => {
     elems[IDs.getOutputButton].addEventListener("click", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedOutput = elems[IDs.outputSelector].value;
-        debugger;
+
         const request = backend.getOutput(selectedAlgorithm, selectedOutput);
         request.then(output => {
             downloadDataAsFile(output, `${selectedOutput}-resultado-${selectedAlgorithm}`);
-            visualizeOutput(output, elems[IDs.outputTableContainer]);
+            if (selectedAlgorithm == ALGORITHMS[1])
+                visualizeOutput(output, elems[IDs.outputTableContainer]);
         });
 
         requestFeedback(request, elems[IDs.getOutputButton], "Obtenido", "Fallido");
