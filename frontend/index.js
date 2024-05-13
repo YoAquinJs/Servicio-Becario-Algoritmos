@@ -62,14 +62,9 @@ function fillSelectorOptions(selectorElem, options){
     selectorElem.dispatchEvent(new Event("change"));
 }
 
-<<<<<<< HEAD
 function updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlgorithm){
     const request = backend.getOutputs(selectedAlgorithm);
     request.then(outputs => {
-=======
-function updateOutputSelector(outputSelectorElem, selectedAlgorithm){
-    backend.getOutputs(selectedAlgorithm).then(outputs => {
->>>>>>> 62429b6a882bc10e75c5c45e7447c258a1a578cd
         fillSelectorOptions(outputSelectorElem, outputs);
         const cssvarDisplay = window.getComputedStyle(outputContainerElem)
                                     .getPropertyValue(OUTPUT_DISPLAY_CSSVAR);
