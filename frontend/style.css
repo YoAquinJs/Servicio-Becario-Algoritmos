@@ -1,6 +1,6 @@
 :root {
     --algorithm-color: "";
-    --dropdown-display: inline-block;
+    --get-output-display: flex;
 }
 
 body {
@@ -31,7 +31,7 @@ table, td, th{
 
 .dropdown {
     position: relative;
-    display: var(--dropdown-display);
+    display: var(inline-block);
 }
 
 .dropdown-toggle {
@@ -110,7 +110,8 @@ table, td, th{
 #get-output {
     min-height: 160px;
     gap: 10px;
-    display: flex;
+    /* by default hidden, modify --get-output-display var for it's non-hidden display */
+    display: hidden;
     flex-direction: column;
     align-items: center;
 }

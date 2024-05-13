@@ -34,7 +34,7 @@ const CONFIGS = [
 
 //CSS vars
 const ALGORITHM_COL_CSSVAR = "--algorithm-color";
-const DROPDOWN_DISPLAY_CSSVAR = "--dropdown-display";
+const OUTPUT_DISPLAY_CSSVAR = "--get-output-display";
 
 //DOM Ids
 const IDs = {
@@ -49,9 +49,9 @@ const IDs = {
     sendFileButton : "send-file-button",
     getConfigButton : "get-config-button",
 
+    outputContainer : "get-output",
     outputSelector : "output-selector",
     getOutputButton : "get-output-button",
-
     outputTableContainer : "output-table",
 };
 
@@ -62,13 +62,16 @@ function fillSelectorOptions(selectorElem, options){
     selectorElem.dispatchEvent(new Event("change"));
 }
 
-function updateOutputSelector(outputSelectorElem, algorithmSelectorElem){
-    backend.getOutputs(algorithmSelectorElem.value).then(outputs => {
+function updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlgorithm){
+    const request = backend.getOutputs(selectedAlgorithm);
+    request.then(outputs => {
         fillSelectorOptions(outputSelectorElem, outputs);
-        const cssvarDisplay = window.getComputedStyle(outputSelectorElem)
-                                    .getPropertyValue(DROPDOWN_DISPLAY_CSSVAR);
-        outputSelectorElem.style.display = outputs.length == 0 ? "none" : cssvarDisplay;
+        const cssvarDisplay = window.getComputedStyle(outputContainerElem)
+                                    .getPropertyValue(OUTPUT_DISPLAY_CSSVAR);
+        outputContainerElem.style.display = outputs.length == 0 ? "none" : cssvarDisplay;
     });
+
+    return request;
 }
 
 document.addEventListener("DOMContentLoaded", _ => {
@@ -78,14 +81,16 @@ document.addEventListener("DOMContentLoaded", _ => {
     }, {});
 
     elems[IDs.algorithmSelector].addEventListener("change", _ => {
-        elems[IDs.outputTableContainer].innerHTML = "";
-        updateOutputSelector(elems[IDs.outputSelector], elems[IDs.algorithmSelector]);
-
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         elems[IDs.algorithmTitle].textContent = selectedAlgorithm;
 
         const color = algorithmPageColors[selectedAlgorithm];
         document.documentElement.style.setProperty(ALGORITHM_COL_CSSVAR, color);
+
+        elems[IDs.outputTableContainer].innerHTML = "";
+        const outputSelectorElem = elems[IDs.outputSelector];
+        const outputContainerElem = elems[IDs.outputContainer];
+        updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlgorithm);
     });
 
     fillSelectorOptions(elems[IDs.algorithmSelector], ALGORITHMS);
@@ -121,26 +126,30 @@ document.addEventListener("DOMContentLoaded", _ => {
     });
 
     elems[IDs.executeButton].addEventListener("click", _ => {
-        elems[IDs.outputTableContainer].innerHTML = "";
-        updateOutputSelector(elems[IDs.outputSelector], elems[IDs.algorithmSelector]);
-
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const request = backend.execute(selectedAlgorithm);
 
-        request.then(response => {
-            alert(response);
-        }); 
+        elems[IDs.outputTableContainer].innerHTML = "";
+        const outputSelectorElem = elems[IDs.outputSelector];
+        const outputContainerElem = elems[IDs.outputContainer];
+        updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlgorithm).then(_ => {
+            request.then(response => {
+                alert(response);
+            }); 
+        });
+
         requestFeedback(request, elems[IDs.executeButton], "Ejecutado", "Fallido");
     });
 
     elems[IDs.getOutputButton].addEventListener("click", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedOutput = elems[IDs.outputSelector].value;
-        debugger;
+
         const request = backend.getOutput(selectedAlgorithm, selectedOutput);
         request.then(output => {
             downloadDataAsFile(output, `${selectedOutput}-resultado-${selectedAlgorithm}`);
-            visualizeOutput(output, elems[IDs.outputTableContainer]);
+            if (selectedAlgorithm == ALGORITHMS[1])
+                visualizeOutput(output, elems[IDs.outputTableContainer]);
         });
 
         requestFeedback(request, elems[IDs.getOutputButton], "Obtenido", "Fallido");
