@@ -1,6 +1,7 @@
 """Modulo para la funcionalidad de carga de matrices de credibilidad"""
 
 from os import path, listdir
+from typing import Callable
 from fastapi import HTTPException
 from modules.base_algorithm import ExecAlgorithm
 
@@ -31,7 +32,7 @@ class CredibilityMatrixAlgorithm(ExecAlgorithm):
     def get_outputs(cls) -> list[str]:
         """Obtiene los nombres de los tipos de resultados"""
         outputs_dir = path.join(EXEC_FILES_DIR, cls.exec_config_dir, cls.exec_output_dir)
-        return [file.split("-")[0] for file in listdir(outputs_dir)]
+        return [f.split("-")[0] for f in listdir(outputs_dir)]
 
     @classmethod
     def _get_output_path(cls, output_type: str) -> str:
@@ -47,8 +48,9 @@ class SortingAlgorithm(ExecAlgorithm):
     def get_outputs(cls) -> list[str]:
         """Obtiene los nombres de los tipos de resultados"""
         outputs_dir = path.join(EXEC_FILES_DIR, cls.exec_config_dir, cls.exec_output_dir)
-        return [file for file in listdir(outputs_dir)]
-
+        exists_out: Callable[[str], bool] = \
+            lambda dir: path.exists(path.join(outputs_dir, dir, f"Assignments{OUTPUT_EXT}"))
+        return [dir for dir in listdir(outputs_dir) if exists_out(dir)]
 
     @classmethod
     def _get_output_path(cls, output_type: str) -> str:
