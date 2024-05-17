@@ -1,6 +1,8 @@
 import { HttpError, ResponseFormatError } from "./errors.js"
 
-const API_URI = "http://127.0.0.1:8000"
+const LOCAL_HOST = "http://127.0.0.1:8000";
+const GLOBAL_HOST = "";
+const API_URI = window.location.hostname == "127.0.0.1" ? LOCAL_HOST : GLOBAL_HOST;
 
 //Api on start validation
 fetch(`${API_URI}/`, {
