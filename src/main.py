@@ -13,6 +13,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from modules.algorithms import get_algorithm
 from modules.config_files import get_config_type
 from modules.execute import run_executable
+from modules.files_update import update_files
+
+
+update_files()
 
 app = FastAPI()
 
