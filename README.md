@@ -12,4 +12,4 @@ Código del back-end de la app, API utilizando Python y la librería FastAPI.
 
 ### Host de la interfaz WEB
 
-[Sitio web](https://yoaquinjs.github.io/Servicio-Becario-Algoritmos/frontend/index.html)
+[Sitio web](https://yoaquinjs.github.io/Servicio-Becario-Algoritmos)
