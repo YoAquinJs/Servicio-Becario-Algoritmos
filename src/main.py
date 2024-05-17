@@ -2,8 +2,8 @@
 Backend para el prototipo web del proyecto de servicio
 becario: Toma de Desciciones con Algoritmos Geneticos
 
-Comand de ejecucion:
-py -m uvicorn main:app --reload
+Comando de ejecucion:
+uvicorn main:app
 """
 
 from fastapi import FastAPI
