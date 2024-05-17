@@ -6,18 +6,16 @@ from abc import ABC, abstractmethod
 from os import path
 from fastapi import HTTPException
 from modules.base_algorithm import ExecAlgorithm
+from modules.paths import EXEC_FILES_DIR, ENCODING, TXT_EXT
 
-CONFIG_EXT = ".txt"
-EXEC_FILES_DIR = "Files"
-ENCODING = "utf-8"
 
 def _read_config_file(algorithm: type[ExecAlgorithm], config_type: str) -> str:
-    file_path = path.join(EXEC_FILES_DIR, algorithm.exec_config_dir, config_type)+CONFIG_EXT
+    file_path = path.join(EXEC_FILES_DIR, algorithm.exec_config_dir, config_type+TXT_EXT)
     with open(file_path, "r", encoding=ENCODING) as file:
         return file.read()
 
 def _write_config_file(algorithm: type[ExecAlgorithm], config_type: str, data: str) -> None:
-    file_path = path.join(EXEC_FILES_DIR, algorithm.exec_config_dir, config_type)+CONFIG_EXT
+    file_path = path.join(EXEC_FILES_DIR, algorithm.exec_config_dir, config_type+TXT_EXT)
     with open(file_path, "w", encoding=ENCODING) as file:
         file.write(data.replace('\r\n', '\n'))
 

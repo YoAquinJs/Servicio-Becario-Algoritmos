@@ -4,6 +4,7 @@ from os import path, listdir
 from typing import Callable
 from fastapi import HTTPException
 from modules.base_algorithm import ExecAlgorithm
+from modules.paths import EXEC_FILES_DIR, TXT_EXT
 
 
 def get_algorithm(algorithm: str) -> type[ExecAlgorithm]:
@@ -19,8 +20,6 @@ def get_algorithm(algorithm: str) -> type[ExecAlgorithm]:
             raise HTTPException(status_code=404, detail=error_msg)
     return parsed_algorithm
 
-OUTPUT_EXT = ".txt"
-EXEC_FILES_DIR = "Files"
 
 class CredibilityMatrixAlgorithm(ExecAlgorithm):
     """Representa el algoritmo de ejecucion Matrices de Credibilidad"""
@@ -36,7 +35,7 @@ class CredibilityMatrixAlgorithm(ExecAlgorithm):
 
     @classmethod
     def _get_output_path(cls, output_type: str) -> str:
-        return output_type+f"-CredibilityMatrix{OUTPUT_EXT}"
+        return f"{output_type}-CredibilityMatrix{TXT_EXT}"
 
 class SortingAlgorithm(ExecAlgorithm):
     """Representa el algoritmo de ejecucion Calculo de Sorteo"""
@@ -49,9 +48,9 @@ class SortingAlgorithm(ExecAlgorithm):
         """Obtiene los nombres de los tipos de resultados"""
         outputs_dir = path.join(EXEC_FILES_DIR, cls.exec_config_dir, cls.exec_output_dir)
         exists_out: Callable[[str], bool] = \
-            lambda dir: path.exists(path.join(outputs_dir, dir, f"Assignments{OUTPUT_EXT}"))
+            lambda dir: path.exists(path.join(outputs_dir, dir, f"Assignments{TXT_EXT}"))
         return [dir for dir in listdir(outputs_dir) if exists_out(dir)]
 
     @classmethod
     def _get_output_path(cls, output_type: str) -> str:
-        return path.join(output_type, f"Assignments{OUTPUT_EXT}")
+        return path.join(output_type, f"Assignments{TXT_EXT}")

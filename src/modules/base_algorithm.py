@@ -3,10 +3,8 @@
 from abc import ABC, abstractmethod
 from os import path
 from fastapi import HTTPException
+from modules.paths import EXEC_FILES_DIR, ENCODING
 
-
-EXEC_FILES_DIR = "Files"
-ENCODING = "utf-8"
 
 class ExecAlgorithm(ABC):
     """Clase base de los diferentes algoritmos de ejecucion"""

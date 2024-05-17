@@ -2,6 +2,8 @@
 Backend para el prototipo web del proyecto de servicio
 becario: Toma de Desciciones con Algoritmos Geneticos
 
+Juan Sebastian Gonzalez A01644942
+
 Comando de ejecucion:
 uvicorn main:app
 """

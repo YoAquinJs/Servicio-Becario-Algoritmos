@@ -1,4 +1,6 @@
-"""This modules contain the format validation for each config file implementation"""
+"""
+Este módulo contiene la validación de formato, para cada implementación de archivo de configuración.
+"""
 
 from fastapi import HTTPException
 from modules.base_config_file import ConfigFile
