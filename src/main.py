@@ -33,6 +33,26 @@ async def root():
     """Root de la api"""
     return {"response":"root"}
 
+# User auth
+
+@app.post("/user/{user}")
+async def register_user(user: str):
+    """Registra un nuevo usuario"""
+    return {"response":f"Registro de '{user}'"}
+
+@app.get("/user/{user}")
+async def exists_user(user: str):
+    """Registra un nuevo usuario"""
+    exists = False
+    return {"response":f"Usuario '{user}', {'existe' if exists else 'no existe'}"}
+
+@app.post("/del_user/{user}")
+async def delete_user(user: str):
+    """Registra un nuevo usuario"""
+    return {"response":f"Eliminacion de '{user}'"}
+
+# Allgortithm
+
 @app.get("/config/{algorithm}/{config_type}")
 async def get_config(algorithm: str, config_type: str) -> dict[str, str]:
     """Retorna la informacion actual del archivo de configuracion solicitado"""
