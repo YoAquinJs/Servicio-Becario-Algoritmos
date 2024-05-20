@@ -8,6 +8,8 @@ Comando de ejecucion:
 uvicorn main:app
 """
 
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,7 +19,19 @@ from modules.execute import run_executable
 from modules.user_auth import delete_user, is_user, register_user
 from modules.user_storage import assert_user_storage
 
-assert_user_storage()
+# Logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("app.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# API
 
 app = FastAPI()
 
@@ -35,6 +49,8 @@ async def root():
     return {"response":"root"}
 
 # User auth
+
+assert_user_storage()
 
 @app.get("/user/{user}")
 async def exists_user(user: str):

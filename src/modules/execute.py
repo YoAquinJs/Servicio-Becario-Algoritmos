@@ -1,5 +1,6 @@
 """Modulo que continue la funcionalidad para correr el ejecutable"""
 
+import logging
 from subprocess import CalledProcessError, TimeoutExpired, run
 
 from fastapi import HTTPException
@@ -12,7 +13,7 @@ def run_executable(algorithm: type[ExecAlgorithm]) -> str:
     """Ejecuta el algoritmo"""
     try:
         command = f"{COMMAND} {algorithm.exec_param}"
-        print(command) #TODO loggign
+        logging.info("executing %s", command)
         result = run(command, shell=True, capture_output=True, text=True, check=True)
         return result.stdout
     except CalledProcessError as exc:
