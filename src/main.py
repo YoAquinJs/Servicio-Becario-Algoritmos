@@ -13,10 +13,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from modules.algorithms import get_algorithm
 from modules.config_files import get_config_type
 from modules.execute import run_executable
-from modules.files_update import update_files
+from modules.user_files import assert_user_storage
+from modules.user_auth import is_user, register_user, delete_user
 
-
-update_files()
+assert_user_storage()
 
 app = FastAPI()
 
@@ -35,21 +35,23 @@ async def root():
 
 # User auth
 
-@app.post("/user/{user}")
-async def register_user(user: str):
-    """Registra un nuevo usuario"""
-    return {"response":f"Registro de '{user}'"}
-
 @app.get("/user/{user}")
 async def exists_user(user: str):
     """Registra un nuevo usuario"""
-    exists = False
-    return {"response":f"Usuario '{user}', {'existe' if exists else 'no existe'}"}
+    exists = is_user(user)
+    return {"response":f"Usuario '{user}' {'existe' if exists else 'no existe'}"}
 
-@app.post("/del_user/{user}")
-async def delete_user(user: str):
+@app.post("/user/{user}")
+async def reg_user(user: str):
     """Registra un nuevo usuario"""
-    return {"response":f"Eliminacion de '{user}'"}
+    register_user(user)
+    return {"response":f"Usuario '{user}' registrado"}
+
+@app.delete("/user/{user}")
+async def del_user(user: str):
+    """Registra un nuevo usuario"""
+    delete_user(user)
+    return {"response":f"Usuario '{user}' eliminado"}
 
 # Allgortithm
 

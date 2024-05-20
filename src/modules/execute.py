@@ -10,7 +10,7 @@ def run_executable(algorithm: type[ExecAlgorithm]) -> str:
     """Ejecuta el algoritmo"""
     try:
         command = f"{COMMAND} {algorithm.exec_param}"
-        print(command)
+        print(command) #TODO loggign
         result = run(command, shell=True, capture_output=True, text=True, check=True)
         return result.stdout
     except CalledProcessError as exc:
