@@ -3,7 +3,7 @@
 from os import path
 from uuid import UUID
 
-COMPRESSED_FILES_ZIP = path.join(path.curdir, "Files.zip")
+USER_DEFAULT_FILES = path.join(path.curdir, "executable.zip")
 EXEC_FILES_DIR = path.join(path.curdir, "Files")
 ENCODING = "utf-8"
 TXT_EXT = ".txt"
