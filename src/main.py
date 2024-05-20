@@ -10,11 +10,12 @@ uvicorn main:app
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from modules.algorithms import get_algorithm
 from modules.config_files import get_config_type
 from modules.execute import run_executable
-from modules.user_files import assert_user_storage
-from modules.user_auth import is_user, register_user, delete_user
+from modules.user_auth import delete_user, is_user, register_user
+from modules.user_storage import assert_user_storage
 
 assert_user_storage()
 

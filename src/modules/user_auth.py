@@ -1,38 +1,33 @@
 """Este modulo contiene el manejo de registro y autenticacion de usuarios"""
 
 import json
-import uuid
 from typing import Any
+from uuid import UUID, uuid4
 
 from fastapi import HTTPException
 
 from modules.paths import ENCODING, USER_RECORD
+from modules.user_storage import del_user_storage, reset_user_storage
 
-UserRecord = dict[str, uuid.UUID]
-UserRecordJson = dict[str, UserRecord]
 
 class UserRecordEnc(json.JSONEncoder):
     """TODO"""
     def default(self, o: Any) -> Any:
         """TODO"""
-        if isinstance(o, uuid.UUID):
+        if isinstance(o, UUID):
             return str(o)
         return super().default(o)
 
 def user_record_dec(o: dict[str, Any]) -> Any:
     """TODO"""
     if '__uuid__' in o:
-        return uuid.UUID(o['__uuid__'])
+        return UUID(o['__uuid__'])
     return o
 
-def _get_user_record() -> UserRecord:
+
+def _get_user_record() -> dict[str, UUID]:
     with open(USER_RECORD, "r", encoding=ENCODING) as file:
         return json.loads(file.read(), object_hook=user_record_dec)["users"]
-
-def is_user(user: str) -> bool:
-    """TODO
-    """
-    return user in _get_user_record().keys()
 
 def register_user(user: str) -> None:
     """TODO
@@ -42,11 +37,12 @@ def register_user(user: str) -> None:
         if user in user_record:
             raise HTTPException(400, detail="Usuario ya existe")
 
-        uid = uuid.uuid4()
+        uid = uuid4()
         while uid in user_record.keys():
-            uid = uuid.uuid4()
+            uid = uuid4()
         user_record[user] = uid
 
+        reset_user_storage(user_record[user])
         file.write(json.dumps({"users" : user_record}, cls=UserRecordEnc))
 
 def delete_user(user: str) -> None:
@@ -57,5 +53,15 @@ def delete_user(user: str) -> None:
         if not user in user_record:
             raise HTTPException(400, detail="Usuario no existe")
 
+        del_user_storage(user_record[user])
         del user_record[user]
         file.write(json.dumps({"users" : user_record}, cls=UserRecordEnc))
+
+def is_user(user: str) -> bool:
+    """TODO
+    """
+    return user in _get_user_record()
+
+def get_user_id(user: str) -> UUID:
+    """TODO"""
+    return _get_user_record()[user]

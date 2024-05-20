@@ -1,8 +1,10 @@
 """Modulo para la funcionalidad de carga de matrices de credibilidad"""
 
-from os import path, listdir
+from os import listdir, path
 from typing import Callable
+
 from fastapi import HTTPException
+
 from modules.base_algorithm import ExecAlgorithm
 from modules.paths import EXEC_FILES_DIR, TXT_EXT
 

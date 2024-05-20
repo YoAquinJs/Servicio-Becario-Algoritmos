@@ -2,8 +2,10 @@
 
 from abc import ABC, abstractmethod
 from os import path
+
 from fastapi import HTTPException
-from modules.paths import EXEC_FILES_DIR, ENCODING
+
+from modules.paths import ENCODING, EXEC_FILES_DIR
 
 
 class ExecAlgorithm(ABC):

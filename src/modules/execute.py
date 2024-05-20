@@ -1,7 +1,9 @@
 """Modulo que continue la funcionalidad para correr el ejecutable"""
 
 from subprocess import CalledProcessError, TimeoutExpired, run
+
 from fastapi import HTTPException
+
 from modules.base_algorithm import ExecAlgorithm
 
 COMMAND = "java -jar executable.jar"
