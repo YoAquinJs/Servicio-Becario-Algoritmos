@@ -1,4 +1,6 @@
 .vscode
+user_storage
+
 *__pycache__/
 *.txt
 *.xlsx

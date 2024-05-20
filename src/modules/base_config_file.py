@@ -4,9 +4,11 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from os import path
+
 from fastapi import HTTPException
+
 from modules.base_algorithm import ExecAlgorithm
-from modules.paths import EXEC_FILES_DIR, ENCODING, TXT_EXT
+from modules.paths import ENCODING, EXEC_FILES_DIR, TXT_EXT
 
 
 def _read_config_file(algorithm: type[ExecAlgorithm], config_type: str) -> str:

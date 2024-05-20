@@ -33,10 +33,10 @@ def register_user(user: str) -> None:
     """TODO
     """
     user_record = _get_user_record()
-    with open(USER_RECORD, "w", encoding=ENCODING) as file:
-        if user in user_record:
-            raise HTTPException(400, detail="Usuario ya existe")
+    if user in user_record:
+        raise HTTPException(400, detail="Usuario ya existe")
 
+    with open(USER_RECORD, "w", encoding=ENCODING) as file:
         uid = uuid4()
         while uid in user_record.keys():
             uid = uuid4()
@@ -49,10 +49,10 @@ def delete_user(user: str) -> None:
     """TODO
     """
     user_record = _get_user_record()
-    with open(USER_RECORD, "w", encoding=ENCODING) as file:
-        if not user in user_record:
-            raise HTTPException(400, detail="Usuario no existe")
+    if not user in user_record:
+        raise HTTPException(400, detail="Usuario no existe")
 
+    with open(USER_RECORD, "w", encoding=ENCODING) as file:
         del_user_storage(user_record[user])
         del user_record[user]
         file.write(json.dumps({"users" : user_record}, cls=UserRecordEnc))

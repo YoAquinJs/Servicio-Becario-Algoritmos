@@ -9,7 +9,7 @@ import uuid
 from os import path
 from zipfile import ZipFile
 
-from modules.paths import (COMPRESSED_FILES_ZIP, ENCODING, USER_RECORD,
+from modules.paths import (ENCODING, USER_DEFAULT_FILES, USER_RECORD,
                            USER_STORAGE, get_user_path)
 
 
@@ -29,10 +29,11 @@ def assert_user_storage() -> None:
 def reset_user_storage(user_id: uuid.UUID) -> None:
     """Actualiza el directorio de archivos del usuario especificado"""
     user_path = get_user_path(user_id)
+    print(user_path)
     if path.exists(user_path):
         shutil.rmtree(user_path)
-    with ZipFile(COMPRESSED_FILES_ZIP, "r") as zip_ref:
-        zip_ref.extractall(path.dirname(user_path))
+    with ZipFile(USER_DEFAULT_FILES, "r") as zip_ref:
+        zip_ref.extractall(user_path)
 
 def del_user_storage(user_id: uuid.UUID) -> None:
     """Borra el directorio de archivos del usuario especificado"""
