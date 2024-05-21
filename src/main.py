@@ -77,10 +77,10 @@ async def root():
 assert_user_storage()
 
 @app.get("/user/{user}")
-async def exists_user(user: str) -> dict[str, str]:
+async def exists_user(user: str) -> dict[str, bool]:
     """Registra un nuevo usuario"""
     exists = is_user(user)
-    return {"response":f"Usuario '{user}' {'existe' if exists else 'no existe'}"}
+    return {"exists":exists}
 
 @app.post("/user/{user}")
 async def reg_user(user: str) -> dict[str, str]:
