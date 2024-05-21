@@ -92,34 +92,34 @@ async def del_user(user: str):
     delete_user(user)
     return {"response":f"Usuario '{user}' eliminado"}
 
-# Allgortithm
+# Algortithm
 
 @app.get("/config/{algorithm}/{user}/{config_type}")
 async def get_config(algorithm: str, user: str, config_type: str) -> dict[str, str]:
     """Retorna la informacion actual del archivo de configuracion solicitado"""
-    config = get_config_type(config_type).load_file(get_algorithm(algorithm))
+    config = get_config_type(config_type).load_file(get_algorithm(algorithm), get_user_id(user))
     return {"config": config}
 
 @app.post("/config/{algorithm}/{user}/{config_type}")
 async def modify_config(algorithm: str, user: str, config_type: str, config_data: str):
     """Guarda la configuracion en su archivo correspondiente"""
-    get_config_type(config_type).save_file(get_algorithm(algorithm), config_data)
+    get_config_type(config_type).save_file(get_algorithm(algorithm), get_user_id(user), config_data)
     return {"response": f"Configuracion ({config_type}) guardada"}
 
 @app.get("/outputs/{algorithm}/{user}")
 async def get_outputs(algorithm: str, user: str) -> dict[str, list[str]]:
     """Obtiene los nombres de resultados de los algoritmos"""
-    outputs = get_algorithm(algorithm).get_outputs()
+    outputs = get_algorithm(algorithm).get_outputs(get_user_id(user))
     return {"outputs": outputs}
 
 @app.get("/output/{algorithm}/{user}/{output_type}")
 async def get_output(algorithm: str, user: str, output_type: str) -> dict[str, str]:
     """Retorna la matriz de credibilidad del indice especificado"""
-    output = get_algorithm(algorithm).get_output(output_type)
+    output = get_algorithm(algorithm).get_output(get_user_id(user), output_type)
     return {"output": output}
 
 @app.post("/execute/{algorithm}/{user}")
 async def execute(algorithm: str, user: str) -> dict[str, str]:
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
-    result = run_executable(get_algorithm(algorithm))
+    result = run_executable(get_algorithm(algorithm), get_user_id(user))
     return {"response": result}

@@ -4,42 +4,46 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from os import path
+from uuid import UUID
 
 from fastapi import HTTPException
 
 from modules.base_algorithm import ExecAlgorithm
 from modules.paths import ENCODING, EXEC_FILES_DIR, TXT_EXT
+from modules.user_storage import get_user_path
 
 
 class ConfigFile(ABC):
     """Clase base para los archivos de configuracion"""
-    #Overrides in each sub class
+    # Overrides in each sub class
     config_type: str
 
     @classmethod
-    def _read_config_file(cls, algorithm: type[ExecAlgorithm]) -> str:
-        file_path = path.join(EXEC_FILES_DIR, algorithm.exec_config_dir, cls.config_type+TXT_EXT)
-        with open(file_path, "r", encoding=ENCODING) as file:
+    def _get_config_path(cls, algorithm: type[ExecAlgorithm], user_path: str) -> str:
+        return path.join(user_path, EXEC_FILES_DIR, algorithm.config_dir, cls.config_type+TXT_EXT)
+
+    @classmethod
+    def _read_config_file(cls, config_path: str) -> str:
+        with open(config_path, "r", encoding=ENCODING) as file:
             return file.read()
 
     @classmethod
-    def _write_config_file(cls, algorithm: type[ExecAlgorithm], data: str) -> None:
-        file_path = path.join(EXEC_FILES_DIR, algorithm.exec_config_dir, cls.config_type+TXT_EXT)
-        with open(file_path, "w", encoding=ENCODING) as file:
+    def _write_config_file(cls, config_path: str, data: str) -> None:
+        with open(config_path, "w", encoding=ENCODING) as file:
             file.write(data.replace('\r\n', '\n'))
 
     @classmethod
-    def load_file(cls, algorithm: type[ExecAlgorithm]) -> str:
+    def load_file(cls, algorithm: type[ExecAlgorithm], user_id: UUID) -> str:
         """Retorna la informacion guardada del archivo de configuracion,
            Puede lanzar un HTTPException si hay algun fallo"""
         try:
-            return cls._read_config_file(algorithm)
+            return cls._read_config_file(cls._get_config_path(algorithm, get_user_path(user_id)))
         except FileNotFoundError as exc:
             error_msg = f"Algoritmo no posee el archivo de configuracion '{cls.config_type}'"
             raise HTTPException(status_code=404, detail=error_msg) from exc
 
     @classmethod
-    def save_file(cls, algorithm: type[ExecAlgorithm], data: str) -> None:
+    def save_file(cls, algorithm: type[ExecAlgorithm], user_id: UUID, data: str) -> None:
         """Guarda el archivo de configuracion con la informacion recibida,
            Puede lanzar un HTTPException si hay algun fallo, Http code 404
            si la informacion enviada no cumple con el formato requerido"""
@@ -48,7 +52,7 @@ class ConfigFile(ABC):
             raise HTTPException(status_code=404, detail=error_msg)
 
         try:
-            cls._write_config_file(algorithm, data)
+            cls._write_config_file(cls._get_config_path(algorithm, get_user_path(user_id)), data)
         except FileNotFoundError as exc:
             error_msg = f"Algoritmo no posee el archivo de configuracion '{cls.config_type}'"
             raise HTTPException(status_code=404, detail=error_msg) from exc
