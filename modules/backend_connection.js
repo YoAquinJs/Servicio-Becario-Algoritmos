@@ -46,6 +46,63 @@ function validateResponseFormat(response, expectedFormat) {
 
 //Api Calls
 
+export async function existsUser(user){
+    const fetchURI = `${API_URI}/user/${user}`;
+
+    const response = await fetch(fetchURI, {method:"GET"});
+    const parsedResponse = await response.json();
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse);
+
+    validateResponseFormat(parsedResponse, {"exists":true});
+
+    return parsedResponse.exists;
+}
+
+export async function registerUser(user){
+    const fetchURI = `${API_URI}/user/${user}`;
+
+    const response = await fetch(fetchURI, {method:"POST"});
+    const parsedResponse = await response.json();
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse);
+
+    validateResponseFormat(parsedResponse, {"response":""});
+
+    return parsedResponse.response;
+}
+
+export async function deleteUser(user){
+    const fetchURI = `${API_URI}/user/${user}`;
+
+    const response = await fetch(fetchURI, {method:"DELETE"});
+    const parsedResponse = await response.json();
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse);
+
+    validateResponseFormat(parsedResponse, {"response":""});
+
+    return parsedResponse.response;
+}
+
+export async function resetUser(user){
+    const fetchURI = `${API_URI}/reset_user/${user}`;
+
+    const response = await fetch(fetchURI, {method:"POST"});
+    const parsedResponse = await response.json();
+
+    if (!response.ok)
+        throw new HttpError(response.status, parsedResponse);
+
+    validateResponseFormat(parsedResponse, {"response":""});
+
+    return parsedResponse.response;
+}
+
+
 export async function getConfigFile(user, algorithmType, configType){
     const fetchURI = `${API_URI}/config/${user}/${algorithmType}/${configType}`;
 
