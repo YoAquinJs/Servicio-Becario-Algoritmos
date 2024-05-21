@@ -9,9 +9,13 @@ uvicorn main:app
 """
 
 import logging
+from typing import Any, Awaitable, Callable
 
 from fastapi import FastAPI
+from fastapi import HTTPException as StarletteHTTPException
+from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from modules.algorithms import get_algorithm
 from modules.config_files import get_config_type
@@ -22,14 +26,12 @@ from modules.user_storage import assert_user_storage
 # Logging
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.ERROR,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("app.log"),
-        logging.StreamHandler()
+        logging.FileHandler("errors.log"),
     ]
 )
-logger = logging.getLogger(__name__)
 
 # API
 
@@ -42,6 +44,26 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(_: Request, exc: StarletteHTTPException):
+    """TODO"""
+    if exc.status_code == 500:
+        logging.error(exc.detail)
+    return JSONResponse(
+            content=exc.detail,
+            status_code=exc.status_code,
+            headers=exc.headers,
+        )
+
+@app.middleware("http")
+async def exception_middleware(request: Request, call_next: Callable[[Request], Awaitable[Any]]):
+    """TODO"""
+    try:
+        return await call_next(request)
+    except Exception as e:
+        logging.error(str(e))
+        return JSONResponse(content=str(e), status_code=500)
 
 @app.get("/")
 async def root():

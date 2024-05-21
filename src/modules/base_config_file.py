@@ -39,11 +39,11 @@ class ConfigFile(ABC):
     @classmethod
     def save_file(cls, algorithm: type[ExecAlgorithm], data: str) -> None:
         """Guarda el archivo de configuracion con la informacion recibida,
-           Puede lanzar un HTTPException si hay algun fallo, Http code 400
+           Puede lanzar un HTTPException si hay algun fallo, Http code 404
            si la informacion enviada no cumple con el formato requerido"""
         if not cls.is_valid_format(data):
             error_msg = f"Formato invalido para el archivo '{cls.config_type}'"
-            raise HTTPException(status_code=500, detail=error_msg)
+            raise HTTPException(status_code=404, detail=error_msg)
 
         try:
             _write_config_file(algorithm, cls.config_type, data)
