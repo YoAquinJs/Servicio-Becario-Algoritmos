@@ -21,7 +21,7 @@ from modules.algorithms import get_algorithm
 from modules.config_files import get_config_type
 from modules.execute import run_executable
 from modules.user_auth import delete_user, get_user_id, is_user, register_user
-from modules.user_storage import assert_user_storage
+from modules.user_storage import assert_user_storage, reset_user_storage
 
 # Logging
 
@@ -70,7 +70,7 @@ async def root():
     """Root de la api"""
     return {"response":"root"}
 
-# User auth
+# User
 
 assert_user_storage()
 
@@ -88,38 +88,44 @@ async def reg_user(user: str):
 
 @app.delete("/user/{user}")
 async def del_user(user: str):
-    """Registra un nuevo usuario"""
+    """Elimina un usuario"""
     delete_user(user)
     return {"response":f"Usuario '{user}' eliminado"}
 
+@app.post("/reset_user/{user}")
+async def reset_user(user: str):
+    """Resetea los archivos de un usuario"""
+    reset_user_storage(get_user_id(user))
+    return {"response":f"Usuario '{user}' reseteado"}
+
 # Algortithm
 
-@app.get("/config/{algorithm}/{user}/{config_type}")
-async def get_config(algorithm: str, user: str, config_type: str) -> dict[str, str]:
+@app.get("/config/{user}/{algorithm}/{config_type}")
+async def get_config(user: str, algorithm: str, config_type: str) -> dict[str, str]:
     """Retorna la informacion actual del archivo de configuracion solicitado"""
     config = get_config_type(config_type).load_file(get_algorithm(algorithm), get_user_id(user))
     return {"config": config}
 
-@app.post("/config/{algorithm}/{user}/{config_type}")
-async def modify_config(algorithm: str, user: str, config_type: str, config_data: str):
+@app.post("/config/{user}/{algorithm}/{config_type}")
+async def modify_config(user: str, algorithm: str, config_type: str, config_data: str):
     """Guarda la configuracion en su archivo correspondiente"""
     get_config_type(config_type).save_file(get_algorithm(algorithm), get_user_id(user), config_data)
     return {"response": f"Configuracion ({config_type}) guardada"}
 
-@app.get("/outputs/{algorithm}/{user}")
-async def get_outputs(algorithm: str, user: str) -> dict[str, list[str]]:
+@app.get("/outputs/{user}/{algorithm}")
+async def get_outputs(user: str, algorithm: str) -> dict[str, list[str]]:
     """Obtiene los nombres de resultados de los algoritmos"""
     outputs = get_algorithm(algorithm).get_outputs(get_user_id(user))
     return {"outputs": outputs}
 
-@app.get("/output/{algorithm}/{user}/{output_type}")
-async def get_output(algorithm: str, user: str, output_type: str) -> dict[str, str]:
+@app.get("/output/{user}/{algorithm}/{output_type}")
+async def get_output(user: str, algorithm: str, output_type: str) -> dict[str, str]:
     """Retorna la matriz de credibilidad del indice especificado"""
     output = get_algorithm(algorithm).get_output(get_user_id(user), output_type)
     return {"output": output}
 
-@app.post("/execute/{algorithm}/{user}")
-async def execute(algorithm: str, user: str) -> dict[str, str]:
+@app.post("/execute/{user}/{algorithm}")
+async def execute(user: str, algorithm: str) -> dict[str, str]:
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
     result = run_executable(get_algorithm(algorithm), get_user_id(user))
     return {"response": result}

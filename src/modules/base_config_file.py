@@ -19,7 +19,8 @@ class ConfigFile(ABC):
     config_type: str
 
     @classmethod
-    def _get_config_path(cls, algorithm: type[ExecAlgorithm], user_path: str) -> str:
+    def _get_config_path(cls, algorithm: type[ExecAlgorithm], user_id: UUID) -> str:
+        user_path = get_user_path(user_id)
         return path.join(user_path, EXEC_FILES_DIR, algorithm.config_dir, cls.config_type+TXT_EXT)
 
     @classmethod
@@ -37,7 +38,7 @@ class ConfigFile(ABC):
         """Retorna la informacion guardada del archivo de configuracion,
            Puede lanzar un HTTPException si hay algun fallo"""
         try:
-            return cls._read_config_file(cls._get_config_path(algorithm, get_user_path(user_id)))
+            return cls._read_config_file(cls._get_config_path(algorithm, user_id))
         except FileNotFoundError as exc:
             error_msg = f"Algoritmo no posee el archivo de configuracion '{cls.config_type}'"
             raise HTTPException(status_code=404, detail=error_msg) from exc
@@ -52,7 +53,7 @@ class ConfigFile(ABC):
             raise HTTPException(status_code=404, detail=error_msg)
 
         try:
-            cls._write_config_file(cls._get_config_path(algorithm, get_user_path(user_id)), data)
+            cls._write_config_file(cls._get_config_path(algorithm, user_id), data)
         except FileNotFoundError as exc:
             error_msg = f"Algoritmo no posee el archivo de configuracion '{cls.config_type}'"
             raise HTTPException(status_code=404, detail=error_msg) from exc
