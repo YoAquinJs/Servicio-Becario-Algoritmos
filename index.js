@@ -62,8 +62,12 @@ function fillSelectorOptions(selectorElem, options){
     selectorElem.dispatchEvent(new Event("change"));
 }
 
+function getUser(){
+    return sessionStorage.getItem("user");
+}
+
 function updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlgorithm){
-    const request = backend.getOutputs(selectedAlgorithm);
+    const request = backend.getOutputs(getUser(), selectedAlgorithm);
     request.then(outputs => {
         fillSelectorOptions(outputSelectorElem, outputs);
         const cssvarDisplay = window.getComputedStyle(outputContainerElem)
@@ -75,6 +79,9 @@ function updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlg
 }
 
 document.addEventListener("DOMContentLoaded", _ => {
+    // Set user
+    sessionStorage.setItem("user", "a");
+
     const elems = Object.keys(IDs).reduce((output, id) => {
         output[IDs[id]] = document.getElementById(IDs[id]);
         return output;
@@ -102,14 +109,14 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedConfig = elems[IDs.configSelector].value;
         const inputText = elems[IDs.configTextInput].value;
-        const request = backend.modifyConfig(selectedAlgorithm, selectedConfig, inputText);
+        const request = backend.modifyConfig(getUser(), selectedAlgorithm, selectedConfig, inputText);
         requestFeedback(request, elems[IDs.sendTextButton], "Enviado", "Fallido");
     });
     elems[IDs.sendFileButton].addEventListener("click", _ => {
         getFileContent().then(fileContent => {
             const selectedAlgorithm = elems[IDs.algorithmSelector].value;
             const selectedConfig = elems[IDs.configSelector].value;
-            const request = backend.modifyConfig(selectedAlgorithm, selectedConfig, fileContent);
+            const request = backend.modifyConfig(getUser(), selectedAlgorithm, selectedConfig, fileContent);
             requestFeedback(request, elems[IDs.sendFileButton], "Enviado", "Fallido");
         }).catch(_ => {
             const noEvent = new Promise(resolve => resolve());
@@ -120,14 +127,14 @@ document.addEventListener("DOMContentLoaded", _ => {
     elems[IDs.getConfigButton].addEventListener("click", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedConfig = elems[IDs.configSelector].value;
-        const request = backend.getConfigFile(selectedAlgorithm, selectedConfig);
+        const request = backend.getConfigFile(getUser(), selectedAlgorithm, selectedConfig);
         request.then(config => downloadDataAsFile(config, selectedConfig));
         requestFeedback(request, elems[IDs.getConfigButton], "Obtenido", "Fallido");
     });
 
     elems[IDs.executeButton].addEventListener("click", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
-        const request = backend.execute(selectedAlgorithm);
+        const request = backend.execute(getUser(), selectedAlgorithm);
 
         elems[IDs.outputTableContainer].innerHTML = "";
         const outputSelectorElem = elems[IDs.outputSelector];
@@ -145,7 +152,7 @@ document.addEventListener("DOMContentLoaded", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;
         const selectedOutput = elems[IDs.outputSelector].value;
 
-        const request = backend.getOutput(selectedAlgorithm, selectedOutput);
+        const request = backend.getOutput(getUser(), selectedAlgorithm, selectedOutput);
         request.then(output => {
             downloadDataAsFile(output, `${selectedOutput}-resultado-${selectedAlgorithm}`);
             if (selectedAlgorithm == ALGORITHMS[1])

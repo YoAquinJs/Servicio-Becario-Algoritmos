@@ -45,71 +45,73 @@ function validateResponseFormat(response, expectedFormat) {
 }
 
 //Api Calls
-export async function getConfigFile(algorithmType, configType){
-    const fetchURI = `${API_URI}/config/${algorithmType}/${configType}`;
+
+export async function getConfigFile(user, algorithmType, configType){
+    const fetchURI = `${API_URI}/config/${user}/${algorithmType}/${configType}`;
 
     const response = await fetch(fetchURI, {method:"GET"});
     const parsedResponse = await response.json();
 
     if (!response.ok)
-        throw new HttpError(response.status, parsedResponse.detail);
+        throw new HttpError(response.status, parsedResponse);
 
     validateResponseFormat(parsedResponse, {"config":""});
 
     return parsedResponse.config;
 }
 
-export async function modifyConfig(algorithmType, configType, data){
+export async function modifyConfig(user, algorithmType, configType, data){
     const param = new URLSearchParams({"config_data":data}).toString();
-    const fetchURI = `${API_URI}/config/${algorithmType}/${configType}?${param}`;
+    const fetchURI = `${API_URI}/config/${user}/${algorithmType}/${configType}?${param}`;
 
     const response = await fetch(fetchURI, {method:"POST"});
     const parsedResponse = await response.json();
 
     if (!response.ok)
-        throw new HttpError(response.status, parsedResponse.detail);
+        throw new HttpError(response.status, parsedResponse);
 
     validateResponseFormat(parsedResponse, {"response":""});
 
     return parsedResponse.response;
 }
 
-export async function getOutputs(algorithmType){
-    const fetchURI = `${API_URI}/outputs/${algorithmType}`;
+export async function getOutputs(user, algorithmType){
+    const fetchURI = `${API_URI}/outputs/${user}/${algorithmType}`;
     const response = await fetch(fetchURI, {method:"GET"});
 
     const parsedResponse = await response.json();
 
     if (!response.ok)
-        throw new HttpError(response.status, parsedResponse.detail);
+        throw new HttpError(response.status, parsedResponse);
 
     validateResponseFormat(parsedResponse, {"outputs":undefined});
 
     return parsedResponse.outputs;
 }
 
-export async function getOutput(algorithmType, outputType){
-    const fetchURI = `${API_URI}/output/${algorithmType}/${outputType}`;
+export async function getOutput(user, algorithmType, outputType){
+    const fetchURI = `${API_URI}/output/${user}/${algorithmType}/${outputType}`;
 
     const response = await fetch(fetchURI, {method:"GET"});
     const parsedResponse = await response.json();
 
     if (!response.ok)
-        throw new HttpError(response.status, parsedResponse.detail);
+        throw new HttpError(response.status, parsedResponse);
 
     validateResponseFormat(parsedResponse, {"output":""});
 
     return parsedResponse.output;
 }
 
-export async function execute(algorithmType){
-    const fetchURI = `${API_URI}/execute/${algorithmType}`;
+export async function execute(user, algorithmType){
+    const fetchURI = `${API_URI}/execute/${user}/${algorithmType}`;
 
     const response = await fetch(fetchURI, {method:"POST"});
     const parsedResponse = await response.json();
 
+    debugger;
     if (!response.ok)
-        throw new HttpError(response.status, parsedResponse.detail);
+        throw new HttpError(response.status, parsedResponse);
 
     validateResponseFormat(parsedResponse, {"response":""});
 
