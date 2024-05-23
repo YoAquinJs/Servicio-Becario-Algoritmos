@@ -10,18 +10,20 @@ uvicorn main:app
 
 import logging
 from typing import Any, Awaitable, Callable
+from uuid import UUID
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi import HTTPException as StarletteHTTPException
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from modules.algorithms import get_algorithm
+from modules.base_algorithm import ExecAlgorithm
 from modules.config_files import get_config_type
 from modules.execute import run_executable
-from modules.user_auth import delete_user, is_user, register_user
-from modules.user_storage import assert_user_storage
+from modules.user_auth import delete_user, get_user_id, is_user, register_user
+from modules.user_storage import assert_user_storage, reset_user_storage
 
 # Logging
 
@@ -61,7 +63,7 @@ async def exception_middleware(request: Request, call_next: Callable[[Request], 
     """TODO"""
     try:
         return await call_next(request)
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-except
         logging.error(str(e))
         return JSONResponse(content=str(e), status_code=500)
 
@@ -70,56 +72,75 @@ async def root():
     """Root de la api"""
     return {"response":"root"}
 
-# User auth
+# User
 
 assert_user_storage()
 
 @app.get("/user/{user}")
-async def exists_user(user: str):
+async def exists_user(user: str) -> dict[str, bool]:
     """Registra un nuevo usuario"""
     exists = is_user(user)
-    return {"response":f"Usuario '{user}' {'existe' if exists else 'no existe'}"}
+    return {"exists":exists}
 
 @app.post("/user/{user}")
-async def reg_user(user: str):
+async def reg_user(user: str) -> dict[str, str]:
     """Registra un nuevo usuario"""
     register_user(user)
     return {"response":f"Usuario '{user}' registrado"}
 
 @app.delete("/user/{user}")
-async def del_user(user: str):
-    """Registra un nuevo usuario"""
+async def del_user(user: str) -> dict[str, str]:
+    """Elimina un usuario"""
     delete_user(user)
     return {"response":f"Usuario '{user}' eliminado"}
 
-# Allgortithm
+@app.post("/reset_user/{user}")
+async def reset_user(user: str) -> dict[str, str]:
+    """Resetea los archivos de un usuario"""
+    reset_user_storage(get_user_id(user))
+    return {"response":f"Usuario '{user}' reseteado"}
 
-@app.get("/config/{algorithm}/{config_type}")
-async def get_config(algorithm: str, config_type: str) -> dict[str, str]:
+# Algortithm
+
+@app.get("/config/{user}/{algorithm}/{config_type}")
+async def get_config(config_type: str,
+                     user: UUID = Depends(get_user_id),
+                     algorithm: type[ExecAlgorithm] = Depends(get_algorithm)
+                     ) -> dict[str, str]:
     """Retorna la informacion actual del archivo de configuracion solicitado"""
-    config = get_config_type(config_type).load_file(get_algorithm(algorithm))
+    config = get_config_type(config_type).load_file(algorithm, user)
     return {"config": config}
 
-@app.post("/config/{algorithm}/{config_type}")
-async def modify_config(algorithm: str, config_type: str, config_data: str):
+@app.post("/config/{user}/{algorithm}/{config_type}")
+async def modify_config(config_type: str, config_data: str,
+                        user: UUID = Depends(get_user_id),
+                        algorithm: type[ExecAlgorithm] = Depends(get_algorithm)
+                        ) -> dict[str, str]:
     """Guarda la configuracion en su archivo correspondiente"""
-    get_config_type(config_type).save_file(get_algorithm(algorithm), config_data)
+    get_config_type(config_type).save_file(algorithm, user, config_data)
     return {"response": f"Configuracion ({config_type}) guardada"}
 
-@app.get("/outputs/{algorithm}")
-async def get_outputs(algorithm: str) -> dict[str, list[str]]:
+@app.get("/outputs/{user}/{algorithm}")
+async def get_outputs(user: UUID = Depends(get_user_id),
+                      algorithm: type[ExecAlgorithm] = Depends(get_algorithm)
+                      ) -> dict[str, list[str]]:
     """Obtiene los nombres de resultados de los algoritmos"""
-    outputs = get_algorithm(algorithm).get_outputs()
+    outputs = algorithm.get_outputs(user)
     return {"outputs": outputs}
 
-@app.get("/output/{algorithm}/{output_type}")
-async def get_output(algorithm: str, output_type: str) -> dict[str, str]:
+@app.get("/output/{user}/{algorithm}/{output_type}")
+async def get_output(output_type: str,
+                     user: UUID = Depends(get_user_id),
+                     algorithm: type[ExecAlgorithm] = Depends(get_algorithm)
+                     ) -> dict[str, str]:
     """Retorna la matriz de credibilidad del indice especificado"""
-    output = get_algorithm(algorithm).get_output(output_type)
+    output = algorithm.get_output(user, output_type)
     return {"output": output}
 
-@app.post("/execute/{algorithm}")
-async def execute(algorithm: str) -> dict[str, str]:
+@app.post("/execute/{user}/{algorithm}")
+async def execute(user: UUID = Depends(get_user_id),
+                  algorithm: type[ExecAlgorithm] = Depends(get_algorithm)
+                  ) -> dict[str, str]:
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
-    result = run_executable(get_algorithm(algorithm))
+    result = run_executable(algorithm, user)
     return {"response": result}

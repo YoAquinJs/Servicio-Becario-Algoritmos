@@ -3,8 +3,8 @@
 from os import path
 from uuid import UUID
 
-USER_DEFAULT_FILES = path.join(path.curdir, "executable.zip")
-EXEC_FILES_DIR = path.join(path.curdir, "Files")
+USER_DEFAULT_FILES = "executable.zip"
+EXEC_FILES_DIR = "Files"
 ENCODING = "utf-8"
 TXT_EXT = ".txt"
 USER_RECORD = "users.json"
