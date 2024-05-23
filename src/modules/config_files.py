@@ -6,6 +6,8 @@ from fastapi import HTTPException
 
 from modules.base_config_file import ConfigFile
 
+import re
+
 
 def get_config_type(config_type: str) -> type[ConfigFile]:
     """Obtiene el tipo correspondiente de archivo de configuracion"""
@@ -62,7 +64,21 @@ class CriteriaDirectionsConfig(ConfigFile):
 
     @classmethod
     def is_valid_format(cls, data: str) -> bool:
+        # Split the data into lines
+        lines = data.splitlines()
+        
+        # Check if there are at least two lines
+        if len(lines) < 2:
+            return False
+        
+        # Split the second line into elements and check each one
+        second_line_elements = lines[1].strip().split()
+        for element in second_line_elements:
+            if element not in ("1", "-1"):
+                return False
+        
         return True
+
 
 class CriteriaHierarchyConfig(ConfigFile):
     """Clase para configuracion de Criteria hierarchy"""
@@ -70,7 +86,43 @@ class CriteriaHierarchyConfig(ConfigFile):
 
     @classmethod
     def is_valid_format(cls, data: str) -> bool:
+        lines = data.strip().split('\n')
+        
+        if not lines:
+            return False
+        
+        node_regex = re.compile(r'^g\d*(?:=\{(g\d+(?:,g\d+)*)\})?$')
+        
+        node_hierarchy = {}
+
+        for line in lines:
+            if not node_regex.match(line):
+                return False
+
+            node, *children = line.split('=')
+            
+            if not node.startswith('g'):
+                return False
+            
+            if children:
+                children = children[0].strip('{}').split(',')
+                for child in children:
+                    if not child.startswith(node): 
+                        return False
+
+                    if node in node_hierarchy:
+                        node_hierarchy[node].append(child)
+                    else:
+                        node_hierarchy[node] = [child]
+            else:
+                node_hierarchy[node] = []
+
+        if 'g' not in node_hierarchy:
+            return False
+            
+        
         return True
+
 
 class CriteriaInteractionsConfig(ConfigFile):
     """Clase para configuracion de Criteria interactions"""
