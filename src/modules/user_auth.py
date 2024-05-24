@@ -63,9 +63,10 @@ def is_user(user: str) -> bool:
     return user in _get_user_record()
 
 def get_user_id(user: str) -> UUID:
-    """TODO"""
+    """TODO
+    """
     try:
         return _get_user_record()[user]
-    except IndexError:
+    except KeyError:
         # pylint: disable=raise-missing-from
         raise HTTPException(status_code=404, detail=f"usuario '{user}' no existe")
