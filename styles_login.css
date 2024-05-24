@@ -8,24 +8,17 @@ body {
 #container {
     background-color: whitesmoke;
     width: 400px;
-    height: 400px;
+    height: 500px;
     border-radius: 25px;
     padding: 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 30px;
-    margin: 25vh auto;
+    margin: 10vh auto;
 }
 
-#log-in {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
-#sign-up {
+.user-act-section {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -3,26 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Inicio de Sesión</title>
-    <link rel="stylesheet" href="styles_session.css">
+    <link rel="stylesheet" href="styles_login.css">
     <script type="module" src="login.js"></script>
 </head>
 <body>
     <div id="container">
-        <div id="log-in">
+        <div class="user-act-section">
             <h1 class="title">Iniciar Sesión</h1>
             <div class="fields">
-                <label id="uname">Nombre de usuario</label>
-                <input id="login-usname" type="text" placeholder="Ingrese nombre de usuario" required>
+                <input id="login-usname" type="text" placeholder="Usuario" required>
             </div>
-            <button id="send-login">Iniciar Sesión</button>
+            <button id="login">Iniciar Sesión</button>
         </div>
-        <div id="sign-up">
-            <h1 class="title">Crear Cuenta</h1>
+        <div class="user-act-section">
+            <h1 class="title">Crear Usuario</h1>
             <div class="fields">
-                <label id="uname">Nombre de usuario</label>
-                <input id="signup-usname" type="text" placeholder="Ingrese nombre de usuario" required>
+                <input id="create-user-name" type="text" placeholder="Usuario" required>
             </div>
-            <button id="create-session">Crear Cuenta</button>
+            <button id="create-user">Crear Usuario</button>
+        </div>
+        <div class="user-act-section">
+            <h1 class="title">Eliminar Usuario</h1>
+            <div class="fields">
+                <input id="delete-user-name" type="text" placeholder="Usuario" required>
+            </div>
+            <button id="delete-user">Eliminar Usuario</button>
         </div>
     </div>
 </body>
