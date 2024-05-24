@@ -80,7 +80,7 @@ function updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlg
 
 document.addEventListener("DOMContentLoaded", _ => {
     // Set user
-    sessionStorage.setItem("user", "a");
+    sessionStorage.setItem("user", "b");
 
     const elems = Object.keys(IDs).reduce((output, id) => {
         output[IDs[id]] = document.getElementById(IDs[id]);

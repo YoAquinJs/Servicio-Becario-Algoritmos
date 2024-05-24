@@ -1,5 +1,6 @@
-document.addEventListener('DOMContentLoaded', function(){
-    // Get buttons and input fields
+import * as backend from "./modules/backend_connection.js"
+
+document.addEventListener("DOMContentLoaded", _ => {
     const logInButton = document.getElementById('send-login')
     const signUpButton = document.getElementById('create-session')
     const logInUsername = document.getElementById('login-usname')
