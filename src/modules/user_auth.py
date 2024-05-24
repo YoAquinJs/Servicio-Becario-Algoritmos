@@ -32,6 +32,9 @@ def _get_user_record() -> dict[str, UUID]:
 def register_user(user: str) -> None:
     """TODO
     """
+    if user == "":
+        raise HTTPException(400, detail="Nombre invalid")
+
     user_record = _get_user_record()
     if user in user_record:
         raise HTTPException(400, detail="Usuario ya existe")
