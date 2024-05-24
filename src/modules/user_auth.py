@@ -34,7 +34,7 @@ def register_user(user: str) -> None:
     """
     user_record = _get_user_record()
     if user in user_record:
-        raise HTTPException(404, detail="Usuario ya existe")
+        raise HTTPException(400, detail="Usuario ya existe")
 
     with open(USER_RECORD, "w", encoding=ENCODING) as file:
         uid = uuid4()
