@@ -50,7 +50,7 @@ class ConfigFile(ABC):
            si la informacion enviada no cumple con el formato requerido"""
         if not cls.is_valid_format(data):
             error_msg = f"Formato invalido para el archivo '{cls.config_type}'"
-            raise HTTPException(status_code=404, detail=error_msg)
+            raise HTTPException(status_code=400, detail=error_msg)
 
         try:
             cls._write_config_file(cls._get_config_path(algorithm, user_id), data)
