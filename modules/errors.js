@@ -1,5 +1,7 @@
+import { redirectTo } from "./user_fetch.js"
+
 export class HttpError extends Error {
-    constructor(statusCode, detail) {
+    constructor(statusCode, detail, ignoreUserValidation=false) {
         super(`Failed request with code ${statusCode}`);
 
         if (Error.captureStackTrace)
@@ -9,6 +11,14 @@ export class HttpError extends Error {
         this.statusCode = statusCode;
         this.detail = detail;
         this.date = new Date();
+
+        if (!ignoreUserValidation){
+            const username = sessionStorage.getItem("username");
+            if (detail == `Usuario '${username}' no encontrado`){
+                // exit app
+                redirectTo("index", )
+            }
+        }
     }
 }
 

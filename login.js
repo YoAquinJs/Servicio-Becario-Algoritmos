@@ -1,26 +1,35 @@
 import * as backend from "./modules/backend_connection.js"
+import { requestFeedback } from "./modules/ui_feedback.js"
+import { redirectTo } from "./modules/user_fetch.js"
+
+//DOM Ids
+const IDs = {
+    loginUsername : "login-user-name",
+    loginButton : "login",
+
+    createUsername : "create-user-name",
+    createUserButton : "create-user",
+
+    deleteUsername : "delete-user-name",
+    deleteUserButton : "delete-user",
+};
 
 document.addEventListener("DOMContentLoaded", _ => {
-    const logInButton = document.getElementById('send-login')
-    const signUpButton = document.getElementById('create-session')
-    const logInUsername = document.getElementById('login-usname')
-    const signUpUsername = document.getElementById('signup-usname')
+    const elems = Object.keys(IDs).reduce((output, id) => {
+        output[IDs[id]] = document.getElementById(IDs[id]);
+        return output;
+    }, {});
 
-    // Function to redirect to page
-    function handleRedirection(username, page){ 
-        if (username && username.trim() != ""){
-            // Redirects to app.html
-            window.location.href = page + '?username=' + encodeURIComponent(username);
-        } else {
-            alert('Por favor, ingrese un nombre de usuario.');
-        }
-    }
-
-    logInButton.addEventListener('click', function(){
-        handleRedirection(logInUsername.value, 'app.html');
-    });
-
-    signUpButton.addEventListener('click', function(){
-        handleRedirection(signUpUsername.value, 'app.html');
+    elems[IDs.loginButton].addEventListener("click", _ => {
+        const username = elems[IDs.loginUsername].value;
+        const request = backend.existsUser(username);
+        requestFeedback(request, elems[IDs.loginButton], "", "Error");
+        request.then(exists => {
+            if (!exists){
+                alert(`Usuario '${username}' no encontrado`)
+                return;
+            }
+            redirectTo("app", username);
+        });
     });
 });

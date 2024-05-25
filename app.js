@@ -3,6 +3,7 @@ import { handleFileSelect, getFileContent } from "./modules/file_uploader.js"
 import { downloadDataAsFile } from "./modules/downloader.js"
 import { requestFeedback } from "./modules/ui_feedback.js"
 import { visualizeOutput } from "./modules/output_visualizer.js"
+import { getUser, redirectTo } from "./modules/user_fetch.js"
 
 const ALGORITHMS = [
     "Calculate credibility matrix",
@@ -53,6 +54,8 @@ const IDs = {
     outputSelector : "output-selector",
     getOutputButton : "get-output-button",
     outputTableContainer : "output-table",
+
+    returnLoginButton : "return-to-login",
 };
 
 function fillSelectorOptions(selectorElem, options){
@@ -60,10 +63,6 @@ function fillSelectorOptions(selectorElem, options){
     options.forEach(opt => selectorElem.innerHTML += `<option value="${opt}">${opt}</option>\n`);
     selectorElem.value = options[0];
     selectorElem.dispatchEvent(new Event("change"));
-}
-
-function getUser(){
-    return sessionStorage.getItem("user");
 }
 
 function updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlgorithm){
@@ -79,9 +78,6 @@ function updateOutputSelect(outputSelectorElem, outputContainerElem, selectedAlg
 }
 
 document.addEventListener("DOMContentLoaded", _ => {
-    // Set user
-    sessionStorage.setItem("user", "b");
-
     const elems = Object.keys(IDs).reduce((output, id) => {
         output[IDs[id]] = document.getElementById(IDs[id]);
         return output;
@@ -104,6 +100,7 @@ document.addEventListener("DOMContentLoaded", _ => {
     fillSelectorOptions(elems[IDs.configSelector], CONFIGS);
 
     elems[IDs.configFileInput].addEventListener("change", handleFileSelect);
+    elems[IDs.returnLoginButton].addEventListener("click", _ => { redirectTo("index", ""); });
 
     elems[IDs.sendTextButton].addEventListener("click", _ => {
         const selectedAlgorithm = elems[IDs.algorithmSelector].value;

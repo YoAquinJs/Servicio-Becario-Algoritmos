@@ -46,22 +46,22 @@ function validateResponseFormat(response, expectedFormat) {
 
 //Api Calls
 
-export async function existsUser(user){
-    const fetchURI = `${API_URI}/user/${user}`;
+export async function existsUser(username){
+    const fetchURI = `${API_URI}/user/${username}`;
 
     const response = await fetch(fetchURI, {method:"GET"});
     const parsedResponse = await response.json();
 
     if (!response.ok)
-        throw new HttpError(response.status, parsedResponse);
+        throw new HttpError(response.status, parsedResponse, ignoreUserValidation=true);
 
     validateResponseFormat(parsedResponse, {"exists":true});
 
     return parsedResponse.exists;
 }
 
-export async function registerUser(user){
-    const fetchURI = `${API_URI}/user/${user}`;
+export async function registerUser(username){
+    const fetchURI = `${API_URI}/user/${username}`;
 
     const response = await fetch(fetchURI, {method:"POST"});
     const parsedResponse = await response.json();
@@ -74,8 +74,8 @@ export async function registerUser(user){
     return parsedResponse.response;
 }
 
-export async function deleteUser(user){
-    const fetchURI = `${API_URI}/user/${user}`;
+export async function deleteUser(username){
+    const fetchURI = `${API_URI}/user/${username}`;
 
     const response = await fetch(fetchURI, {method:"DELETE"});
     const parsedResponse = await response.json();
@@ -88,8 +88,8 @@ export async function deleteUser(user){
     return parsedResponse.response;
 }
 
-export async function resetUser(user){
-    const fetchURI = `${API_URI}/reset_user/${user}`;
+export async function resetUser(username){
+    const fetchURI = `${API_URI}/reset_user/${username}`;
 
     const response = await fetch(fetchURI, {method:"POST"});
     const parsedResponse = await response.json();
@@ -166,7 +166,6 @@ export async function execute(user, algorithmType){
     const response = await fetch(fetchURI, {method:"POST"});
     const parsedResponse = await response.json();
 
-    debugger;
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
