@@ -26,10 +26,29 @@ document.addEventListener("DOMContentLoaded", _ => {
         requestFeedback(request, elems[IDs.loginButton], "", "Error");
         request.then(exists => {
             if (!exists){
-                alert(`Usuario '${username}' no encontrado`)
+                alert("Usuario no encontrado");
                 return;
             }
             redirectTo("app", username);
+        });
+    });
+
+    elems[IDs.createUserButton].addEventListener("click", _ => {
+        const username = elems[IDs.createUsername].value;
+        const request = backend.registerUser(username);
+        requestFeedback(request, elems[IDs.createUserButton], "", "Error");
+        request.then(response => {
+            alert(response);
+            redirectTo("app", username);
+        });
+    });
+
+    elems[IDs.deleteUserButton].addEventListener("click", _ => {
+        const username = elems[IDs.deleteUsername].value;
+        const request = backend.deleteUser(username);
+        requestFeedback(request, elems[IDs.deleteUserButton], "", "Error");
+        request.then(response => {
+            alert(response);
         });
     });
 });

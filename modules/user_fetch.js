@@ -6,7 +6,5 @@ export function getUser(){
 
 export function redirectTo(html, username){
     sessionStorage.setItem(USERNAME_KEY, username);
-
-    const appPage = `${html}.html`;
-    window.location.href = appPage;
+    window.location.href = `${html}.html`;
 }
