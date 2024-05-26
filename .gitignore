@@ -1,5 +1,5 @@
 .vscode
-user_storage
+**/user_storage/
 
 *__pycache__/
 *.txt
