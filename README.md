@@ -1,14 +1,7 @@
 # Servicio-Becario-Algoritmos
 
-Aplicación web de interfaz, para los algoritmos genéticos de toma de decisiones.
-
-### Branch Frontend
-
-Código del front-end de la app, página web estática de HTML, JavaScript y CSS.
-
-### Branch Backend
-
-Código del back-end de la app, API utilizando Python y la librería FastAPI.
+Aplicación web de interfaz, para los algoritmos genéticos de toma de decisiones, se comunica con la api del backend para poder.
+Debe ser ejecutado en un servidor.
 
 ### Host de la interfaz WEB
 
