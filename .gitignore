@@ -1,5 +1,6 @@
-.vscode
-**/user_storage/
+*.vscode/
+*user_storage/
+*venv/
 
 *__pycache__/
 *.txt
