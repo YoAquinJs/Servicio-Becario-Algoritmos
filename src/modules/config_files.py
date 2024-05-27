@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from modules.base_config_file import ConfigFile
 
 import re
+import logging
 
 
 def get_config_type(config_type: str) -> type[ConfigFile]:
@@ -42,14 +43,46 @@ def get_config_type(config_type: str) -> type[ConfigFile]:
 
 DATA_SEPARATOR = "\t"
 
+
 class AdditionalCriteriaParametersConfig(ConfigFile):
     """Clase para configuracion de Additional criteria parameters"""
     config_type = "Additional criteria parameters"
 
     @classmethod
     def is_valid_format(cls, data: str) -> bool:
+        # Splits data into lines
+        lines = data.splitlines()
+
+        # Ensure there are at least 3 lines
+        if len(lines) != 3:
+            return False
+
+        if " " in data:
+            return False
+
+        # Check first line for two real numbers separated by a tab
+        pattern = re.compile(r'^\s*([-+]?\d*\.\d+|[-+]?\d+)\t([-+]?\d*\.\d+|[-+]?\d+)\s*$')
+        matches = pattern.findall(lines[0])
+        if not matches:  # If the pattern doesn't match
+            return False
+
+            # Check second line for a single real number
+        pattern = re.compile(r'^\s*([-+]?\d*\.\d+|[-+]?\d+)\s*$')
+        matches = pattern.findall(lines[1])
+        if not matches:  # If the pattern doesn't match
+            return False
+
+        # Check third line for a single integer
+        pattern = re.compile(r'^\s*([-+]?\d+)\s*$')
+        matches = pattern.findall(lines[2])
+        if not matches:  # If the pattern doesn't match
+            return False
+
+        # If all conditions are met, the file is valid
         return True
 
+
+    
 class CredibilityCriteriaConfig(ConfigFile):
     """Clase para configuracion de Credibility criteria"""
     config_type = "Credibility criteria"
