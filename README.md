@@ -5,7 +5,7 @@ ejecutable de algoritmos, y la logica de la interfaz.
 
 ### Ejecucion del Backend
 
-Descargar python 3.13, crear un virtual enviroment y configurar las dependencias especificadas en requirements.txt
+Descargar python 3.13, y tenrer Java instalado, version minima 1.8, crear un virtual enviroment y configurar las dependencias especificadas en requirements.txt
 ```bash
 cd backend-src
 
