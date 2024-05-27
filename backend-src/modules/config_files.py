@@ -2,6 +2,8 @@
 Este módulo contiene la validación de formato, para cada implementación de archivo de configuración.
 """
 
+import re
+
 from fastapi import HTTPException
 
 from modules.base_config_file import ConfigFile
