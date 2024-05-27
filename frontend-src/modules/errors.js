@@ -14,9 +14,9 @@ export class HttpError extends Error {
 
         if (!ignoreUserValidation){
             const username = sessionStorage.getItem("username");
-            if (detail == `Usuario '${username}' no encontrado`){
+            if (detail == `usuario '${username}' no existe`){
                 // exit app
-                redirectTo("index", )
+                redirectTo("index", "");
             }
         }
     }
