@@ -7,5 +7,7 @@
 *.xlsx
 *.json
 *.log
+*.jar
 
 !requirements.txt
+
