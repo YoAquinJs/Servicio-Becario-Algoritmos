@@ -5,7 +5,7 @@ becario: Toma de Desciciones con Algoritmos Geneticos
 Juan Sebastian Gonzalez A01644942
 
 Comando de ejecucion:
-py main.py
+python3 main.py
 # o
 uvicorn main:app --ssl-keyfile key.pem --ssl-certfile cert.pem
 """
@@ -153,4 +153,4 @@ async def execute(user: UUID = Depends(get_user_id),
     return {"response": result}
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, ssl_certfile=SSL_CERT, ssl_keyfile=SSL_KEY)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, ssl_certfile=SSL_CERT, ssl_keyfile=SSL_KEY)
