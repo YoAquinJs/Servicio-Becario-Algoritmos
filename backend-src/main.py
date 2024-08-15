@@ -5,19 +5,21 @@ becario: Toma de Desciciones con Algoritmos Geneticos
 Juan Sebastian Gonzalez A01644942
 
 Comando de ejecucion:
-uvicorn main:app
+py main.py
+# o
+uvicorn main:app --ssl-keyfile key.pem --ssl-certfile cert.pem
 """
 
 import logging
 from typing import Any, Awaitable, Callable
 from uuid import UUID
 
+import uvicorn
 from fastapi import Depends, FastAPI
 from fastapi import HTTPException as StarletteHTTPException
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-
 from modules.algorithms import get_algorithm
 from modules.base_algorithm import ExecAlgorithm
 from modules.config_files import get_config_type
@@ -34,6 +36,11 @@ logging.basicConfig(
         logging.FileHandler("errors.log"),
     ]
 )
+
+# SSL
+
+SSL_CERT = "cert.pem"
+SSL_KEY = "key.pem"
 
 # API
 
@@ -68,7 +75,7 @@ async def exception_middleware(request: Request, call_next: Callable[[Request], 
         return JSONResponse(content=str(e), status_code=500)
 
 @app.get("/")
-async def root():
+async def root() -> dict[str, str]:
     """Root de la api"""
     return {"response":"root"}
 
@@ -144,3 +151,6 @@ async def execute(user: UUID = Depends(get_user_id),
     """Ejecuta el archivo .jar calculando las matrices de credibilidad"""
     result = run_executable(algorithm, user)
     return {"response": result}
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, ssl_certfile=SSL_CERT, ssl_keyfile=SSL_KEY)

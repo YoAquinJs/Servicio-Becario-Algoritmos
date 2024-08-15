@@ -8,6 +8,7 @@
 *.json
 *.log
 *.jar
+*.pem
 
 !requirements.txt
 
