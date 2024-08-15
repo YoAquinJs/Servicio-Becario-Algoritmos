@@ -1,7 +1,7 @@
 import { HttpError, ResponseFormatError } from "./errors.js"
 
 const LOCAL_HOST = "http://127.0.0.1:8000";
-const GLOBAL_HOST = "http://3.145.178.31";
+const GLOBAL_HOST = "https://3.145.178.31";
 const API_URI = window.location.hostname == "127.0.0.1" ? LOCAL_HOST : GLOBAL_HOST;
 
 //Api on start validation
