@@ -1,8 +1,9 @@
 import { HttpError, ResponseFormatError } from "./errors.js"
 
 const LOCAL_HOST = "http://127.0.0.1:8000";
-const GLOBAL_HOST = "https://3.145.178.31";
+const GLOBAL_HOST = "missing"//"http://18.224.67.125";
 const API_URI = window.location.hostname == "127.0.0.1" ? LOCAL_HOST : GLOBAL_HOST;
+// const API_URI = GLOBAL_HOST;
 
 //Api on start validation
 fetch(`${API_URI}/`, {
@@ -89,7 +90,7 @@ export async function deleteUser(username){
 }
 
 export async function resetUser(username){
-    const fetchURI = `${API_URI}/reset_user/${username}`;
+    const fetchURI = `${API_URI}/user/reset/${username}`;
 
     const response = await fetch(fetchURI, {method:"POST"});
     const parsedResponse = await response.json();
