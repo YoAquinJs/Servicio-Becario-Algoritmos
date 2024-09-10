@@ -1,13 +1,14 @@
-"""Modulo para la funcionalidad de carga de matrices de credibilidad"""
+"""
+Modulo para la funcionalidad de carga de matrices de credibilidad
+"""
 
 from os import listdir, path
 from typing import Callable
 from uuid import UUID
 
+from algorithms.base_algorithm import ExecAlgorithm
 from fastapi import HTTPException
-
-from modules.base_algorithm import ExecAlgorithm
-from modules.paths import TXT_EXT
+from paths import TXT_EXT
 
 
 def get_algorithm(algorithm: str) -> type[ExecAlgorithm]:

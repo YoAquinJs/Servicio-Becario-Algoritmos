@@ -9,6 +9,6 @@
 *.log
 *.jar
 *.pem
+*.swp
 
 !requirements.txt
-

@@ -4,12 +4,10 @@ Este módulo contiene la validación de formato, para cada implementación de ar
 
 import re
 
+from algorithms.base_config_file import ConfigFile
 from fastapi import HTTPException
 
-from modules.base_config_file import ConfigFile
-
-import re
-import logging
+# import re
 
 
 def get_config_type(config_type: str) -> type[ConfigFile]:
@@ -128,7 +126,7 @@ class CriteriaHierarchyConfig(ConfigFile):
         
         node_regex = re.compile(r'^g\d*(?:=\{(g\d+(?:,g\d+)*)\})?$')
         
-        node_hierarchy = {}
+        node_hierarchy: dict[str, list[str]] = {}
 
         for line in lines:
             if not node_regex.match(line):

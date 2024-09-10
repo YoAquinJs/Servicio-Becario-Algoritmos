@@ -9,8 +9,8 @@ import uuid
 from os import path
 from zipfile import ZipFile
 
-from modules.paths import (ENCODING, USER_DEFAULT_FILES, USER_RECORD,
-                           USER_STORAGE, get_user_path)
+from paths import (ENCODING, USER_DEFAULT_FILES, USER_RECORD, USER_STORAGE,
+                   get_user_path)
 
 
 def assert_user_storage() -> None:

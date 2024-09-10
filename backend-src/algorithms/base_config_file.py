@@ -1,4 +1,6 @@
-"""Modulo de la clase base de los archivos de configuracion"""
+"""
+Modulo de la clase base de los archivos de configuracion
+"""
 
 from __future__ import annotations
 
@@ -6,11 +8,10 @@ from abc import ABC, abstractmethod
 from os import path
 from uuid import UUID
 
+from algorithms.base_algorithm import ExecAlgorithm
 from fastapi import HTTPException
-
-from modules.base_algorithm import ExecAlgorithm
-from modules.paths import ENCODING, EXEC_FILES_DIR, TXT_EXT
-from modules.user_storage import get_user_path
+from paths import ENCODING, EXEC_FILES_DIR, TXT_EXT
+from user.user_storage import get_user_path
 
 
 class ConfigFile(ABC):

@@ -1,12 +1,13 @@
-"""Este modulo contiene la clase base para la representacion de un algoritmo de ejecucion"""
+"""
+Este modulo contiene la clase base para la representacion de un algoritmo de ejecucion
+"""
 
 from abc import ABC, abstractmethod
 from os import path
 from uuid import UUID
 
 from fastapi import HTTPException
-
-from modules.paths import ENCODING, EXEC_FILES_DIR, get_user_path
+from paths import ENCODING, EXEC_FILES_DIR, get_user_path
 
 
 class ExecAlgorithm(ABC):

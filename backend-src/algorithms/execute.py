@@ -1,12 +1,13 @@
-"""Modulo que continue la funcionalidad para correr el ejecutable"""
+"""
+Modulo que continue la funcionalidad para correr el ejecutable
+"""
 
 from subprocess import CalledProcessError, TimeoutExpired, run
 from uuid import UUID
 
+from algorithms.base_algorithm import ExecAlgorithm
 from fastapi import HTTPException
-
-from modules.base_algorithm import ExecAlgorithm
-from modules.paths import get_user_path
+from paths import get_user_path
 
 COMMAND = "java -jar executable.jar"
 

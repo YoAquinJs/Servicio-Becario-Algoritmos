@@ -1,4 +1,6 @@
-"""Este modulo contiene la constante EXEC_FILES_DIR"""
+"""
+Este modulo contiene la constante EXEC_FILES_DIR
+"""
 
 from os import path
 from uuid import UUID

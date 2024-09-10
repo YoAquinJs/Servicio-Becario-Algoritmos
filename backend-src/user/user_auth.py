@@ -1,13 +1,14 @@
-"""Este modulo contiene el manejo de registro y autenticacion de usuarios"""
+"""
+Este modulo contiene el manejo de registro y autenticacion de usuarios
+"""
 
 import json
 from typing import Any
 from uuid import UUID, uuid4
 
 from fastapi import HTTPException
-
-from modules.paths import ENCODING, USER_RECORD
-from modules.user_storage import del_user_storage, reset_user_storage
+from paths import ENCODING, USER_RECORD
+from user.user_storage import del_user_storage, reset_user_storage
 
 
 class UserRecordEnc(json.JSONEncoder):
