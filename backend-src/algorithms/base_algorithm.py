@@ -19,18 +19,17 @@ class ExecAlgorithm(ABC):
 
     @classmethod
     def _get_output_dir(cls, user_id: UUID) -> str:
-        return  path.join(
-            get_user_path(user_id),
-            EXEC_FILES_DIR,
-            cls.config_dir,
-            cls.output_dir
+        return path.join(
+            get_user_path(user_id), EXEC_FILES_DIR, cls.config_dir, cls.output_dir
         )
 
     @classmethod
     def get_output(cls, user_id: UUID, output_type: str) -> str:
         """Obtiene los resultados del algoritmo correspondiente"""
         try:
-            output_path = path.join(cls._get_output_dir(user_id), cls._get_output_path(output_type))
+            output_path = path.join(
+                cls._get_output_dir(user_id), cls._get_output_path(output_type)
+            )
             with open(output_path, "r", encoding=ENCODING) as file:
                 return file.read()
         except FileNotFoundError as exc:
@@ -46,4 +45,4 @@ class ExecAlgorithm(ABC):
     @classmethod
     @abstractmethod
     def _get_output_path(cls, output_type: str) -> str:
-        """Obtiene la direccion del archivo de resultados"""
+        """Obtiene la direction del archivo de resultados"""

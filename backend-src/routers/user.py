@@ -13,26 +13,30 @@ router = APIRouter(
 
 assert_user_storage()
 
+
 @router.get("/{user}")
 async def exists_user(user: str) -> dict[str, bool]:
     """Registra un nuevo usuario"""
     exists = is_user(user)
-    return {"exists":exists}
+    return {"exists": exists}
+
 
 @router.post("/{user}")
 async def reg_user(user: str) -> dict[str, str]:
     """Registra un nuevo usuario"""
     register_user(user)
-    return {"response":f"Usuario '{user}' registrado"}
+    return {"response": f"Usuario '{user}' registrado"}
+
 
 @router.delete("/{user}")
 async def del_user(user: str) -> dict[str, str]:
     """Elimina un usuario"""
     delete_user(user)
-    return {"response":f"Usuario '{user}' eliminado"}
+    return {"response": f"Usuario '{user}' eliminado"}
+
 
 @router.post("/reset/{user}")
 async def reset_user(user: str) -> dict[str, str]:
     """Resetea los archivos de un usuario"""
     reset_user_storage(get_user_id(user))
-    return {"response":f"Usuario '{user}' reseteado"}
+    return {"response": f"Usuario '{user}' reseteado"}
