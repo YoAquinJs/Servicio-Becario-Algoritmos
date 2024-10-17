@@ -7,18 +7,18 @@ const API_URI = window.location.hostname == "127.0.0.1" ? LOCAL_HOST : GLOBAL_HO
 
 //Api on start validation
 fetch(`${API_URI}/`, {
-    method : "GET"
+    method: "GET"
 }).then(response => {
-    if (!response.ok){
+    if (!response.ok) {
         console.error("conexion con backend fallida");
-        console.error({"error code":response.status});
+        console.error({ "error code": response.status });
     }
     return response.json();
 })
-.then(_ => {})
-.catch(error => {
-    console.error(error);
-});
+    .then(_ => { })
+    .catch(error => {
+        console.error(error);
+    });
 
 //Throws an expcetion if the format of the response does not match the expected one
 //Otherwiise does nothing and returns undefined
@@ -47,130 +47,130 @@ function validateResponseFormat(response, expectedFormat) {
 
 //Api Calls
 
-export async function existsUser(username){
+export async function existsUser(username) {
     const fetchURI = `${API_URI}/user/${username}`;
 
-    const response = await fetch(fetchURI, {method:"GET"});
+    const response = await fetch(fetchURI, { method: "GET" });
     const parsedResponse = await response.json();
 
     if (!response.ok)
-        throw new HttpError(response.status, parsedResponse, ignoreUserValidation=true);
+        throw new HttpError(response.status, parsedResponse, ignoreUserValidation = true);
 
-    validateResponseFormat(parsedResponse, {"exists":true});
+    validateResponseFormat(parsedResponse, { "exists": true });
 
     return parsedResponse.exists;
 }
 
-export async function registerUser(username){
+export async function registerUser(username) {
     const fetchURI = `${API_URI}/user/${username}`;
 
-    const response = await fetch(fetchURI, {method:"POST"});
+    const response = await fetch(fetchURI, { method: "POST" });
     const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
-    validateResponseFormat(parsedResponse, {"response":""});
+    validateResponseFormat(parsedResponse, { "response": "" });
 
     return parsedResponse.response;
 }
 
-export async function deleteUser(username){
+export async function deleteUser(username) {
     const fetchURI = `${API_URI}/user/${username}`;
 
-    const response = await fetch(fetchURI, {method:"DELETE"});
+    const response = await fetch(fetchURI, { method: "DELETE" });
     const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
-    validateResponseFormat(parsedResponse, {"response":""});
+    validateResponseFormat(parsedResponse, { "response": "" });
 
     return parsedResponse.response;
 }
 
-export async function resetUser(username){
+export async function resetUser(username) {
     const fetchURI = `${API_URI}/user/reset/${username}`;
 
-    const response = await fetch(fetchURI, {method:"POST"});
+    const response = await fetch(fetchURI, { method: "POST" });
     const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
-    validateResponseFormat(parsedResponse, {"response":""});
+    validateResponseFormat(parsedResponse, { "response": "" });
 
     return parsedResponse.response;
 }
 
 
-export async function getConfigFile(user, algorithmType, configType){
+export async function getConfigFile(user, algorithmType, configType) {
     const fetchURI = `${API_URI}/config/${user}/${algorithmType}/${configType}`;
 
-    const response = await fetch(fetchURI, {method:"GET"});
+    const response = await fetch(fetchURI, { method: "GET" });
     const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
-    validateResponseFormat(parsedResponse, {"config":""});
+    validateResponseFormat(parsedResponse, { "config": "" });
 
     return parsedResponse.config;
 }
 
-export async function modifyConfig(user, algorithmType, configType, data){
-    const param = new URLSearchParams({"config_data":data}).toString();
+export async function modifyConfig(user, algorithmType, configType, data) {
+    const param = new URLSearchParams({ "config_data": data }).toString();
     const fetchURI = `${API_URI}/config/${user}/${algorithmType}/${configType}?${param}`;
 
-    const response = await fetch(fetchURI, {method:"POST"});
+    const response = await fetch(fetchURI, { method: "POST" });
     const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
-    validateResponseFormat(parsedResponse, {"response":""});
+    validateResponseFormat(parsedResponse, { "response": "" });
 
     return parsedResponse.response;
 }
 
-export async function getOutputs(user, algorithmType){
+export async function getOutputs(user, algorithmType) {
     const fetchURI = `${API_URI}/outputs/${user}/${algorithmType}`;
-    const response = await fetch(fetchURI, {method:"GET"});
+    const response = await fetch(fetchURI, { method: "GET" });
 
     const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
-    validateResponseFormat(parsedResponse, {"outputs":undefined});
+    validateResponseFormat(parsedResponse, { "outputs": undefined });
 
     return parsedResponse.outputs;
 }
 
-export async function getOutput(user, algorithmType, outputType){
+export async function getOutput(user, algorithmType, outputType) {
     const fetchURI = `${API_URI}/output/${user}/${algorithmType}/${outputType}`;
 
-    const response = await fetch(fetchURI, {method:"GET"});
+    const response = await fetch(fetchURI, { method: "GET" });
     const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
-    validateResponseFormat(parsedResponse, {"output":""});
+    validateResponseFormat(parsedResponse, { "output": "" });
 
     return parsedResponse.output;
 }
 
-export async function execute(user, algorithmType){
+export async function execute(user, algorithmType) {
     const fetchURI = `${API_URI}/execute/${user}/${algorithmType}`;
 
-    const response = await fetch(fetchURI, {method:"POST"});
+    const response = await fetch(fetchURI, { method: "POST" });
     const parsedResponse = await response.json();
 
     if (!response.ok)
         throw new HttpError(response.status, parsedResponse);
 
-    validateResponseFormat(parsedResponse, {"response":""});
+    validateResponseFormat(parsedResponse, { "response": "" });
 
     return parsedResponse.response;
 }

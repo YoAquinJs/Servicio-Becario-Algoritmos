@@ -4,14 +4,14 @@ import { redirectTo } from "./modules/user_fetch.js"
 
 //DOM Ids
 const IDs = {
-    loginUsername : "login-user-name",
-    loginButton : "login",
+    loginUsername: "login-user-name",
+    loginButton: "login",
 
-    createUsername : "create-user-name",
-    createUserButton : "create-user",
+    createUsername: "create-user-name",
+    createUserButton: "create-user",
 
-    deleteUsername : "delete-user-name",
-    deleteUserButton : "delete-user",
+    deleteUsername: "delete-user-name",
+    deleteUserButton: "delete-user",
 };
 
 document.addEventListener("DOMContentLoaded", _ => {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", _ => {
         const request = backend.existsUser(username);
         requestFeedback(request, elems[IDs.loginButton], "", "Error");
         request.then(exists => {
-            if (!exists){
+            if (!exists) {
                 alert("Usuario no encontrado");
                 return;
             }

@@ -1,7 +1,7 @@
 import { redirectTo } from "./user_fetch.js"
 
 export class HttpError extends Error {
-    constructor(statusCode, detail, ignoreUserValidation=false) {
+    constructor(statusCode, detail, ignoreUserValidation = false) {
         super(`Failed request with code ${statusCode}`);
 
         if (Error.captureStackTrace)
@@ -12,9 +12,9 @@ export class HttpError extends Error {
         this.detail = detail;
         this.date = new Date();
 
-        if (!ignoreUserValidation){
+        if (!ignoreUserValidation) {
             const username = sessionStorage.getItem("username");
-            if (detail == `usuario '${username}' no existe`){
+            if (detail == `usuario '${username}' no existe`) {
                 // exit app
                 redirectTo("index", "");
             }
