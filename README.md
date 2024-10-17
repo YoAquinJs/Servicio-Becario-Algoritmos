@@ -1,4 +1,4 @@
-# Servicio-Becario-Algoritmos
+# Interfaz Web del Sistema Integral de Seleccion de Proyectos
 
 Interfaz web para facilitar el uso del Sistema Integrado de Seleccion de Proyectos.
 
