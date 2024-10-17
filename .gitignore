@@ -11,4 +11,6 @@
 *.pem
 *.swp
 
+.rgignore
+
 !requirements.txt
